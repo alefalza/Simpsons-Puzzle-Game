@@ -10,6 +10,7 @@ namespace GameModes.BubbleMerge.Gameplay
         [SerializeField] private BubbleHUDController HUDController;
 
         private int score = 0;
+        private bool isInputBlocked = false;
 
         public static BubbleGameManager Instance;
 
@@ -34,6 +35,8 @@ namespace GameModes.BubbleMerge.Gameplay
 
         private void GetInput()
         {
+            if (isInputBlocked) return;
+
             if (Input.GetMouseButtonDown(0))
             {
                 spawner.DropBubble();
@@ -62,6 +65,12 @@ namespace GameModes.BubbleMerge.Gameplay
         {
             score += amount;
             HUDController.UpdateScore(score);
+        }
+
+        public void OnGameOver()
+        {
+            isInputBlocked = true;
+            HUDController.ShowGameOver(score);
         }
     }
 }

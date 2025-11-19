@@ -6,8 +6,6 @@ namespace Core.Managers
 {
     public class SceneController : MonoBehaviour, IService
     {
-        [SerializeField] private GameObject gameHUDOverlayPrefab;
-        
         private UIManager uiManager;
 
         private void Awake()
@@ -77,16 +75,6 @@ namespace Core.Managers
         {
             string loadType = mode == LoadSceneMode.Single ? "SINGLE" : "ADDITIVE";
             Debug.Log($"[SceneController] Scene LOADED → {scene.name} ({loadType})");
-            
-            // If we're in a GameMode scene (anything except MainMenuScene)
-            // instantiate the HUD overlay
-            if (mode == LoadSceneMode.Single && scene.name != "MainMenuScene")
-            {
-                if (gameHUDOverlayPrefab != null)
-                {
-                    Instantiate(gameHUDOverlayPrefab);
-                }
-            }
         }
 
         private void OnUnitySceneUnloaded(Scene scene)

@@ -13,6 +13,11 @@ namespace GameModes.BubbleMerge.UI
         [Header("Bubble Icons")]
         [SerializeField] private Sprite[] bubbleTierIcons;
 
+        [Header("Overlays")]
+        [SerializeField] private GameOverOverlay gameOverOverlay;
+
+        private GameOverOverlay gameOverOverlayInstance;
+
         public void UpdateScore(int newScore)
         {
             scoreUI.SetScore(newScore);
@@ -30,6 +35,12 @@ namespace GameModes.BubbleMerge.UI
             if (tier < 0 || tier >= bubbleTierIcons.Length) return;
 
             nextBubbleIcon.sprite = bubbleTierIcons[tier];
+        }
+
+        public void ShowGameOver(int finalScore)
+        {
+            gameOverOverlayInstance = Instantiate(gameOverOverlay);
+            gameOverOverlayInstance.Show(finalScore);
         }
     }
 }

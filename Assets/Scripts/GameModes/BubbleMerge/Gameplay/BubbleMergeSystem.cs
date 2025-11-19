@@ -13,10 +13,7 @@ namespace GameModes.BubbleMerge.Gameplay
             int maxTier = BubbleGameManager.Instance.MaxTier;
 
             if (a.Tier >= maxTier && b.Tier >= maxTier)
-            {
-                Debug.Log("[Merge] Max tier reached, bubbles will not merge.");
                 return null;
-            }
 
             a.BlockMergeTemporarily();
             b.BlockMergeTemporarily();
