@@ -37,9 +37,14 @@ namespace GameModes.BubbleMerge.Gameplay
             }
         }
 
-        public Bubble SpawnBubble(int tier, Vector3 position)
+        public Bubble SpawnBubble(int tier, Vector3 position, Transform root)
         {
-            return Instantiate(bubblePrefabs[tier], position, Quaternion.identity);
+            Bubble bubble = Instantiate(bubblePrefabs[tier], position, Quaternion.identity, root);
+            Rigidbody2D rb = bubble.GetComponent<Rigidbody2D>();
+            rb.AddForce(new Vector2(Random.Range(-0.4f, 0.4f), 0), ForceMode2D.Impulse);
+            //rb.AddTorque(Random.Range(-2f, 2f), ForceMode2D.Impulse);
+            
+            return bubble;
         }
 
         public Bubble SpawnMergedBubble(int tier, Vector3 position)

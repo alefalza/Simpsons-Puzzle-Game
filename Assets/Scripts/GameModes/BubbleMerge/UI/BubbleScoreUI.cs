@@ -10,7 +10,7 @@ namespace GameModes.BubbleMerge.UI
         public void SetScore(int score)
         {
             if (scoreText != null)
-                scoreText.text = "Score:" + score;
+                scoreText.text = "Score: " + score;
         }
     }
 }

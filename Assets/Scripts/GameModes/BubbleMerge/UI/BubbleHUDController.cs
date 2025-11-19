@@ -1,3 +1,4 @@
+using GameModes.BubbleMerge.Gameplay;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,8 +18,8 @@ namespace GameModes.BubbleMerge.UI
 
         private void Start()
         {
-            //UpdateCurrentBubble(BubbleGameManager.Instance.BubbleSpawner.GetCurrentTier());
-            //UpdateNextBubble(BubbleGameManager.Instance.BubbleSpawner.GetNextTier());
+            UpdateCurrentBubble(BubbleGameManager.Instance.BubbleSpawner.GetCurrentTier());
+            UpdateNextBubble(BubbleGameManager.Instance.BubbleSpawner.GetNextTier());
             UpdateScore(0);
         }
 

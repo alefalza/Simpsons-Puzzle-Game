@@ -41,14 +41,17 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 3543684471
+    locked: 0
   - name: Gameplay
     uniqueID: 1814557151
     locked: 0
+  - name: Bubbles
+    uniqueID: 131769341
+    locked: 0
   - name: UI
     uniqueID: 945241397
-    locked: 0
-  - name: Background
-    uniqueID: 3543684471
     locked: 0
   m_RenderingLayers:
   - Default

@@ -5,6 +5,7 @@ namespace GameModes.BubbleMerge.Gameplay
     public class BubbleSpawner : MonoBehaviour
     {
         [SerializeField] private Transform spawnPoint;
+        [SerializeField] private Transform bubbleRoot;
 
         private int currentTier;
         private int nextTier;
@@ -17,7 +18,7 @@ namespace GameModes.BubbleMerge.Gameplay
 
         public void DropBubble()
         {
-            BubbleGameManager.Instance.SpawnBubble(currentTier, spawnPoint.position);
+            BubbleGameManager.Instance.SpawnBubble(currentTier, spawnPoint.position, bubbleRoot);
 
             currentTier = nextTier;
             nextTier = RandomTier();
