@@ -112,9 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tier: 1
-  hasMerged: 0
-  rb: {fileID: 0}
-  col: {fileID: 0}
+  spawnWeight: 30
 --- !u!114 &5654422667225085171
 MonoBehaviour:
   m_ObjectHideFlags: 0

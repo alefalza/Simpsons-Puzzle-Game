@@ -1,4 +1,4 @@
-using GameModes.BubbleMerge.Core;
+﻿using GameModes.BubbleMerge.Core;
 using UnityEngine;
 
 namespace GameModes.BubbleMerge.Gameplay
@@ -7,15 +7,28 @@ namespace GameModes.BubbleMerge.Gameplay
     {
         public Bubble Merge(Bubble a, Bubble b)
         {
-            a.hasMerged = true;
-            b.hasMerged = true;
+            a.MarkAsMerged();
+            b.MarkAsMerged();
 
-            Vector3 spawnPos = (a.transform.position + b.transform.position) * 0.5f;
+            int maxTier = BubbleGameManager.Instance.MaxTier;
+
+            if (a.Tier >= maxTier && b.Tier >= maxTier)
+            {
+                Debug.Log("[Merge] Max tier reached, bubbles will not merge.");
+                return null;
+            }
+
+            a.BlockMergeTemporarily();
+            b.BlockMergeTemporarily();
 
             Object.Destroy(a.gameObject);
             Object.Destroy(b.gameObject);
 
-            return BubbleGameManager.Instance.SpawnMergedBubble(a.tier + 1, spawnPos);
+            Vector3 spawnPos = (a.transform.position + b.transform.position) * 0.5f;
+            Bubble mergedBubble = BubbleGameManager.Instance.SpawnMergedBubble(a.Tier + 1, spawnPos);
+            mergedBubble.BlockMergeTemporarily();
+
+            return mergedBubble;
         }
     }
 }

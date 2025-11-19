@@ -6,21 +6,23 @@ namespace GameModes.BubbleMerge.Core
     public class BubbleMergeDetector : MonoBehaviour
     {
         private Bubble bubble;
+        private BubbleMergeSystem mergeSystem;
 
         private void Awake()
         {
             bubble = GetComponent<Bubble>();
+            mergeSystem = new BubbleMergeSystem();
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            Bubble other = collision.collider.GetComponent<Bubble>();
+            if (!collision.collider.TryGetComponent<Bubble>(out var other)) return;
+            if (other.Tier != bubble.Tier) return;
 
-            if (other == null) return;
-            if (other.tier != bubble.tier) return;
-            if (bubble.hasMerged || other.hasMerged) return; // TODO: remove eventually
+            if (bubble.IsMergeBlocked || other.IsMergeBlocked) return;
+            if (bubble.HasMerged || other.HasMerged) return;
 
-            BubbleGameManager.Instance.TryMerge(bubble, other);
+            mergeSystem.Merge(bubble, other);
         }
     }
 }

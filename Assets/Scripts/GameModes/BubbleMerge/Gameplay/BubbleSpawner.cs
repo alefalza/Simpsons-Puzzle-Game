@@ -1,38 +1,60 @@
+using GameModes.BubbleMerge.Core;
 using UnityEngine;
 
 namespace GameModes.BubbleMerge.Gameplay
 {
     public class BubbleSpawner : MonoBehaviour
     {
+        [SerializeField] private Bubble[] bubblePrefabs;
         [SerializeField] private Transform spawnPoint;
         [SerializeField] private Transform bubbleRoot;
 
-        private int currentTier;
-        private int nextTier;
+        public int CurrentTier { get; private set; }
+        public int NextTier { get; private set; }
+        public int MaxTier => bubblePrefabs.Length - 1;
 
         public void Init()
         {
-            currentTier = RandomTier();
-            nextTier = RandomTier();
+            CurrentTier = GetRandomWeightedTier();
+            NextTier = GetRandomWeightedTier();
         }
 
         public void DropBubble()
         {
-            BubbleGameManager.Instance.SpawnBubble(currentTier, spawnPoint.position, bubbleRoot);
+            SpawnBubble(CurrentTier, spawnPoint.position);
 
-            currentTier = nextTier;
-            nextTier = RandomTier();
+            CurrentTier = NextTier;
+            NextTier = GetRandomWeightedTier();
 
-            BubbleGameManager.Instance.UpdateHUD(currentTier, nextTier);
+            BubbleGameManager.Instance.UpdateHUD(CurrentTier, NextTier);
         }
 
-        private int RandomTier()
+        public Bubble SpawnBubble(int tier, Vector3 position)
         {
-            // Only small tiers for spawning
-            return Random.Range(0, 3);
+            return Instantiate(bubblePrefabs[tier], position, Quaternion.identity, bubbleRoot);
         }
 
-        public int GetCurrentTier() => currentTier;
-        public int GetNextTier() => nextTier;
+        private int GetRandomWeightedTier()
+        {
+            int totalWeight = 0;
+
+            foreach (var bubble in bubblePrefabs)
+                totalWeight += bubble.SpawnWeight;
+
+            if (totalWeight <= 0)
+                return 0;
+
+            int randomValue = Random.Range(0, totalWeight);
+            int cumulative = 0;
+
+            for (int i = 0; i < bubblePrefabs.Length; i++)
+            {
+                cumulative += bubblePrefabs[i].SpawnWeight;
+                if (randomValue < cumulative)
+                    return i;
+            }
+
+            return 0;
+        }
     }
 }
