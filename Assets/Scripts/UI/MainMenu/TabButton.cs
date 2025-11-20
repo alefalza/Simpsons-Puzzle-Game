@@ -5,11 +5,12 @@ namespace UI.MainMenu
 {
     public class TabButton : MonoBehaviour
     {
-        [Header("Assigned in Inspector")]
-        public Button button;
-        public TabView targetView;
+        [SerializeField] private Button button;
+        [SerializeField] private TabView targetView;
 
         private TabGroup tabGroup;
+
+        public TabView TargetView => targetView;
 
         /// <summary>
         /// Sets the TabGroup this button belongs to.

@@ -39,9 +39,9 @@ namespace UI.MainMenu
             foreach (var tab in tabButtons)
             {
                 if (tab == currentTab)
-                    tab.targetView.Show();
+                    tab.TargetView.Show();
                 else
-                    tab.targetView.Hide();
+                    tab.TargetView.Hide();
             }
         }
     }

@@ -1,22 +1,25 @@
 using UnityEngine;
 
-public class PlayTabView : MonoBehaviour
+namespace UI.MainMenu.Tabs
 {
-    [Header("Grid Parent")]
-    [SerializeField] private Transform gridContainer;
-
-    [Header("Button Prefab")]
-    [SerializeField] private GameModeButton buttonPrefab;
-
-    [Header("Modes List")]
-    [SerializeField] private GameModeData[] gameModes;
-
-    private void Start()
+    public class PlayTabView : MonoBehaviour
     {
-        foreach (var mode in gameModes)
+        [Header("Grid Parent")]
+        [SerializeField] private Transform gridContainer;
+
+        [Header("Button Prefab")]
+        [SerializeField] private GameModeButton buttonPrefab;
+
+        [Header("Modes List")]
+        [SerializeField] private GameModeData[] gameModes;
+
+        private void Start()
         {
-            var button = Instantiate(buttonPrefab, gridContainer);
-            button.Initialize(mode);
+            foreach (var mode in gameModes)
+            {
+                var button = Instantiate(buttonPrefab, gridContainer);
+                button.Initialize(mode);
+            }
         }
     }
 }

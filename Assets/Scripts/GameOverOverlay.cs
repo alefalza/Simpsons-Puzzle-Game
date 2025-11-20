@@ -28,8 +28,6 @@ public class GameOverOverlay : MonoBehaviour
 
     public void Show(int finalScore)
     {
-        gameObject.SetActive(true);
-
         scoreText.text = $"Final Score: {finalScore}";
         StartCoroutine(FadeIn());
     }

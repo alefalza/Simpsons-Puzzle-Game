@@ -15,8 +15,10 @@ namespace GameModes.BubbleMerge.UI
 
         [Header("Overlays")]
         [SerializeField] private GameOverOverlay gameOverOverlay;
+        [SerializeField] private PauseOverlay pauseOverlay;
 
         private GameOverOverlay gameOverOverlayInstance;
+        private PauseOverlay pauseOverlayInstance;
 
         public void UpdateScore(int newScore)
         {
@@ -37,7 +39,23 @@ namespace GameModes.BubbleMerge.UI
             nextBubbleIcon.sprite = bubbleTierIcons[tier];
         }
 
-        public void ShowGameOver(int finalScore)
+        public bool TryShowPauseOverlay(bool isPaused)
+        {
+            if (pauseOverlayInstance != null && pauseOverlayInstance.IsFading)
+                return false;
+            
+            if (pauseOverlayInstance == null)
+                pauseOverlayInstance = Instantiate(pauseOverlay);
+            
+            if (!isPaused)
+                pauseOverlayInstance.Show();
+            else
+                pauseOverlayInstance.Hide();
+
+            return pauseOverlayInstance.IsFading;
+        }
+        
+        public void ShowGameOverOverlay(int finalScore)
         {
             gameOverOverlayInstance = Instantiate(gameOverOverlay);
             gameOverOverlayInstance.Show(finalScore);
