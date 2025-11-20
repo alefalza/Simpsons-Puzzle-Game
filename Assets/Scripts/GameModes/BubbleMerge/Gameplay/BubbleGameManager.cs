@@ -69,6 +69,7 @@ namespace GameModes.BubbleMerge.Gameplay
             hudController.UpdateScore(score);
         }
 
+        #region Pause Logic
         private void TogglePause()
         {
             if (!hudController.CanTogglePause()) return;
@@ -101,6 +102,7 @@ namespace GameModes.BubbleMerge.Gameplay
         {
             Resume();
         }
+        #endregion
 
         public void OnGameOver()
         {

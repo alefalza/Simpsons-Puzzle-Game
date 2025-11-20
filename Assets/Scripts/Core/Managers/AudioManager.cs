@@ -23,12 +23,22 @@ namespace Core.Managers
             musicSource.Play();
         }
 
+        public void SetMusicVolume(float v)
+        {
+            musicSource.volume = v;
+        }
+        
         /// <summary>
         /// Plays a sound effect once.
         /// </summary>
         public void PlaySFX(AudioClip clip, float volume = 1f)
         {
             sfxSource.PlayOneShot(clip, volume);
+        }
+        
+        public void SetSFXVolume(float v)
+        {
+            sfxSource.volume = v;
         }
     }
 }

@@ -463,7 +463,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &241122773
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1011,6 +1011,7 @@ GameObject:
   m_Component:
   - component: {fileID: 794133842}
   - component: {fileID: 794133843}
+  - component: {fileID: 794133844}
   m_Layer: 5
   m_Name: SettingsView
   m_TagString: Untagged
@@ -1051,6 +1052,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a243a0469f58f44309d12a7cbf397946, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &794133844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794133841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9384b8ec537377a48bb886d8d492df08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicSlider: {fileID: 0}
+  sfxSlider: {fileID: 0}
+  hapticsToggle: {fileID: 0}
+  notificationsToggle: {fileID: 0}
+  autoPauseToggle: {fileID: 0}
+  languageDropdown: {fileID: 0}
 --- !u!1 &933309919
 GameObject:
   m_ObjectHideFlags: 0
@@ -1067,7 +1086,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &933309920
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1371,7 +1390,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1151072243
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2384,7 +2403,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1852463174
 RectTransform:
   m_ObjectHideFlags: 0
