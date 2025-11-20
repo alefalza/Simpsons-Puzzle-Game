@@ -11,8 +11,8 @@ namespace UI.Settings
         [Header("UI References")]
         [SerializeField] private Slider musicSlider;
         [SerializeField] private Slider sfxSlider;
-        [SerializeField] private Toggle hapticsToggle;
         [SerializeField] private Toggle notificationsToggle;
+        [SerializeField] private Toggle hapticsToggle;
         [SerializeField] private Toggle autoPauseToggle;
         [SerializeField] private TMP_Dropdown languageDropdown;
 
