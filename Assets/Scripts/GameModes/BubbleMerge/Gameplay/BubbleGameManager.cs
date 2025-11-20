@@ -37,7 +37,7 @@ namespace GameModes.BubbleMerge.Gameplay
         private void GetInput()
         {
             if (Input.GetKeyDown(KeyCode.Escape))
-                OnPause();
+                TogglePause();
             
             if (isInputBlocked) return;
 
@@ -69,13 +69,37 @@ namespace GameModes.BubbleMerge.Gameplay
             hudController.UpdateScore(score);
         }
 
-        private void OnPause()
+        private void TogglePause()
         {
-            if (hudController.TryShowPauseOverlay(IsPaused))
-            {
-                IsPaused = !IsPaused;
-                isInputBlocked = IsPaused;
-            }
+            if (!hudController.CanTogglePause()) return;
+
+            if (!IsPaused)
+                Pause();
+            else
+                Resume();
+        }
+
+        private void Pause()
+        {
+            IsPaused = true;
+            isInputBlocked = true;
+            spawner.enabled = false;
+
+            hudController.ShowPauseOverlay();
+        }
+
+        private void Resume()
+        {
+            IsPaused = false;
+            isInputBlocked = false;
+            spawner.enabled = true;
+
+            hudController.HidePauseOverlay();
+        }
+
+        public void TogglePauseFromOverlay()
+        {
+            Resume();
         }
 
         public void OnGameOver()

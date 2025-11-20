@@ -39,22 +39,24 @@ namespace GameModes.BubbleMerge.UI
             nextBubbleIcon.sprite = bubbleTierIcons[tier];
         }
 
-        public bool TryShowPauseOverlay(bool isPaused)
+        public bool CanTogglePause()
         {
-            if (pauseOverlayInstance != null && pauseOverlayInstance.IsFading)
-                return false;
-            
+            return pauseOverlayInstance == null || !pauseOverlayInstance.IsFading;
+        }
+
+        public void ShowPauseOverlay()
+        {
             if (pauseOverlayInstance == null)
                 pauseOverlayInstance = Instantiate(pauseOverlay);
-            
-            if (!isPaused)
-                pauseOverlayInstance.Show();
-            else
-                pauseOverlayInstance.Hide();
 
-            return pauseOverlayInstance.IsFading;
+            pauseOverlayInstance.Show();
         }
-        
+
+        public void HidePauseOverlay()
+        {
+            pauseOverlayInstance.Hide();
+        }
+
         public void ShowGameOverOverlay(int finalScore)
         {
             gameOverOverlayInstance = Instantiate(gameOverOverlay);

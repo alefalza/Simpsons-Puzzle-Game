@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using Core;
 using Core.Managers;
+using GameModes.BubbleMerge.Gameplay;
 
 public class PauseOverlay : MonoBehaviour
 {
@@ -29,13 +30,13 @@ public class PauseOverlay : MonoBehaviour
 
     public void Hide()
     {
-        Time.timeScale = 1f;
         StartCoroutine(FadeOut());
     }
 
     private IEnumerator FadeIn()
     {
         IsFading = true;
+
         canvasGroup.alpha = 0;
         
         while (canvasGroup.alpha < 1f)
@@ -47,7 +48,6 @@ public class PauseOverlay : MonoBehaviour
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
         
-        Time.timeScale = 0f;
         IsFading = false;
     }
 
@@ -70,7 +70,7 @@ public class PauseOverlay : MonoBehaviour
 
     private void OnResumePressed()
     {
-        Hide();
+        BubbleGameManager.Instance.TogglePauseFromOverlay();
     }
 
     private void OnMenuPressed()
