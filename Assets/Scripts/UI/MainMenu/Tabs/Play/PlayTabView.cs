@@ -1,8 +1,8 @@
 using UnityEngine;
 
-namespace UI.MainMenu.Tabs
+namespace UI.MainMenu.Tabs.Play
 {
-    public class PlayTabView : MonoBehaviour
+    public class PlayTabView : TabView
     {
         [Header("Grid Parent")]
         [SerializeField] private Transform gridContainer;

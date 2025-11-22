@@ -1,14 +1,13 @@
-using System;
 using Core;
 using TMPro;
+using UI.Settings;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Settings
+namespace UI.MainMenu.Tabs.Settings
 {
-    public class SettingsPanel : MonoBehaviour
+    public class SettingsTabView : TabView
     {
-        [Header("UI References")]
         [SerializeField] private Slider musicSlider;
         [SerializeField] private Slider sfxSlider;
         [SerializeField] private Toggle notificationsToggle;
