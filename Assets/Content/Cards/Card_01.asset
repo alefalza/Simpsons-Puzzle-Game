@@ -13,5 +13,8 @@ MonoBehaviour:
   m_Name: Card_01
   m_EditorClassIdentifier: 
   cardName: Homer
-  cardImage: {fileID: 0}
+  cardImage: {fileID: 21300000, guid: ec2b37a7ba5459f4891e76825f5971f9, type: 3}
+  cardDescription: "Homer is a donut-powered disaster machine. Loud, lazy, and somehow
+    lovable, he survives life through luck, naps, and questionable decisions. Certified
+    \u201CD\u2019oh!\u201D expert."
   unlocked: 1

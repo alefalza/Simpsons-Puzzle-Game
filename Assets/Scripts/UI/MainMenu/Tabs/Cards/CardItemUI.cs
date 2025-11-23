@@ -1,3 +1,4 @@
+using System;
 using Collectables;
 using TMPro;
 using UnityEngine;
@@ -13,15 +14,21 @@ namespace UI.MainMenu.Tabs.Cards
         [SerializeField] private Button button;
 
         private CardData data;
+        private Action<CardData> onClicked;
 
-        public void Setup(CardData cardData)
+        public void Setup(CardData cardData, Action<CardData> onClick)
         {
             data = cardData;
+            onClicked = onClick;
+            
             title.text = cardData.CardName;
-            //icon.sprite = cardData.CardImage;
+
+            if (cardData.CardImage != null)
+            {
+                icon.sprite = cardData.CardImage;
+            }
             
             bool unlocked = cardData.Unlocked;
-
             lockedOverlay.SetActive(!unlocked);
             button.interactable = unlocked;
         }
@@ -31,8 +38,7 @@ namespace UI.MainMenu.Tabs.Cards
             if (!data.Unlocked)
                 return;
 
-            Debug.Log($"Clicked {data.CardName}");
-            // Abrir detalle, o lo que quieras
+            onClicked?.Invoke(data);
         }
     }
 }

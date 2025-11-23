@@ -1,71 +1,74 @@
-using Core;
-using UnityEngine;
-using UnityEngine.UI;
-using Core.Managers;
 using System.Collections;
-using UnityEngine.SceneManagement;
+using Core;
+using Core.Managers;
 using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class GameOverOverlay : MonoBehaviour
+namespace UI.Overlays
 {
-    [Header("UI References")]
-    [SerializeField] private CanvasGroup canvasGroup;
-    [SerializeField] private TMP_Text scoreText;
-    [SerializeField] private Button retryButton;
-    [SerializeField] private Button menuButton;
-
-    private SceneController sceneController;
-    private string currentScene;
-
-    private void Awake()
+    public class GameOverOverlay : MonoBehaviour
     {
-        sceneController = ServiceLocator.Get<SceneController>();
-        currentScene = SceneManager.GetActiveScene().name;
+        [Header("UI References")]
+        [SerializeField] private CanvasGroup canvasGroup;
+        [SerializeField] private TMP_Text scoreText;
+        [SerializeField] private Button retryButton;
+        [SerializeField] private Button menuButton;
 
-        retryButton.onClick.AddListener(OnRetryClicked);
-        menuButton.onClick.AddListener(OnMenuClicked);
-    }
+        private SceneController sceneController;
+        private string currentScene;
 
-    public void Show(int finalScore)
-    {
-        scoreText.text = $"Final Score: {finalScore}";
-        StartCoroutine(FadeIn());
-    }
-
-    private IEnumerator FadeIn()
-    {
-        canvasGroup.alpha = 0f;
-        canvasGroup.interactable = false;
-        canvasGroup.blocksRaycasts = false;
-
-        const float duration = 0.4f;
-        float t = 0f;
-
-        while (t < duration)
+        private void Awake()
         {
-            t += Time.deltaTime;
-            canvasGroup.alpha = Mathf.Lerp(0, 1, t / duration);
-            yield return null;
+            sceneController = ServiceLocator.Get<SceneController>();
+            currentScene = SceneManager.GetActiveScene().name;
+
+            retryButton.onClick.AddListener(OnRetryClicked);
+            menuButton.onClick.AddListener(OnMenuClicked);
         }
 
-        canvasGroup.alpha = 1f;
-        canvasGroup.interactable = true;
-        canvasGroup.blocksRaycasts = true;
-    }
+        public void Show(int finalScore)
+        {
+            scoreText.text = $"Final Score: {finalScore}";
+            StartCoroutine(FadeIn());
+        }
 
-    private void OnRetryClicked()
-    {
-        sceneController.LoadScene(currentScene);
-    }
+        private IEnumerator FadeIn()
+        {
+            canvasGroup.alpha = 0f;
+            canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
 
-    private void OnMenuClicked()
-    {
-        sceneController.LoadScene("MainMenuScene");
-    }
+            const float duration = 0.4f;
+            float t = 0f;
 
-    private void OnDestroy()
-    {
-        retryButton.onClick.RemoveListener(OnRetryClicked);
-        menuButton.onClick.RemoveListener(OnMenuClicked);
+            while (t < duration)
+            {
+                t += Time.deltaTime;
+                canvasGroup.alpha = Mathf.Lerp(0, 1, t / duration);
+                yield return null;
+            }
+
+            canvasGroup.alpha = 1f;
+            canvasGroup.interactable = true;
+            canvasGroup.blocksRaycasts = true;
+        }
+
+        private void OnRetryClicked()
+        {
+            sceneController.LoadScene(currentScene);
+        }
+
+        private void OnMenuClicked()
+        {
+            sceneController.LoadScene("MainMenuScene");
+        }
+
+        private void OnDestroy()
+        {
+            retryButton.onClick.RemoveListener(OnRetryClicked);
+            menuButton.onClick.RemoveListener(OnMenuClicked);
+        }
     }
 }

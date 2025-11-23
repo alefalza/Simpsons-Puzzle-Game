@@ -13,5 +13,8 @@ MonoBehaviour:
   m_Name: Card_04
   m_EditorClassIdentifier: 
   cardName: Bart
-  cardImage: {fileID: 0}
-  unlocked: 1
+  cardImage: {fileID: 21300000, guid: a5512769204567846bc2475f75d96880, type: 3}
+  cardDescription: "Bart is Springfield\u2019s #1 troublemaker. Skateboard menace,
+    prank mastermind, and part-time underachiever (\u201Cand proud of it!\u201D).
+    If something exploded, he probably pressed the button."
+  unlocked: 0

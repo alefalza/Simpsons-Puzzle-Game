@@ -1,4 +1,5 @@
 using Collectables;
+using UI.Overlays;
 using UnityEngine;
 
 namespace UI.MainMenu.Tabs.Cards
@@ -8,7 +9,10 @@ namespace UI.MainMenu.Tabs.Cards
         [SerializeField] private CardDatabase database;
         [SerializeField] private Transform gridRoot;
         [SerializeField] private CardItemUI cardItemPrefab;
+        [SerializeField] private CardDetailOverlay cardDetailOverlay;
 
+        private CardDetailOverlay cardDetailOverlayInstance;
+        
         private void Start()
         {
             Populate();
@@ -22,8 +26,16 @@ namespace UI.MainMenu.Tabs.Cards
             foreach (var card in database.AllCards)
             {
                 var item = Instantiate(cardItemPrefab, gridRoot);
-                item.Setup(card);
+                item.Setup(card, OnCardClickedCallback);
             }
+        }
+
+        private void OnCardClickedCallback(CardData cardData)
+        {
+            if (cardDetailOverlayInstance == null)
+                cardDetailOverlayInstance = Instantiate(cardDetailOverlay, transform.root);
+            
+            cardDetailOverlayInstance.Show(cardData);
         }
     }
 }

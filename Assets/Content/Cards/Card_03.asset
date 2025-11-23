@@ -13,5 +13,8 @@ MonoBehaviour:
   m_Name: Card_03
   m_EditorClassIdentifier: 
   cardName: Lisa
-  cardImage: {fileID: 0}
-  unlocked: 1
+  cardImage: {fileID: 21300000, guid: 7598b2e94267d9a46b1575d1569d1709, type: 3}
+  cardDescription: "Lisa is an 8-year-old genius trapped in a family powered mostly
+    by donuts and chaos. Plays sax, saves whales, and does everyone\u2019s homework\u2014except
+    her own, because she already aced it."
+  unlocked: 0

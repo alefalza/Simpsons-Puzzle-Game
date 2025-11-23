@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace UI.MainMenu
 {
-    public class TabView : MonoBehaviour, ITabView
+    public class TabView : MonoBehaviour, IView
     {
         public void Show()
         {

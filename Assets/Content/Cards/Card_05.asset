@@ -13,5 +13,8 @@ MonoBehaviour:
   m_Name: Card_05
   m_EditorClassIdentifier: 
   cardName: Maggie
-  cardImage: {fileID: 0}
-  unlocked: 1
+  cardImage: {fileID: 21300000, guid: da7df6eef35611c4692deae0520a4657, type: 3}
+  cardDescription: "Maggie may be quiet, but don\u2019t let the pacifier fool you\u2014she\u2019s
+    the stealthiest Simpson. Expert crawler, accidental hero, and secretly the most
+    competent one of the bunch."
+  unlocked: 0

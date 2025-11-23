@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Mr. Burns
   cardImage: {fileID: 0}
+  cardDescription: ...
   unlocked: 0

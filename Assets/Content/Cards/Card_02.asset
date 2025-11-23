@@ -13,5 +13,8 @@ MonoBehaviour:
   m_Name: Card_02
   m_EditorClassIdentifier: 
   cardName: Marge
-  cardImage: {fileID: 0}
+  cardImage: {fileID: 21300000, guid: 225770f36cb7fd34e90e50e66ed3df57, type: 3}
+  cardDescription: "Marge is the blue-haired backbone of the family. Kind, patient,
+    and way too good for this chaos, she fixes problems Homer hasn\u2019t even caused
+    yet. Professional sigh-er."
   unlocked: 1
