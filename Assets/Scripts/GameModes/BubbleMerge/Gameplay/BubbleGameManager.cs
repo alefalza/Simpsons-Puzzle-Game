@@ -40,9 +40,6 @@ namespace GameModes.BubbleMerge.Gameplay
                 TogglePause();
             
             if (isInputBlocked) return;
-
-            if (Input.GetMouseButtonDown(0))
-                spawner.DropBubble();
         }
 
         private void InitHUDController()
@@ -63,6 +60,11 @@ namespace GameModes.BubbleMerge.Gameplay
             return spawner.SpawnBubble(tier, position);
         }
 
+        public Bubble GetBubblePrefabByTier(int tier)
+        {
+            return spawner.BubblePrefabs[tier];
+        }
+        
         private void AddScore(int amount)
         {
             score += amount;
