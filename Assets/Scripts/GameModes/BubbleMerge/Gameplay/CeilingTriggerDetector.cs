@@ -1,20 +1,22 @@
 ﻿using GameModes.BubbleMerge.Core;
-using GameModes.BubbleMerge.Gameplay;
 using UnityEngine;
 
-public class CeilingTriggerDetector : MonoBehaviour
+namespace GameModes.BubbleMerge.Gameplay
 {
-    private bool gameOverTriggered = false;
-
-    private void OnTriggerEnter2D(Collider2D collision)
+    public class CeilingTriggerDetector : MonoBehaviour
     {
-        if (gameOverTriggered) return;
-        if (!collision.TryGetComponent(out Bubble bubble)) return;
-        if (collision.transform.position.y > transform.position.y) return;
+        private bool gameOverTriggered = false;
 
-        gameOverTriggered = true;
-        Debug.Log("[Ceiling] Bubble touched ceiling → GAME OVER");
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (gameOverTriggered) return;
+            if (!collision.TryGetComponent(out Bubble bubble)) return;
+            if (collision.transform.position.y > transform.position.y) return;
 
-        BubbleGameManager.Instance.OnGameOver();
+            gameOverTriggered = true;
+            Debug.Log("[Ceiling] Bubble touched ceiling → GAME OVER");
+
+            BubbleGameManager.Instance.OnGameOver();
+        }
     }
 }

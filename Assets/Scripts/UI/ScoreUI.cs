@@ -1,9 +1,9 @@
 using TMPro;
 using UnityEngine;
 
-namespace GameModes.BubbleMerge.UI
+namespace UI
 {
-    public class BubbleScoreUI : MonoBehaviour
+    public class ScoreUI : MonoBehaviour
     {
         [SerializeField] private TMP_Text scoreText;
 

@@ -28,8 +28,8 @@ namespace GameModes.BubbleMerge.Core
 
         private void AddSpawnForce()
         {
-            rb.AddForce(new Vector2(Random.Range(-0.4f, 0.4f), 0), ForceMode2D.Impulse);
-            rb.AddTorque(Random.Range(-1f, 1f), ForceMode2D.Impulse);
+            //rb.AddForce(new Vector2(Random.Range(-0.4f, 0.4f), 0), ForceMode2D.Impulse);
+            //rb.AddTorque(Random.Range(-1f, 1f), ForceMode2D.Impulse);
         }
 
         public void MarkAsMerged()

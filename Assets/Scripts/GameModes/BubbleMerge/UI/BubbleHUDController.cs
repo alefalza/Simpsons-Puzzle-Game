@@ -1,3 +1,4 @@
+using UI;
 using UI.Overlays;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,7 +8,7 @@ namespace GameModes.BubbleMerge.UI
     public class BubbleHUDController : MonoBehaviour
     {
         [Header("UI")]
-        [SerializeField] private BubbleScoreUI scoreUI;
+        [SerializeField] private ScoreUI scoreUI;
         [SerializeField] private Image currentBubbleIcon;
         [SerializeField] private Image nextBubbleIcon;
 
@@ -15,11 +16,11 @@ namespace GameModes.BubbleMerge.UI
         [SerializeField] private Sprite[] bubbleTierIcons;
 
         [Header("Overlays")]
-        [SerializeField] private GameOverOverlay gameOverOverlay;
         [SerializeField] private PauseOverlay pauseOverlay;
+        [SerializeField] private GameOverOverlay gameOverOverlay;
 
-        private GameOverOverlay gameOverOverlayInstance;
         private PauseOverlay pauseOverlayInstance;
+        private GameOverOverlay gameOverOverlayInstance;
 
         public void UpdateScore(int newScore)
         {
