@@ -45,7 +45,7 @@ namespace GameModes.BubbleMerge.Gameplay
 
         private void HandleInput()
         {
-            if (BubbleGameManager.Instance.IsPaused) return;
+            if (BubbleGameManager.Instance.IsInputBlocked) return;
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -64,7 +64,7 @@ namespace GameModes.BubbleMerge.Gameplay
 
         private void FollowMouseWhileDragging()
         {
-            if (!isDragging) return;
+            if (!isDragging || BubbleGameManager.Instance.IsInputBlocked) return;
 
             Vector3 mousePos = Input.mousePosition;
             Vector3 worldPos = mainCamera.ScreenToWorldPoint(mousePos);

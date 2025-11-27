@@ -10,12 +10,12 @@ namespace GameModes.BubbleMerge.Gameplay
         [SerializeField] private BubbleHUDController hudController;
 
         private int score = 0;
-        private bool isInputBlocked = false;
 
         public static BubbleGameManager Instance;
 
         public int MaxTier => spawner.MaxTier;
         public bool IsPaused { get; private set; } = false;
+        public bool IsInputBlocked { get; private set; } = false;
 
         private void Awake()
         {
@@ -39,7 +39,7 @@ namespace GameModes.BubbleMerge.Gameplay
             if (Input.GetKeyDown(KeyCode.Escape))
                 TogglePause();
             
-            if (isInputBlocked) return;
+            if (IsInputBlocked) return;
         }
 
         private void InitHUDController()
@@ -85,7 +85,7 @@ namespace GameModes.BubbleMerge.Gameplay
         private void Pause()
         {
             IsPaused = true;
-            isInputBlocked = true;
+            IsInputBlocked = true;
             spawner.enabled = false;
 
             hudController.ShowPauseOverlay();
@@ -94,7 +94,7 @@ namespace GameModes.BubbleMerge.Gameplay
         private void Resume()
         {
             IsPaused = false;
-            isInputBlocked = false;
+            IsInputBlocked = false;
             spawner.enabled = true;
 
             hudController.HidePauseOverlay();
@@ -108,7 +108,7 @@ namespace GameModes.BubbleMerge.Gameplay
 
         public void OnGameOver()
         {
-            isInputBlocked = true;
+            IsInputBlocked = true;
             hudController.ShowGameOverOverlay(score);
         }
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Core;
 using Core.Managers;
@@ -78,6 +79,12 @@ namespace UI.Overlays
         private void OnMenuPressed()
         {
             sceneController.LoadScene("MainMenuScene");
+        }
+
+        private void OnDestroy()
+        {
+            resumeButton.onClick.RemoveListener(OnResumePressed);
+            menuButton.onClick.RemoveListener(OnMenuPressed);
         }
     }
 }

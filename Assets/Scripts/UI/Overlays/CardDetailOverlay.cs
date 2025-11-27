@@ -97,5 +97,10 @@ namespace UI.Overlays
 
             return 1 + c3 * Mathf.Pow(t - 1, 3) + c1 * Mathf.Pow(t - 1, 2);
         }
+
+        private void OnDestroy()
+        {
+            closeButton.onClick.RemoveListener(Close);
+        }
     }
 }
