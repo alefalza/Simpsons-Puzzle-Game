@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6839996500576349020}
   - component: {fileID: 872096555905411416}
-  - component: {fileID: 4537925564279483999}
   - component: {fileID: 4338763547125742857}
   - component: {fileID: 6985237755696838229}
   - component: {fileID: 5654422667225085171}
@@ -64,65 +63,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!60 &4537925564279483999
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2895433768281193533}
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 1.3478644, y: 2.0895083}
-      - {x: -0.014556527, y: 2.470209}
-      - {x: -1.4735867, y: 2.0624053}
-      - {x: -2.3484828, y: 1.0222867}
-      - {x: -2.5180562, y: -0.45185247}
-      - {x: -2.028881, y: -1.6241822}
-      - {x: -1.225223, y: -2.187852}
-      - {x: -0.030136881, y: -2.4830172}
-      - {x: 0.9855573, y: -2.2756276}
-      - {x: 1.8396462, y: -1.726078}
-      - {x: 2.462136, y: -0.50728035}
-      - {x: 2.217474, y: 1.226078}
-  m_UseDelaunayMesh: 0
 --- !u!58 &4338763547125742857
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -173,7 +113,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tier: 2
   spawnWeight: 10
-  mergeCooldown: 0.1
+  mergeCooldown: 0.05
 --- !u!114 &5654422667225085171
 MonoBehaviour:
   m_ObjectHideFlags: 0

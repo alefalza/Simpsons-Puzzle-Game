@@ -15,6 +15,9 @@ namespace GameModes.BubbleMerge.UI
             baseScale = iconImage.rectTransform.localScale;
         }
 
+        /// <summary>
+        /// Assigns the icon sprite. If a Bubble is provided, scales the icon to match its scale.
+        /// </summary>
         public void SetBubbleIcon(Sprite icon, Bubble bubble = null)
         {
             iconImage.sprite = icon;
