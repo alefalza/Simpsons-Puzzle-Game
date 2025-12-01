@@ -53,5 +53,14 @@ TagManager:
   - name: UI
     uniqueID: 945241397
     locked: 0
+  - name: HexCell
+    uniqueID: 3831667257
+    locked: 0
+  - name: Piece
+    uniqueID: 1178850771
+    locked: 0
+  - name: HUD
+    uniqueID: 1303034973
+    locked: 0
   m_RenderingLayers:
   - Default

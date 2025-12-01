@@ -1,6 +1,7 @@
 using System.Collections;
 using Core;
-using Core.Managers;
+using Core.Services;
+using Core.Services.SceneService;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,12 +17,12 @@ namespace UI.Overlays
         [SerializeField] private Button retryButton;
         [SerializeField] private Button menuButton;
 
-        private SceneController sceneController;
+        private SceneService sceneController;
         private string currentScene;
 
         private void Awake()
         {
-            sceneController = ServiceLocator.Get<SceneController>();
+            sceneController = ServiceLocator.Get<SceneService>();
             currentScene = SceneManager.GetActiveScene().name;
 
             retryButton.onClick.AddListener(OnRetryClicked);

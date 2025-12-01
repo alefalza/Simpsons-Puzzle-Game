@@ -1,6 +1,6 @@
 using Core;
+using Core.Services.SettingsService;
 using TMPro;
-using UI.Settings;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,11 +15,11 @@ namespace UI.MainMenu.Tabs.Settings
         [SerializeField] private Toggle autoPauseToggle;
         [SerializeField] private TMP_Dropdown languageDropdown;
 
-        private SettingsManager settingsManager;
+        private SettingsService settingsManager;
 
         private void Awake()
         {
-            settingsManager = ServiceLocator.Get<SettingsManager>();
+            settingsManager = ServiceLocator.Get<SettingsService>();
         }
 
         private void Start()

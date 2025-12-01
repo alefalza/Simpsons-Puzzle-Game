@@ -1,66 +1,53 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections;
 
-public class BootLoader : MonoBehaviour
+namespace Boot
 {
-    [Header("Managers Root Prefab")]
-    [SerializeField] private GameObject managersRootPrefab;
-
-    [Header("Boot Overlay (local to BootScene)")]
-    [SerializeField] private GameObject bootOverlay;
-
-    private const string MAIN_MENU_SCENE = "MainMenuScene";
-
-    private IEnumerator Start()
+    public class BootLoader : MonoBehaviour
     {
-        // Show boot overlay immediately
-        if (bootOverlay != null)
-            bootOverlay.SetActive(true);
+        [Header("Managers Root Prefab")]
+        [SerializeField] private GameObject managersRoot;
 
-        // Small delay so the UI actually appears on screen
-        yield return new WaitForSeconds(0.2f);
+        [Header("Boot Overlay (local to BootScene)")]
+        [SerializeField] private GameObject bootOverlay;
 
-        // -------------------------
-        // 1) Instantiate ManagersRoot
-        // -------------------------
-        if (managersRootPrefab != null)
+        private const string MAIN_MENU_SCENE = "MainMenuScene";
+
+        private IEnumerator Start()
         {
-            GameObject root = Instantiate(managersRootPrefab);
-            root.transform.SetParent(null);
-            DontDestroyOnLoad(root);
+            if (bootOverlay != null)
+                bootOverlay.SetActive(true);
+
+            // Small delay so the UI actually appears on screen
+            yield return new WaitForSeconds(0.2f);
+
+            if (managersRoot != null)
+            {
+                GameObject root = Instantiate(managersRoot, null);
+                DontDestroyOnLoad(root);
+            }
+            else
+            {
+                Debug.LogError("[BootLoader] ManagersRootPrefab is missing!");
+            }
+
+            // Load Main Menu (Single)
+            AsyncOperation loadOp = SceneManager.LoadSceneAsync(MAIN_MENU_SCENE, LoadSceneMode.Single);
+
+            // Set main menu active on completion
+            loadOp.completed += _ =>
+            {
+                Scene menu = SceneManager.GetSceneByName(MAIN_MENU_SCENE);
+                SceneManager.SetActiveScene(menu);
+            };
+
+            yield return loadOp;
+
+            if (bootOverlay != null)
+                bootOverlay.SetActive(false);
+
+            Destroy(gameObject);
         }
-        else
-        {
-            Debug.LogError("[BootLoader] ManagersRootPrefab is missing!");
-        }
-
-        // -------------------------
-        // 2) Load Main Menu (Single)
-        // -------------------------
-        AsyncOperation loadOp = SceneManager.LoadSceneAsync(MAIN_MENU_SCENE, LoadSceneMode.Single);
-
-        // OPTIONAL: set main menu active on completion
-        loadOp.completed += _ =>
-        {
-            Scene menu = SceneManager.GetSceneByName(MAIN_MENU_SCENE);
-            SceneManager.SetActiveScene(menu);
-        };
-
-        yield return loadOp;
-
-        // -------------------------
-        // 3) Hide Boot Overlay
-        // -------------------------
-        if (bootOverlay != null)
-            bootOverlay.SetActive(false);
-
-        // -------------------------
-        // 4) Destroy BootScene
-        // -------------------------
-        // At this point BootLoader exists in BootScene
-        // LoadScene(Single) already unloaded BootScene,
-        // but the GameObject survives unless we kill it manually.
-        Destroy(gameObject);
     }
 }

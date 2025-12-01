@@ -2,7 +2,8 @@ using Core;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Core.Managers;
+using Core.Services;
+using Core.Services.SceneService;
 
 public class GameModeButton : MonoBehaviour
 {
@@ -11,12 +12,12 @@ public class GameModeButton : MonoBehaviour
 
     private Button button;
     private GameModeData data;
-    private SceneController sceneController;
+    private SceneService sceneController;
 
     private void Awake()
     {
         button =  GetComponent<Button>();
-        sceneController = ServiceLocator.Get<SceneController>();
+        sceneController = ServiceLocator.Get<SceneService>();
     }
 
     public void Initialize(GameModeData modeData)

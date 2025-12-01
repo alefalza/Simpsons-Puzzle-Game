@@ -530,7 +530,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52e65fa51785a324c938862484a45d91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  managersRootPrefab: {fileID: 8458217352798492045, guid: 139c1c02e820b4a6d89aaa663c4d8401, type: 3}
+  managersRoot: {fileID: 8458217352798492045, guid: 139c1c02e820b4a6d89aaa663c4d8401, type: 3}
   bootOverlay: {fileID: 27853081}
 --- !u!4 &1901385371
 Transform:

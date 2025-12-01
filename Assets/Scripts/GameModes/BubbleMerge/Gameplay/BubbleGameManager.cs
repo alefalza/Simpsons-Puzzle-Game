@@ -11,7 +11,7 @@ namespace GameModes.BubbleMerge.Gameplay
 
         private int score = 0;
 
-        public static BubbleGameManager Instance;
+        public static BubbleGameManager Instance { get; private set; }
 
         public int MaxTier => spawner.MaxTier;
         public bool IsPaused { get; private set; } = false;
@@ -19,7 +19,14 @@ namespace GameModes.BubbleMerge.Gameplay
 
         private void Awake()
         {
-            Instance = this;
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
 
         private void Start()

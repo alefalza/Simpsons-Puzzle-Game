@@ -1,38 +1,33 @@
-using System;
-using Core;
-using Core.Managers;
+﻿using Core.Services.AudioService;
+using UI.MainMenu.Tabs.Settings;
 using UnityEngine;
 
-namespace UI.Settings
+namespace Core.Services.SettingsService
 {
-    public class SettingsManager : MonoBehaviour, IService
+    public class SettingsService : ISettingsService
     {
         public SettingsData Data { get; private set; }
 
-        private AudioManager audioManager;
-    
-        private void Awake()
+        public SettingsService() { }
+        
+        public void Initialize()
         {
-            ServiceLocator.Register(this);
-        }
-
-        private void Start()
-        {
+            Debug.Log("[SettingsService] Initializing...");
+            
             Data = SettingsData.Load();
-            audioManager = ServiceLocator.Get<AudioManager>();
         }
 
         public void SetMusicVolume(float value)
         {
             Data.MusicVolume = value;
-            audioManager.SetMusicVolume(value);
+            AudioService.SetMusicVolume(value);
             Data.Save();
         }
 
         public void SetSFXVolume(float value)
         {
             Data.SFXVolume = value;
-            audioManager.SetSFXVolume(value);
+            AudioService.SetSFXVolume(value);
             Data.Save();
         }
 
@@ -60,5 +55,13 @@ namespace UI.Settings
             // TODO: LocalizationSystem
             Data.Save();
         }
+
+        public void Shutdown()
+        {
+            Debug.Log("[SettingsService] Shutting down...");
+        }
+        
+        private IAudioService audioService;
+        private IAudioService AudioService => audioService ??= ServiceLocator.Get<IAudioService>();
     }
 }

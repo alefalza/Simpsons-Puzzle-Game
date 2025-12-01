@@ -1,7 +1,8 @@
 using System;
 using System.Collections;
 using Core;
-using Core.Managers;
+using Core.Services;
+using Core.Services.SceneService;
 using GameModes.BubbleMerge.Gameplay;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,13 +15,15 @@ namespace UI.Overlays
         [SerializeField] private Button resumeButton;
         [SerializeField] private Button menuButton;
 
-        private SceneController sceneController;
+        private SceneService sceneController;
 
+        public Action OnResume;
+        
         public bool IsFading { get; private set; } = false;
     
         private void Awake()
         {
-            sceneController = ServiceLocator.Get<SceneController>();
+            sceneController = ServiceLocator.Get<SceneService>();
 
             resumeButton.onClick.AddListener(OnResumePressed);
             menuButton.onClick.AddListener(OnMenuPressed);
@@ -73,7 +76,7 @@ namespace UI.Overlays
 
         private void OnResumePressed()
         {
-            BubbleGameManager.Instance.TogglePauseFromOverlay();
+            OnResume?.Invoke();
         }
 
         private void OnMenuPressed()
