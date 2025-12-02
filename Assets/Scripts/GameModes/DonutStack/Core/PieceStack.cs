@@ -102,6 +102,33 @@ namespace GameModes.DonutStack.Core
             transform.position = cell.transform.position;
         }
         
+        public int RemoveTopGroupIfReached(int minCount)
+        {
+            int topCount = TopColorCount();
+            
+            if (topCount < minCount)
+                return 0;
+
+            PieceColor topColor = GetTopColor();
+            int removed = 0;
+
+            for (int i = pieces.Count - 1; i >= 0; i--)
+            {
+                if (pieces[i].Color == topColor)
+                {
+                    Destroy(pieces[i].gameObject);
+                    pieces.RemoveAt(i);
+                    removed++;
+                }
+                else
+                    break;
+            }
+
+            ArrangePieces();
+            
+            return removed;
+        }
+        
         private Sprite CreateCircleSprite()
         {
             Texture2D texture = new Texture2D(64, 64);

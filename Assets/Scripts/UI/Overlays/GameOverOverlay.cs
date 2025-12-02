@@ -1,6 +1,5 @@
 using System.Collections;
 using Core;
-using Core.Services;
 using Core.Services.SceneService;
 using TMPro;
 using UnityEngine;
@@ -17,16 +16,16 @@ namespace UI.Overlays
         [SerializeField] private Button retryButton;
         [SerializeField] private Button menuButton;
 
-        private SceneService sceneController;
+        private SceneService sceneService;
         private string currentScene;
 
         private void Awake()
         {
-            sceneController = ServiceLocator.Get<SceneService>();
+            sceneService = ServiceLocator.Get<SceneService>();
             currentScene = SceneManager.GetActiveScene().name;
 
             retryButton.onClick.AddListener(OnRetryClicked);
-            menuButton.onClick.AddListener(OnMenuClicked);
+            menuButton.onClick.AddListener(OnBackToMenuClicked);
         }
 
         public void Show(int finalScore)
@@ -58,18 +57,18 @@ namespace UI.Overlays
 
         private void OnRetryClicked()
         {
-            sceneController.LoadScene(currentScene);
+            sceneService.LoadScene(currentScene);
         }
 
-        private void OnMenuClicked()
+        private void OnBackToMenuClicked()
         {
-            sceneController.LoadScene("MainMenuScene");
+            sceneService.LoadScene("MainMenuScene");
         }
 
         private void OnDestroy()
         {
             retryButton.onClick.RemoveListener(OnRetryClicked);
-            menuButton.onClick.RemoveListener(OnMenuClicked);
+            menuButton.onClick.RemoveListener(OnBackToMenuClicked);
         }
     }
 }

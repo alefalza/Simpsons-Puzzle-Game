@@ -21,8 +21,10 @@ namespace UI
         [SerializeField] private PauseOverlay pauseOverlay;
         [SerializeField] private GameOverOverlay gameOverOverlay;
 
-        protected PauseOverlay pauseOverlayInstance;
-        protected GameOverOverlay gameOverOverlayInstance;
+        private PauseOverlay pauseOverlayInstance;
+        private GameOverOverlay gameOverOverlayInstance;
+        
+        private bool IsGameOver => gameOverOverlayInstance != null;
         
         public virtual void UpdateScore(int newScore)
         {
@@ -31,7 +33,7 @@ namespace UI
 
         public virtual bool CanTogglePause()
         {
-            return pauseOverlayInstance == null || !pauseOverlayInstance.IsFading;
+            return (pauseOverlayInstance == null || !pauseOverlayInstance.IsFading) && !IsGameOver;
         }
 
         public virtual void ShowPauseOverlay()
@@ -43,7 +45,7 @@ namespace UI
             pauseOverlayInstance.OnResume += OnResumeClicked;
         }
 
-        public abstract void OnResumeClicked();
+        protected abstract void OnResumeClicked();
 
         public virtual void HidePauseOverlay()
         {

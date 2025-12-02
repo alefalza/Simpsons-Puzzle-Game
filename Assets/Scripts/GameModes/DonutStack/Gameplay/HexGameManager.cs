@@ -146,30 +146,29 @@ namespace GameModes.DonutStack.Gameplay
         
             bool foundMatch = true;
         
-            // Repetir mientras haya matches
             while (foundMatch && cell.IsOccupied)
             {
                 foundMatch = false;
             
-                List<HexCell> neighbors = hexGrid.GetNeighbours(cell);
+                List<HexCell> neighbours = hexGrid.GetNeighbours(cell);
                 PieceColor currentTopColor = cell.Stack.GetTopColor();
             
                 // Buscar el primer vecino que hace match
-                foreach (var neighbor in neighbors)
+                foreach (var neighbour in neighbours)
                 {
-                    if (!neighbor.IsOccupied) continue;
+                    if (!neighbour.IsOccupied) continue;
                 
-                    if (neighbor.Stack.GetTopColor() == currentTopColor)
+                    if (neighbour.Stack.GetTopColor() == currentTopColor)
                     {
                         // Match encontrado! Mover piezas del mismo color
                         List<Piece> piecesToMove = cell.Stack.RemovePiecesOfColor(currentTopColor);
                     
                         foreach (var piece in piecesToMove)
                         {
-                            neighbor.Stack.AddPiece(piece);
+                            neighbour.Stack.AddPiece(piece);
                         }
                     
-                        neighbor.Stack.ArrangePieces();
+                        neighbour.Stack.ArrangePieces();
                     
                         yield return new WaitForSeconds(0.2f);
                     
@@ -185,21 +184,31 @@ namespace GameModes.DonutStack.Gameplay
                         }
                     
                         // Verificar si el stack vecino llegó a 10 piezas
-                        if (neighbor.IsOccupied && neighbor.Stack.PieceCount >= piecesToDestroy)
+                        if (neighbour.IsOccupied && neighbour.Stack.PieceCount >= piecesToDestroy)
                         {
-                            int points = neighbor.Stack.PieceCount;
-                            score += points;
-                            UpdateScoreUI();
-                        
-                            Destroy(neighbor.Stack.gameObject);
-                            neighbor.ClearStack();
+                            int removed = neighbour.Stack.RemoveTopGroupIfReached(piecesToDestroy);
+
+                            if (removed > 0)
+                            {
+                                score += removed;
+                                UpdateScoreUI();
+                                yield return new WaitForSeconds(0.3f);
+
+                                // Si después de eliminar el grupo el stack quedó vacío, destruirlo
+                                if (neighbour.Stack.PieceCount == 0)
+                                {
+                                    Destroy(neighbour.Stack.gameObject);
+                                    neighbour.ClearStack();
+                                    yield break;
+                                }
+                            }
                         
                             yield return new WaitForSeconds(0.3f);
                         }
-                        else if (neighbor.IsOccupied)
+                        else if (neighbour.IsOccupied)
                         {
                             // Procesar recursivamente el vecino que recibió las piezas
-                            yield return StartCoroutine(ProcessCellMatchesRecursively(neighbor));
+                            yield return StartCoroutine(ProcessCellMatchesRecursively(neighbour));
                         }
                     
                         // Si la celda actual aún tiene piezas, puede haber más matches

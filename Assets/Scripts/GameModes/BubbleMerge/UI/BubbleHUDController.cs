@@ -29,7 +29,7 @@ namespace GameModes.BubbleMerge.UI
             nextBubbleIcon.SetBubbleIcon(bubbleTierIcons[tier]);
         }
 
-        public override void OnResumeClicked()
+        protected override void OnResumeClicked()
         {
             BubbleGameManager.Instance.TogglePauseFromOverlay();
         }
