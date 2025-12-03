@@ -85,8 +85,8 @@ MonoBehaviour:
   piecePrefab: {fileID: 1125557765035750209, guid: 29c86a0dc7bebd2428b50e1035d39e52, type: 3}
   pieceSpacing: 0.15
   topCountText: {fileID: 7673381334066802913}
-  availableColors: 01000000020000000300000004000000
-  minStackHeight: 1
+  availableColors: 010000000200000004000000
+  minStackHeight: 2
   maxStackHeight: 4
 --- !u!1 &6243891334656356876
 GameObject:

@@ -20,7 +20,7 @@ namespace GameModes.DonutStack.Gameplay
         
         private readonly Dictionary<Vector2Int, HexCell> cells = new Dictionary<Vector2Int, HexCell>();
 
-        public void InitializeGrid(int radius)
+        public void Initialize(int radius)
         {
             for (int q = -radius; q <= radius; q++)
             {

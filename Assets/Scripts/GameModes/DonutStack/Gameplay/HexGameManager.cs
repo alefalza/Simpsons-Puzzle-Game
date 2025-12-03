@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using GameModes.DonutStack.Core;
 using GameModes.DonutStack.UI;
 using UnityEngine;
@@ -46,7 +47,7 @@ namespace GameModes.DonutStack.Gameplay
 
         private void Start()
         {
-            hexGrid.InitializeGrid(gridRadius);
+            hexGrid.Initialize(gridRadius);
             UpdateScoreUI();
             GenerateNewTurn();
         }
@@ -62,6 +63,11 @@ namespace GameModes.DonutStack.Gameplay
                 TogglePause();
             
             if (IsInputBlocked) return;
+        }
+        
+        private void UpdateScoreUI()
+        {
+            hudController.UpdateScore(score);
         }
         
         private void GenerateNewTurn()
@@ -118,22 +124,13 @@ namespace GameModes.DonutStack.Gameplay
 
         private bool AllStacksPlaced()
         {
-            foreach (var stack in currentTurnStacks)
-            {
-                if (stack != null && !stack.IsPlaced)
-                {
-                    return false;
-                }
-            }
-        
-            return true;
+            return currentTurnStacks.All(stack => stack == null || stack.IsPlaced);
         }
 
         private IEnumerator ProcessMatchesRecursive(HexCell startCell)
         {
             IsProcessingMatches = true;
         
-            // Procesar matches recursivos desde esta celda
             yield return StartCoroutine(ProcessCellMatchesRecursively(startCell));
         
             IsProcessingMatches = false;
@@ -143,36 +140,31 @@ namespace GameModes.DonutStack.Gameplay
         private IEnumerator ProcessCellMatchesRecursively(HexCell cell)
         {
             if (!cell.IsOccupied) yield break;
-        
+
             bool foundMatch = true;
-        
+
             while (foundMatch && cell.IsOccupied)
             {
                 foundMatch = false;
-            
+
                 List<HexCell> neighbours = hexGrid.GetNeighbours(cell);
                 PieceColor currentTopColor = cell.Stack.GetTopColor();
-            
-                // Buscar el primer vecino que hace match
+
                 foreach (var neighbour in neighbours)
                 {
                     if (!neighbour.IsOccupied) continue;
-                
+
                     if (neighbour.Stack.GetTopColor() == currentTopColor)
                     {
-                        // Match encontrado! Mover piezas del mismo color
                         List<Piece> piecesToMove = cell.Stack.RemovePiecesOfColor(currentTopColor);
-                    
+
                         foreach (var piece in piecesToMove)
-                        {
                             neighbour.Stack.AddPiece(piece);
-                        }
-                    
+
                         neighbour.Stack.ArrangePieces();
-                    
+
                         yield return new WaitForSeconds(0.2f);
-                    
-                        // Si la celda origen quedó vacía, destruir el stack
+
                         if (cell.Stack.PieceCount == 0)
                         {
                             Destroy(cell.Stack.gameObject);
@@ -182,82 +174,42 @@ namespace GameModes.DonutStack.Gameplay
                         {
                             cell.Stack.ArrangePieces();
                         }
-                    
-                        // Verificar si el stack vecino llegó a 10 piezas
+
                         if (neighbour.IsOccupied && neighbour.Stack.PieceCount >= piecesToDestroy)
                         {
-                            int removed = neighbour.Stack.RemoveTopGroupIfReached(piecesToDestroy);
+                            int groupCount = neighbour.Stack.TopColorCount();
 
-                            if (removed > 0)
+                            score += groupCount;
+                            UpdateScoreUI();
+
+                            yield return StartCoroutine(
+                                neighbour.Stack.RemoveTopGroupWithDelay(piecesToDestroy, 0.05f)
+                            );
+
+                            if (neighbour.Stack.PieceCount == 0)
                             {
-                                score += removed;
-                                UpdateScoreUI();
-                                yield return new WaitForSeconds(0.3f);
-
-                                // Si después de eliminar el grupo el stack quedó vacío, destruirlo
-                                if (neighbour.Stack.PieceCount == 0)
-                                {
-                                    Destroy(neighbour.Stack.gameObject);
-                                    neighbour.ClearStack();
-                                    yield break;
-                                }
+                                Destroy(neighbour.Stack.gameObject);
+                                neighbour.ClearStack();
+                                yield break;
                             }
-                        
-                            yield return new WaitForSeconds(0.3f);
+
+                            yield return new WaitForSeconds(0.2f);
                         }
                         else if (neighbour.IsOccupied)
                         {
-                            // Procesar recursivamente el vecino que recibió las piezas
                             yield return StartCoroutine(ProcessCellMatchesRecursively(neighbour));
                         }
-                    
-                        // Si la celda actual aún tiene piezas, puede haber más matches
+
                         if (cell.IsOccupied)
                         {
                             foundMatch = true;
-                            break; // Salir del foreach y reintentar desde el principio
+                            break;
                         }
                         else
                         {
-                            yield break; // La celda quedó vacía, terminar
+                            yield break;
                         }
                     }
-                }
-            
-                // Verificar si el stack actual llegó a 10 después de perder piezas
-                if (cell.IsOccupied && cell.Stack.PieceCount >= piecesToDestroy)
-                {
-                    int points = cell.Stack.PieceCount;
-                    score += points;
-                    UpdateScoreUI();
-                
-                    Destroy(cell.Stack.gameObject);
-                    cell.ClearStack();
-                
-                    yield return new WaitForSeconds(0.3f);
-                    yield break;
-                }
-            }
-        }
-
-        private void CheckGameOver()
-        {
-            if (!hexGrid.HasEmptyCells() && currentTurnStacks.Count > 0)
-            {
-                bool canPlaceAny = false;
-            
-                foreach (var stack in currentTurnStacks)
-                {
-                    if (stack != null && !stack.IsPlaced)
-                    {
-                        canPlaceAny = true;
-                        break;
-                    }
-                }
-            
-                if (canPlaceAny)
-                {
-                    OnGameOver();
                 }
             }
         }
@@ -295,15 +247,32 @@ namespace GameModes.DonutStack.Gameplay
         }
         #endregion
 
+        private void CheckGameOver()
+        {
+            if (!hexGrid.HasEmptyCells() && currentTurnStacks.Count > 0)
+            {
+                bool canPlaceAny = false;
+            
+                foreach (var stack in currentTurnStacks)
+                {
+                    if (stack != null && !stack.IsPlaced)
+                    {
+                        canPlaceAny = true;
+                        break;
+                    }
+                }
+            
+                if (canPlaceAny)
+                {
+                    OnGameOver();
+                }
+            }
+        }
+        
         private void OnGameOver()
         {
             IsInputBlocked = true;
             hudController.ShowGameOverOverlay(score);
-        }
-        
-        private void UpdateScoreUI()
-        {
-            hudController.UpdateScore(score);
         }
     }
 }

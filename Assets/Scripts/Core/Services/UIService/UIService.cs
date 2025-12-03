@@ -1,3 +1,4 @@
+using UI.MainMenu;
 using UnityEngine;
 
 namespace Core.Services.UIService
@@ -6,6 +7,8 @@ namespace Core.Services.UIService
     {
         private readonly GameObject loadingOverlay;
 
+        public MainMenuTab LastTabSeen { get; private set; } = MainMenuTab.Home;
+        
         public UIService(GameObject overlay)
         {
             loadingOverlay = overlay;
@@ -28,6 +31,11 @@ namespace Core.Services.UIService
         {
             if (loadingOverlay != null)
                 loadingOverlay.SetActive(show);
+        }
+
+        public void SetLastTabSeen(MainMenuTab tab)
+        {
+            LastTabSeen = tab;
         }
 
         public void Shutdown()

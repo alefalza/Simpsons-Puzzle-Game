@@ -7,10 +7,12 @@ namespace UI.MainMenu
     {
         [SerializeField] private Button button;
         [SerializeField] private TabView targetView;
+        [SerializeField] private MainMenuTab tabId;
 
         private TabGroup tabGroup;
 
         public TabView TargetView => targetView;
+        public MainMenuTab TabId => tabId;
 
         /// <summary>
         /// Sets the TabGroup this button belongs to.
@@ -26,7 +28,7 @@ namespace UI.MainMenu
         /// </summary>
         private void OnClick()
         {
-            tabGroup.OnTabSelected(this);
+            tabGroup.OnTabButtonClicked(this);
         }
     }
 }

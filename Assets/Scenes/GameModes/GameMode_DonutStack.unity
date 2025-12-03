@@ -500,7 +500,7 @@ MonoBehaviour:
   gridRadius: 1
   pieceStackPrefab: {fileID: 5863030423550925337, guid: 7d4ccbbf6c87dd6409e953f1b29dabb6, type: 3}
   stacksPerTurn: 3
-  piecesToDestroy: 10
+  piecesToDestroy: 8
   hudController: {fileID: 1601575534}
 --- !u!4 &1601575533
 Transform:

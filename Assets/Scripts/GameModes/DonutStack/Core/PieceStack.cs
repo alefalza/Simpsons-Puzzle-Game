@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using GameModes.DonutStack.Gameplay;
 using TMPro;
@@ -102,15 +103,14 @@ namespace GameModes.DonutStack.Core
             transform.position = cell.transform.position;
         }
         
-        public int RemoveTopGroupIfReached(int minCount)
+        public IEnumerator RemoveTopGroupWithDelay(int minCount, float delay)
         {
             int topCount = TopColorCount();
             
             if (topCount < minCount)
-                return 0;
+                yield break;
 
             PieceColor topColor = GetTopColor();
-            int removed = 0;
 
             for (int i = pieces.Count - 1; i >= 0; i--)
             {
@@ -118,38 +118,13 @@ namespace GameModes.DonutStack.Core
                 {
                     Destroy(pieces[i].gameObject);
                     pieces.RemoveAt(i);
-                    removed++;
+                    ArrangePieces();
+                    yield return new WaitForSeconds(delay);
                 }
-                else
-                    break;
+                else break;
             }
-
-            ArrangePieces();
-            
-            return removed;
         }
         
-        private Sprite CreateCircleSprite()
-        {
-            Texture2D texture = new Texture2D(64, 64);
-            Color[] pixels = new Color[64 * 64];
-            Vector2 center = new Vector2(32, 32);
-
-            for (int y = 0; y < 64; y++)
-            {
-                for (int x = 0; x < 64; x++)
-                {
-                    float dist = Vector2.Distance(new Vector2(x, y), center);
-                    pixels[y * 64 + x] = dist <= 30 ? Color.white : Color.clear;
-                }
-            }
-
-            texture.SetPixels(pixels);
-            texture.Apply();
-
-            return Sprite.Create(texture, new Rect(0, 0, 64, 64), new Vector2(0.5f, 0.5f));
-        }
-
         private void UpdateTopCountText()
         {
             int topCount = TopColorCount();
@@ -176,7 +151,7 @@ namespace GameModes.DonutStack.Core
             }
         }
         
-        private int TopColorCount()
+        public int TopColorCount()
         {
             if (pieces.Count == 0) return 0;
 
