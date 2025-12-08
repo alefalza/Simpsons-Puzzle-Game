@@ -495,7 +495,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 500a9d4f03e094f7f8cb30af1031281f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvasGroup: {fileID: 1409229981017697323}
+  definition: {fileID: 11400000, guid: 46364655ae16d4dfb96f4e47b1eef34d, type: 2}
   scoreText: {fileID: 7498591510557258188}
   retryButton: {fileID: 1411127125288635168}
   menuButton: {fileID: 2299389672339533980}

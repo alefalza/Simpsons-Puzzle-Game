@@ -8,9 +8,8 @@ using UnityEngine.UI;
 
 namespace UI.Overlays
 {
-    public class GameOverOverlay : MonoBehaviour
+    public class GameOverOverlay : BasePopup
     {
-        [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private TMP_Text scoreText;
         [SerializeField] private Button retryButton;
         [SerializeField] private Button menuButton;
@@ -18,8 +17,10 @@ namespace UI.Overlays
         private SceneService sceneService;
         private string currentScene;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+            
             sceneService = ServiceLocator.Get<SceneService>();
             currentScene = SceneManager.GetActiveScene().name;
 

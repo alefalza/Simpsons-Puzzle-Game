@@ -2,7 +2,8 @@ namespace Core.Services.PopupService
 {
     public interface IPopupService : IService
     {
-        void ShowPopup(string popupId);
-        void HidePopup(string popupId);
+        public T Show<T>(PopupDefinition definition) where T : BasePopup;
+        public void Close(string popupId);
+        public void Close(BasePopup popup);
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Core.Services.PopupService
@@ -6,35 +7,58 @@ namespace Core.Services.PopupService
     [Serializable]
     public class PopupService : IPopupService
     {
-        private Transform popupRoot;
+        private Transform popupContainer;
 
-        public PopupService(Transform root)
+        private readonly Dictionary<string, BasePopup> activePopups = new();
+
+        public PopupService(Transform container)
         {
-            popupRoot = root;
+            popupContainer = container;
         }
 
         public void Initialize()
         {
             Debug.Log("[PopupService] Initializing...");
             
-            if (popupRoot == null)
+            if (popupContainer == null)
             {
                 Debug.LogError("[PopupService] Missing popup root!");
             }
         }
-
-        public void ShowPopup(string popupId)
+        
+        public T Show<T>(PopupDefinition definition) where T : BasePopup
         {
-            if (popupRoot == null) return;
-            Debug.Log($"[PopupService] Show popup: {popupId}");
-            // Implement prefab/resource logic using popupRoot
+            if (activePopups.TryGetValue(definition.popupId, out var popup))
+                return popup as T;
+
+            var instance = UnityEngine.Object.Instantiate(definition.prefab, popupContainer);
+            instance.definition = definition;
+            instance.name = definition.popupId;
+
+            activePopups[definition.popupId] = instance;
+
+            instance.Open();
+
+            return instance as T;
         }
 
-        public void HidePopup(string popupId)
+        public void Close(string popupId)
         {
-            Debug.Log($"[PopupService] Hide popup: {popupId}");
+            if (!activePopups.TryGetValue(popupId, out var popup))
+                return;
+
+            popup.Close();
+            activePopups.Remove(popupId);
         }
 
+        public void Close(BasePopup popup)
+        {
+            if (popup == null) return;
+            
+            activePopups.Remove(popup.definition.popupId);
+            popup.Close();
+        }
+        
         public void Shutdown()
         {
             Debug.Log("[PopupService] Shutting down...");
