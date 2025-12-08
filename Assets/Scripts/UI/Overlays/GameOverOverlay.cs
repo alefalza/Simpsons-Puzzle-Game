@@ -10,7 +10,6 @@ namespace UI.Overlays
 {
     public class GameOverOverlay : MonoBehaviour
     {
-        [Header("UI References")]
         [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private TMP_Text scoreText;
         [SerializeField] private Button retryButton;
@@ -63,6 +62,7 @@ namespace UI.Overlays
         private void OnBackToMenuClicked()
         {
             sceneService.LoadScene("MainMenuScene");
+            Destroy(gameObject); // So it does not overlap with the Loading screen
         }
 
         private void OnDestroy()

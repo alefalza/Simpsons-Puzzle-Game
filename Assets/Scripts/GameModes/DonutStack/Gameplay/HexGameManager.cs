@@ -18,9 +18,11 @@ namespace GameModes.DonutStack.Gameplay
         
         [Header("Game Settings")]
         [SerializeField] private int stacksPerTurn = 3;
+        [SerializeField] private Transform stackContainer;
+        [SerializeField] private Transform dragLayer;
         [SerializeField] private int piecesToDestroy = 10;
     
-        [Header("UI")]
+        [Header("HUD")]
         [SerializeField] private HexHUDController hudController;
         
         private readonly List<PieceStack> currentTurnStacks = new List<PieceStack>();
@@ -28,6 +30,9 @@ namespace GameModes.DonutStack.Gameplay
         private int score = 0;
 
         public static HexGameManager Instance { get; private set; }
+        
+        public Transform StackContainer => stackContainer;
+        public Transform DragLayer => dragLayer;
         
         public bool IsPaused { get; private set; } = false;
         public bool IsInputBlocked { get; private set; } = false;
@@ -86,22 +91,20 @@ namespace GameModes.DonutStack.Gameplay
             {
                 PieceStack stack = CreateRandomStack();
                 currentTurnStacks.Add(stack);
-                stack.transform.position = new Vector3(-4 + i * 2, -4, 0); // TODO: remove hardcode
             }
         }
 
         private PieceStack CreateRandomStack()
         {
-            PieceStack stack = Instantiate(pieceStackPrefab);
+            PieceStack stack = Instantiate(pieceStackPrefab, stackContainer.transform);
         
             if (stack == null)
             {
                 Debug.LogError("PieceStack component not found on prefab!");
                 return null;
             }
-        
+            
             stack.Initialize();
-            stack.ArrangePieces();
         
             return stack;
         }
@@ -112,6 +115,7 @@ namespace GameModes.DonutStack.Gameplay
             if (cell.IsOccupied) return;
         
             cell.SetStack(stack);
+            stack.PlaceOnCell(cell);
             currentTurnStacks.Remove(stack);
         
             StartCoroutine(ProcessMatchesRecursive(cell));
@@ -154,6 +158,7 @@ namespace GameModes.DonutStack.Gameplay
                 {
                     if (!neighbour.IsOccupied) continue;
 
+                    // If colors at the top match, move pieces from one stack to the other.
                     if (neighbour.Stack.GetTopColor() == currentTopColor)
                     {
                         List<Piece> piecesToMove = cell.Stack.RemovePiecesOfColor(currentTopColor);
@@ -165,6 +170,7 @@ namespace GameModes.DonutStack.Gameplay
 
                         yield return new WaitForSeconds(0.2f);
 
+                        // If origin stack ends up empty after moving its pieces to the target stack, destroy it.
                         if (cell.Stack.PieceCount == 0)
                         {
                             Destroy(cell.Stack.gameObject);
@@ -175,17 +181,19 @@ namespace GameModes.DonutStack.Gameplay
                             cell.Stack.ArrangePieces();
                         }
 
-                        if (neighbour.IsOccupied && neighbour.Stack.PieceCount >= piecesToDestroy)
+                        int topColorCount = neighbour.Stack.TopColorCount();
+                        
+                        // Destroy pieces of the same color if amount to destroy is reached.
+                        if (neighbour.IsOccupied && topColorCount >= piecesToDestroy)
                         {
-                            int groupCount = neighbour.Stack.TopColorCount();
-
-                            score += groupCount;
-                            UpdateScoreUI();
-
                             yield return StartCoroutine(
                                 neighbour.Stack.RemoveTopGroupWithDelay(piecesToDestroy, 0.05f)
                             );
+                            
+                            score += topColorCount;
+                            UpdateScoreUI();
 
+                            // If the stack ends up empty after destroying its top pieces, destroy it.
                             if (neighbour.Stack.PieceCount == 0)
                             {
                                 Destroy(neighbour.Stack.gameObject);

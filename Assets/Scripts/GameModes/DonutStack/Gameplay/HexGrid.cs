@@ -74,21 +74,21 @@ namespace GameModes.DonutStack.Gameplay
         private void CreateHexCell(int q, int r)
         {
             Vector2Int axialCoords = new Vector2Int(q, r);
-            Vector3 worldPos = AxialToWorld(axialCoords);
         
-            HexCell cell = Instantiate(hexCellPrefab, worldPos, Quaternion.identity, transform);
+            var cell = Instantiate(hexCellPrefab, transform);
             cell.name = $"HexCell_{q}_{r}";
             cell.Initialize(axialCoords);
+            cell.GetComponent<RectTransform>().anchoredPosition = AxialToUI(axialCoords);
         
             cells[axialCoords] = cell;
         }
 
-        private Vector3 AxialToWorld(Vector2Int axial)
+        private Vector2 AxialToUI(Vector2Int axial)
         {
             float x = hexSize * (Mathf.Sqrt(3) * axial.x + Mathf.Sqrt(3) / 2f * axial.y);
             float y = hexSize * (3f / 2f * axial.y);
-        
-            return new Vector3(x, y, 0);
+
+            return new Vector2(x, y);
         }
     }
 }

@@ -80,6 +80,7 @@ namespace UI.Overlays
         private void OnBackToMenuClicked()
         {
             sceneService.LoadScene("MainMenuScene");
+            Destroy(gameObject); // So it does not overlap with the Loading screen
         }
 
         private void OnDestroy()

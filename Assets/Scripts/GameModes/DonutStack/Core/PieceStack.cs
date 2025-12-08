@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using GameModes.DonutStack.Gameplay;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using Random = UnityEngine.Random;
 
 namespace GameModes.DonutStack.Core
 {
-    public class PieceStack : MonoBehaviour
+    public class PieceStack : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         [SerializeField] private Piece piecePrefab;
         [SerializeField] private float pieceSpacing = 0.15f;
@@ -25,10 +27,9 @@ namespace GameModes.DonutStack.Core
         
         private readonly List<Piece> pieces = new List<Piece>();
         
-        private Camera mainCamera;
-        private bool isDragging = false;
-        private Vector3 originalPosition;
-        private Vector3 dragOffset;
+        private RectTransform rectTransform;
+        private Canvas canvas;
+        private Vector2 originalPos;
         private Renderer textRenderer;
 
         public int PieceCount => pieces.Count;
@@ -36,12 +37,13 @@ namespace GameModes.DonutStack.Core
 
         private void Awake()
         {
-            mainCamera = Camera.main;
-            UpdateTopCountText();
+            rectTransform = GetComponent<RectTransform>();
         }
 
         public void Initialize()
         {
+            canvas = HexGameManager.Instance.DragLayer.GetComponentInParent<Canvas>();
+            
             int pieceCount = Random.Range(minStackHeight, maxStackHeight + 1);
         
             for (int i = 0; i < pieceCount; i++)
@@ -51,6 +53,8 @@ namespace GameModes.DonutStack.Core
                 piece.Initialize(color);
                 AddPiece(piece);
             }
+            
+            ArrangePieces();
         }
 
         public void AddPiece(Piece piece)
@@ -64,7 +68,6 @@ namespace GameModes.DonutStack.Core
             for (int i = 0; i < pieces.Count; i++)
             {
                 pieces[i].transform.localPosition = new Vector3(0, i * pieceSpacing, 0);
-                pieces[i].SetSortingOrder(i);
             }
 
             UpdateTopCountText();
@@ -168,86 +171,52 @@ namespace GameModes.DonutStack.Core
 
             return count;
         }
-        
-        private void SetDraggingSortingOrder(bool dragging)
-        {
-            int baseOrder = dragging ? 100 : 0;
 
-            for (int i = 0; i < pieces.Count; i++)
-            {
-                pieces[i].SetSortingOrder(baseOrder + i);
-            }
+        #region Drag Events
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            if (IsPlaced) return;
+            
+            originalPos = rectTransform.anchoredPosition;
+            transform.SetParent(HexGameManager.Instance.DragLayer, worldPositionStays: false);
         }
 
-        #region Mouse Events
-        private void OnMouseDown()
+        public void OnDrag(PointerEventData eventData)
         {
-            if (!IsPlaced && HexGameManager.Instance != null && !HexGameManager.Instance.IsProcessingMatches)
-            {
-                isDragging = true;
-                originalPosition = transform.position;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                (RectTransform)canvas.transform,
+                eventData.position,
+                canvas.worldCamera,
+                out var pos
+            );
 
-                Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-                mouseWorldPos.z = 0;
-                dragOffset = transform.position - mouseWorldPos;
-
-                SetDraggingSortingOrder(true);
-            }
-        }
-        
-        private void OnMouseDrag()
-        {
-            if (isDragging)
-            {
-                Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-                mouseWorldPos.z = 0;
-                transform.position = mouseWorldPos + dragOffset;
-            }
+            rectTransform.anchoredPosition = pos;
         }
 
-        private void OnMouseUp()
+        public void OnEndDrag(PointerEventData eventData)
         {
-            if (isDragging)
+            var cell = DetectCellUnderPointer(eventData);
+
+            if (cell != null && !cell.IsOccupied)
             {
-                isDragging = false;
-
-                HexCell targetCell = GetHexCellUnderMouse();
-                bool placed = false;
-
-                if (targetCell != null && !targetCell.IsOccupied && HexGameManager.Instance != null)
-                {
-                    HexGameManager.Instance.TryPlaceStack(targetCell, this);
-                    placed = true;
-                }
-
-                if (!placed)
-                {
-                    transform.position = originalPosition;
-                    SetDraggingSortingOrder(false);
-                    ArrangePieces();
-                }
-                else
-                {
-                    SetDraggingSortingOrder(false);
-                }
+                HexGameManager.Instance.TryPlaceStack(cell, this);
+            }
+            else
+            {
+                transform.SetParent(HexGameManager.Instance.StackContainer, worldPositionStays: false);
+                rectTransform.anchoredPosition = originalPos;
             }
         }
         
-        private HexCell GetHexCellUnderMouse()
+        private HexCell DetectCellUnderPointer(PointerEventData eventData)
         {
-            Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D[] hits = Physics2D.RaycastAll(mousePos, Vector2.zero);
+            var results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventData, results);
 
-            foreach (var hit in hits)
+            foreach (var r in results)
             {
-                if (hit.collider != null && hit.collider.gameObject != gameObject)
-                {
-                    HexCell cell = hit.collider.GetComponent<HexCell>();
-                    if (cell != null)
-                    {
-                        return cell;
-                    }
-                }
+                if (r.gameObject.TryGetComponent<HexCell>(out var cell))
+                    return cell;
             }
 
             return null;
