@@ -333,14 +333,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreUI: {fileID: 671730733}
+  pausePopupDefinition: {fileID: 11400000, guid: 3eb7eef81f58d421f88bfd2c327f336f, type: 2}
+  gameOverPopupDefinition: {fileID: 11400000, guid: 9b4307631e92b4feea1e9e2ce2230cb9, type: 2}
   currentBubbleIcon: {fileID: 1208971333}
   nextBubbleIcon: {fileID: 663035330}
   bubbleTierIcons:
   - {fileID: 21300000, guid: 01a147392ffcb4edd9ca38a0f31d3c20, type: 3}
   - {fileID: 21300000, guid: 972f5c5db8e0e49008fca247b1ed3300, type: 3}
   - {fileID: 21300000, guid: af708b3d8ae164b0481638f318ea4172, type: 3}
-  pauseOverlay: {fileID: 5645000255229299705, guid: 0f5f7c1e1f63e4419b05d67ad54c4691, type: 3}
-  gameOverOverlay: {fileID: 7047570459705113954, guid: e8ef014f94e944f988c5fe6b2ab59ce4, type: 3}
 --- !u!1 &219281218
 GameObject:
   m_ObjectHideFlags: 0

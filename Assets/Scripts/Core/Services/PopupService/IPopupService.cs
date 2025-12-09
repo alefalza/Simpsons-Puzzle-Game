@@ -2,8 +2,7 @@ namespace Core.Services.PopupService
 {
     public interface IPopupService : IService
     {
-        void PushPopup(PopupData data);
-        int GetQueueSize();
+        void Push(PopupDefinition def, PopupData data);
         BasePopup GetOpenedPopup();
     }
 }

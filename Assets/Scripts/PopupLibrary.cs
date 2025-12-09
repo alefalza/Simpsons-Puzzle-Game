@@ -5,12 +5,14 @@ using UnityEngine;
 [Serializable]
 public class PopupItem
 {
-    public string Type;
-    public BasePopup Popup;
+    public string name;
+    public BasePopup prefab;
 }
 
-[CreateAssetMenu]
-public class PopupsLibrary : ScriptableObject
+[CreateAssetMenu(fileName = "PopupsLibrary", menuName = "Core/Popups Library")]
+public class PopupLibrary : ScriptableObject
 {
-    public List<PopupItem> PopupItems;
+    [SerializeField] private List<PopupItem> popupItems;
+    
+    public List<PopupItem> PopupItems => popupItems;
 }

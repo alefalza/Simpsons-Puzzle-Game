@@ -238,7 +238,7 @@ namespace GameModes.DonutStack.Gameplay
             IsPaused = true;
             IsInputBlocked = true;
 
-            hudController.ShowPauseOverlay();
+            hudController.ShowPausePopup();
         }
 
         private void Resume()
@@ -246,7 +246,7 @@ namespace GameModes.DonutStack.Gameplay
             IsPaused = false;
             IsInputBlocked = false;
 
-            hudController.HidePauseOverlay();
+            hudController.HidePausePopup();
         }
 
         public void TogglePauseFromOverlay()

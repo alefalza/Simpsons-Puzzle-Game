@@ -523,6 +523,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serviceDefinitions: {fileID: 11400000, guid: 0744aed76f4f96b4f882d77d03cc37a4, type: 2}
+  popupLibrary: {fileID: 11400000, guid: ef07133223fa14743bd1617816280092, type: 2}
   musicSource: {fileID: 4935226758557160055}
   sfxSource: {fileID: 640028887835824790}
   popupRoot: {fileID: 4229017695341292995}

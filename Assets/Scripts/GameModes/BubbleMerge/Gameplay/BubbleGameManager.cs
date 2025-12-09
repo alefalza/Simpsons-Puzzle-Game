@@ -95,7 +95,7 @@ namespace GameModes.BubbleMerge.Gameplay
             IsInputBlocked = true;
             spawner.enabled = false;
 
-            hudController.ShowPauseOverlay();
+            hudController.ShowPausePopup();
         }
 
         private void Resume()
@@ -104,7 +104,7 @@ namespace GameModes.BubbleMerge.Gameplay
             IsInputBlocked = false;
             spawner.enabled = true;
 
-            hudController.HidePauseOverlay();
+            hudController.HidePausePopup();
         }
 
         public void TogglePauseFromOverlay()

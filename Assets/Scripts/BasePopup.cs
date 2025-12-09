@@ -1,98 +1,73 @@
 using System;
 using UnityEngine;
 using System.Collections;
-using TMPro;
-using UnityEngine.UI;
+
+public enum Priority
+{
+    Urgent = 4,
+    High = 3,
+    Medium = 2,
+    Low = 1
+}
 
 public abstract class PopupData
 {
     public Priority Priority { get; private set; }
-    public string Message { get; private set; }
-    public string Title { get; private set; }
-    
-    public PopupData(Priority priority, string message, string title)
+
+    protected PopupData(Priority priority)
     {
         Priority = priority;
-        Message = message;
-        Title = title;
     }
 }
 
 [RequireComponent(typeof(CanvasGroup))]
 public abstract class BasePopup : MonoBehaviour
 {
-    [Header("Popup Definition")]
-    public PopupDefinition definition;
-    [SerializeField] private TMP_Text titleText;
-    [SerializeField] private Button closeButton;
-
-    protected CanvasGroup canvasGroup;
-    protected bool isOpen = false;
+    private CanvasGroup canvasGroup;
+    
+    public PopupData PopupData { get; private set; }
+    public PopupDefinition Definition { get; private set; }
 
     public event Action OnOpened;
     public event Action OnClosed;
-    public event Action OnHide;
 
-    protected PopupData popupData;
-    
+    public bool IsFading { get; private set; }
+
     protected virtual void Awake()
     {
-        /*
         canvasGroup = GetComponent<CanvasGroup>();
-
-        if (definition == null)
-            Debug.LogError($"{name} missing PopupDefinition!");
-
-        // Start invisible
-        canvasGroup.alpha = 0;
+        canvasGroup.alpha = 0f;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
-        */
-        if (closeButton != null)
-        {
-            closeButton.onClick.AddListener(Close);
-        }
     }
 
-    public virtual void Setup(PopupData data)
+    protected virtual void Start()
     {
-        popupData = data;
+        
+    }
+
+    public virtual void Setup(PopupData data, PopupDefinition def)
+    {
+        PopupData = data;
+        Definition = def;
     }
 
     public virtual void Open()
     {
-        //isOpen = true;
-        //StopAllCoroutines();
-        //StartCoroutine(FadeIn());
-        titleText.text = popupData.Title;
-        gameObject.SetActive(true);
-        OnOpened?.Invoke();
-    }
-
-    public virtual void Hide()
-    {
-        gameObject.SetActive(false);
-        OnHide?.Invoke();
+        StartCoroutine(FadeIn());
     }
 
     public virtual void Close()
     {
-        //if (!isOpen) return;
-        //isOpen = false;
-
-        OnClosed?.Invoke();
-        Destroy(gameObject);
-        //StopAllCoroutines();
-        //StartCoroutine(FadeOut());
+        StartCoroutine(FadeOut());
     }
 
     private IEnumerator FadeIn()
     {
-        float duration = definition.overrideFadeDuration ? definition.fadeInDuration : 0.15f;
-        float t = 0;
-
-        canvasGroup.interactable = true;
-        canvasGroup.blocksRaycasts = definition.blocksInput;
+        IsFading = true;
+        
+        float t = 0f;
+        float duration = Definition.fadeInDuration;
 
         while (t < duration)
         {
@@ -101,13 +76,21 @@ public abstract class BasePopup : MonoBehaviour
             yield return null;
         }
 
-        canvasGroup.alpha = 1;
+        canvasGroup.alpha = 1f;
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
+
+        OnOpened?.Invoke();
+
+        IsFading = false;
     }
 
     private IEnumerator FadeOut()
     {
-        float duration = definition.overrideFadeDuration ? definition.fadeOutDuration : 0.15f;
-        float t = 0;
+        IsFading = true;
+        
+        float t = 0f;
+        float duration = Definition.fadeOutDuration;
 
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
@@ -115,23 +98,24 @@ public abstract class BasePopup : MonoBehaviour
         while (t < duration)
         {
             t += Time.deltaTime;
-            canvasGroup.alpha = 1 - (t / duration);
+            canvasGroup.alpha = 1f - (t / duration);
             yield return null;
         }
 
         canvasGroup.alpha = 0;
 
-        if (definition.destroyOnClose)
+        OnClosed?.Invoke();
+
+        IsFading = false;
+
+        if (Definition.destroyOnClose)
             Destroy(gameObject);
         else
             gameObject.SetActive(false);
     }
-    
-    protected void OnDestroy()
+
+    protected virtual void OnDestroy()
     {
-        if (closeButton != null)
-        {
-            closeButton.onClick.AddListener(Close);
-        }
+        
     }
 }

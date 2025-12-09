@@ -1,110 +1,97 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum Priority
-{
-    Urgent = 4,
-    High = 3,
-    Medium = 2,
-    Low = 1
-}
-
 namespace Core.Services.PopupService
 {
-    [Serializable]
     public class PopupService : IPopupService
     {
-        private List<PopupData> _popupsToShow;
-        private BasePopup _openedPopup;
-        private BasePopup _hidedPopup;
-        private readonly IPopupFactory _popupsFactory;
-        private readonly Transform _prefabsRoot;
-        
-        private readonly Dictionary<string, BasePopup> activePopups = new();
+        private readonly IPopupFactory factory;
+        private readonly Transform container;
 
-        public PopupService(IPopupFactory popupsFactory, Transform prefabsRoot)
+        private readonly List<(PopupDefinition def, PopupData data)> queue = new();
+
+        private BasePopup openedPopup;
+        private (PopupDefinition def, PopupData data)? hiddenPopup;
+
+        public PopupService(IPopupFactory factory, Transform container)
         {
-            _popupsFactory = popupsFactory;
-            _prefabsRoot = prefabsRoot;
-            _popupsToShow = new List<PopupData>();
+            this.factory = factory;
+            this.container = container;
         }
 
         public void Initialize()
         {
-            Debug.Log("[PopupService] Initializing...");
             
         }
-
-        public void PushPopup(PopupData data)
+    
+        public void Push(PopupDefinition def, PopupData data)
         {
-            if (data == null)
+            queue.Add((def, data));
+            TryShowNext();
+        }
+        
+        public BasePopup GetOpenedPopup() => openedPopup;
+        
+        private void TryShowNext()
+        {
+            // case 1: reopening hidden popup
+            if (openedPopup == null && hiddenPopup.HasValue)
             {
-                Debug.LogError($"[{nameof(PopupService)}] - Unable to push message. Null APopupData");
+                var (def, data) = hiddenPopup.Value;
+                hiddenPopup = null;
+
+                openedPopup = factory.CreatePopup(def, data, container);
+                openedPopup.OnClosed += OnPopupClosed;
+                openedPopup.Open();
                 return;
             }
 
-            _popupsToShow ??= new List<PopupData>();
-            _popupsToShow.Add(data);
-            ShowPopup();
-        }
-        
-        private void ShowPopup()
-        {
-            if (_openedPopup == null && _hidedPopup != null)
+            // nothing to open
+            if (openedPopup != null)
             {
-                _hidedPopup.Open();
-                _openedPopup = _hidedPopup;
-                _hidedPopup = null;
+                var next = queue.OrderByDescending(q => q.data.Priority).FirstOrDefault();
+
+                // if next is not urgent, do nothing
+                if (!next.Equals(default((PopupDefinition, PopupData))) &&
+                    next.data.Priority == Priority.Urgent)
+                {
+                    // urgent overrides current
+                    openedPopup.Close();
+                    hiddenPopup = (openedPopup.Definition, openedPopup.PopupData);
+                    openedPopup = null;
+
+                    queue.Remove(next);
+                    openedPopup = factory.CreatePopup(next.def, next.data, container);
+                    openedPopup.OnClosed += OnPopupClosed;
+                    openedPopup.Open();
+                }
+
                 return;
             }
 
-            var popupData = GetPopupToShow();
-            if (popupData == null || (_openedPopup != null && popupData.Priority != Priority.Urgent)) return;
-
-            if (popupData.Priority == Priority.Urgent && _openedPopup != null)
+            // case 3: no popup active, open next
+            if (queue.Count > 0)
             {
-                _openedPopup.Hide();
-                _hidedPopup = _openedPopup;
-                _openedPopup = null;
+                var next = queue.OrderByDescending(q => q.data.Priority).First();
+                queue.Remove(next);
+
+                openedPopup = factory.CreatePopup(next.def, next.data, container);
+                openedPopup.OnClosed += OnPopupClosed;
+                openedPopup.Open();
             }
-
-            _popupsToShow.Remove(popupData);
-            _openedPopup = _popupsFactory.InstantiatePopup(popupData, _prefabsRoot);
-            _openedPopup.OnClosed += PopupOnClosedHandler;
-            _openedPopup.Open();
-        }
-        
-        
-        private void PopupOnClosedHandler()
-        {
-            _openedPopup.OnClosed -= PopupOnClosedHandler;
-            _openedPopup = null;
-            ShowPopup();
-        }
-        
-        private PopupData GetPopupToShow()
-        {
-            if (GetQueueSize() == 0) return null;
-        
-            var prioritizedList = _popupsToShow.OrderByDescending(t => t.Priority);
-            return prioritizedList.FirstOrDefault();
         }
 
-        public int GetQueueSize()
+        private void OnPopupClosed()
         {
-            return _popupsToShow?.Count ?? 0;
+            openedPopup.OnClosed -= OnPopupClosed;
+            openedPopup = null;
+            TryShowNext();
         }
-
-        public BasePopup GetOpenedPopup()
-        {
-            return _openedPopup;
-        }
-
+        
         public void Shutdown()
         {
-            Debug.Log("[PopupService] Shutting down...");
+            
         }
     }
 }

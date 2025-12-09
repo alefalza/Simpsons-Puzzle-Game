@@ -733,8 +733,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreUI: {fileID: 903823918}
-  pauseOverlay: {fileID: 5645000255229299705, guid: 0f5f7c1e1f63e4419b05d67ad54c4691, type: 3}
-  gameOverOverlay: {fileID: 7047570459705113954, guid: e8ef014f94e944f988c5fe6b2ab59ce4, type: 3}
+  pausePopupDefinition: {fileID: 11400000, guid: 3eb7eef81f58d421f88bfd2c327f336f, type: 2}
+  gameOverPopupDefinition: {fileID: 11400000, guid: 9b4307631e92b4feea1e9e2ce2230cb9, type: 2}
 --- !u!1 &1941297059
 GameObject:
   m_ObjectHideFlags: 0

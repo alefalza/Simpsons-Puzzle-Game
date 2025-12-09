@@ -1,4 +1,3 @@
-using System.Collections;
 using Core;
 using Core.Services.SceneService;
 using TMPro;
@@ -8,7 +7,7 @@ using UnityEngine.UI;
 
 namespace UI.Overlays
 {
-    public class GameOverOverlay : BasePopup
+    public class GameOverPopup : BasePopup
     {
         [SerializeField] private TMP_Text scoreText;
         [SerializeField] private Button retryButton;
@@ -28,31 +27,11 @@ namespace UI.Overlays
             menuButton.onClick.AddListener(OnBackToMenuClicked);
         }
 
-        public void Show(int finalScore)
+        public override void Open()
         {
-            scoreText.text = $"Final Score: {finalScore}";
-            StartCoroutine(FadeIn());
-        }
-
-        private IEnumerator FadeIn()
-        {
-            canvasGroup.alpha = 0f;
-            canvasGroup.interactable = false;
-            canvasGroup.blocksRaycasts = false;
-
-            const float duration = 0.4f;
-            float t = 0f;
-
-            while (t < duration)
-            {
-                t += Time.deltaTime;
-                canvasGroup.alpha = Mathf.Lerp(0, 1, t / duration);
-                yield return null;
-            }
-
-            canvasGroup.alpha = 1f;
-            canvasGroup.interactable = true;
-            canvasGroup.blocksRaycasts = true;
+            scoreText.text = $"Final Score: {(PopupData as GameOverPopupData)?.FinalScore}";
+            
+            base.Open();
         }
 
         private void OnRetryClicked()
@@ -63,13 +42,25 @@ namespace UI.Overlays
         private void OnBackToMenuClicked()
         {
             sceneService.LoadScene("MainMenuScene");
-            Destroy(gameObject); // So it does not overlap with the Loading screen
+            Close();
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
+            
             retryButton.onClick.RemoveListener(OnRetryClicked);
             menuButton.onClick.RemoveListener(OnBackToMenuClicked);
+        }
+    }
+
+    public class GameOverPopupData : PopupData
+    {
+        public int FinalScore { get; private set; }
+        
+        public GameOverPopupData(Priority priority, int finalScore) : base(priority)
+        {
+            FinalScore = finalScore;
         }
     }
 }

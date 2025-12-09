@@ -1,4 +1,6 @@
-﻿using UI.Overlays;
+﻿using Core;
+using Core.Services.PopupService;
+using UI.Overlays;
 using UnityEngine;
 
 namespace UI
@@ -7,8 +9,8 @@ namespace UI
     {
         public void UpdateScore(int newScore);
         public bool CanTogglePause();
-        public void ShowPauseOverlay();
-        public void HidePauseOverlay();
+        public void ShowPausePopup();
+        public void HidePausePopup();
         public void ShowGameOverOverlay(int finalScore);
     }
     
@@ -16,16 +18,20 @@ namespace UI
     {
         [Header("UI")]
         [SerializeField] private ScoreUI scoreUI;
-        
-        [Header("Overlays")]
-        [SerializeField] private PauseOverlay pauseOverlay;
-        [SerializeField] private GameOverOverlay gameOverOverlay;
 
-        private PauseOverlay pauseOverlayInstance;
-        private GameOverOverlay gameOverOverlayInstance;
-        
-        private bool IsGameOver => gameOverOverlayInstance != null;
-        
+        [Header("Popup Definitions")]
+        [SerializeField] private PopupDefinition pausePopupDefinition;
+        [SerializeField] private PopupDefinition gameOverPopupDefinition;
+
+        private IPopupService popupService;
+
+        private BasePopup OpenedPopup => popupService.GetOpenedPopup();
+
+        private void Awake()
+        {
+            popupService = ServiceLocator.Get<IPopupService>();
+        }
+
         public virtual void UpdateScore(int newScore)
         {
             scoreUI.SetScore(newScore);
@@ -33,30 +39,24 @@ namespace UI
 
         public virtual bool CanTogglePause()
         {
-            return (pauseOverlayInstance == null || !pauseOverlayInstance.IsFading) && !IsGameOver;
+            return OpenedPopup is null || OpenedPopup is PausePopup && !OpenedPopup.IsFading;
         }
 
-        public virtual void ShowPauseOverlay()
-        {
-            if (pauseOverlayInstance == null)
-                pauseOverlayInstance = Instantiate(pauseOverlay);
-
-            pauseOverlayInstance.Show();
-            pauseOverlayInstance.OnResume += OnResumeClicked;
+        public virtual void ShowPausePopup()
+        {   
+            popupService.Push(pausePopupDefinition, new PausePopupData(Priority.Low, OnResumeClicked));
         }
 
         protected abstract void OnResumeClicked();
 
-        public virtual void HidePauseOverlay()
+        public virtual void HidePausePopup()
         {
-            pauseOverlayInstance.Hide();
-            pauseOverlayInstance.OnResume -= OnResumeClicked;
+            (OpenedPopup as PausePopup)?.Close();
         }
 
         public virtual void ShowGameOverOverlay(int finalScore)
         {
-            gameOverOverlayInstance = Instantiate(gameOverOverlay);
-            gameOverOverlayInstance.Show(finalScore);
+            popupService.Push(gameOverPopupDefinition, new GameOverPopupData(Priority.Low, finalScore));
         }
     }
 }
