@@ -1,17 +1,43 @@
+using System;
 using UnityEngine;
 using System.Collections;
+using TMPro;
+using UnityEngine.UI;
+
+public abstract class PopupData
+{
+    public Priority Priority { get; private set; }
+    public string Message { get; private set; }
+    public string Title { get; private set; }
+    
+    public PopupData(Priority priority, string message, string title)
+    {
+        Priority = priority;
+        Message = message;
+        Title = title;
+    }
+}
 
 [RequireComponent(typeof(CanvasGroup))]
 public abstract class BasePopup : MonoBehaviour
 {
     [Header("Popup Definition")]
     public PopupDefinition definition;
+    [SerializeField] private TMP_Text titleText;
+    [SerializeField] private Button closeButton;
 
     protected CanvasGroup canvasGroup;
     protected bool isOpen = false;
 
+    public event Action OnOpened;
+    public event Action OnClosed;
+    public event Action OnHide;
+
+    protected PopupData popupData;
+    
     protected virtual void Awake()
     {
+        /*
         canvasGroup = GetComponent<CanvasGroup>();
 
         if (definition == null)
@@ -21,22 +47,43 @@ public abstract class BasePopup : MonoBehaviour
         canvasGroup.alpha = 0;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
+        */
+        if (closeButton != null)
+        {
+            closeButton.onClick.AddListener(Close);
+        }
+    }
+
+    public virtual void Setup(PopupData data)
+    {
+        popupData = data;
     }
 
     public virtual void Open()
     {
-        isOpen = true;
-        StopAllCoroutines();
-        StartCoroutine(FadeIn());
+        //isOpen = true;
+        //StopAllCoroutines();
+        //StartCoroutine(FadeIn());
+        titleText.text = popupData.Title;
+        gameObject.SetActive(true);
+        OnOpened?.Invoke();
+    }
+
+    public virtual void Hide()
+    {
+        gameObject.SetActive(false);
+        OnHide?.Invoke();
     }
 
     public virtual void Close()
     {
-        if (!isOpen) return;
-        isOpen = false;
+        //if (!isOpen) return;
+        //isOpen = false;
 
-        StopAllCoroutines();
-        StartCoroutine(FadeOut());
+        OnClosed?.Invoke();
+        Destroy(gameObject);
+        //StopAllCoroutines();
+        //StartCoroutine(FadeOut());
     }
 
     private IEnumerator FadeIn()
@@ -78,5 +125,13 @@ public abstract class BasePopup : MonoBehaviour
             Destroy(gameObject);
         else
             gameObject.SetActive(false);
+    }
+    
+    protected void OnDestroy()
+    {
+        if (closeButton != null)
+        {
+            closeButton.onClick.AddListener(Close);
+        }
     }
 }

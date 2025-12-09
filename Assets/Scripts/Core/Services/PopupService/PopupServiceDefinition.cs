@@ -8,7 +8,7 @@ namespace Core.Services.PopupService
     {
         public override IService CreateInstance(ServiceBootstrap bootstrap)
         {
-            return new PopupService(bootstrap.PopupRoot);
+            return new PopupService(new PopupFactory(), bootstrap.PopupRoot);
         }
     }
 }
