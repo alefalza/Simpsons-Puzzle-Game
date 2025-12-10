@@ -2,13 +2,19 @@ using UnityEngine;
 
 namespace GameModes.BubbleMerge.UI
 {
+    [RequireComponent(typeof(LineRenderer))]
     public class LineRendererScroller : MonoBehaviour
     {
-        [SerializeField] private LineRenderer lineRenderer;
         [SerializeField] private float scrollSpeed = 1f;
 
+        private LineRenderer lineRenderer;
         private Material lineMat;
         private float offset;
+
+        private void Awake()
+        {
+            lineRenderer = GetComponent<LineRenderer>();
+        }
 
         private void Start()
         {

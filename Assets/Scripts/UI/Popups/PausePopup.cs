@@ -4,7 +4,7 @@ using Core.Services.SceneService;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Overlays
+namespace UI.Popups
 {
     public class PausePopup : BasePopup
     {

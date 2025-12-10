@@ -1,5 +1,7 @@
 using Collectables;
-using UI.Overlays;
+using Core;
+using Core.Services.PopupService;
+using UI.Popups;
 using UnityEngine;
 
 namespace UI.MainMenu.Tabs.Cards
@@ -9,10 +11,15 @@ namespace UI.MainMenu.Tabs.Cards
         [SerializeField] private CardDatabase database;
         [SerializeField] private Transform gridRoot;
         [SerializeField] private CardItemUI cardItemPrefab;
-        [SerializeField] private CardDetailOverlay cardDetailOverlay;
+        [SerializeField] private PopupDefinition cardDetailPopupDefinition;
 
-        private CardDetailOverlay cardDetailOverlayInstance;
+        private IPopupService popupService;
         
+        private void Awake()
+        {
+            popupService = ServiceLocator.Get<IPopupService>();
+        }
+
         private void Start()
         {
             Populate();
@@ -32,10 +39,7 @@ namespace UI.MainMenu.Tabs.Cards
 
         private void OnCardClickedCallback(CardData cardData)
         {
-            if (cardDetailOverlayInstance == null)
-                cardDetailOverlayInstance = Instantiate(cardDetailOverlay, transform.root);
-            
-            cardDetailOverlayInstance.Show(cardData);
+            popupService.Push(cardDetailPopupDefinition, new CardDetailPopupData(Priority.Low, cardData));
         }
     }
 }

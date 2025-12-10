@@ -1,6 +1,6 @@
 ﻿using Core;
 using Core.Services.PopupService;
-using UI.Overlays;
+using UI.Popups;
 using UnityEngine;
 
 namespace UI

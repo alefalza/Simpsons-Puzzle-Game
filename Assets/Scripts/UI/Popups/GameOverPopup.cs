@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace UI.Overlays
+namespace UI.Popups
 {
     public class GameOverPopup : BasePopup
     {

@@ -23,7 +23,7 @@ public abstract class PopupData
 [RequireComponent(typeof(CanvasGroup))]
 public abstract class BasePopup : MonoBehaviour
 {
-    private CanvasGroup canvasGroup;
+    protected CanvasGroup canvasGroup;
 
     public PopupData PopupData { get; private set; }
     public PopupDefinition Definition { get; private set; }
@@ -62,7 +62,7 @@ public abstract class BasePopup : MonoBehaviour
         if (immediate)
         {
             CheckDestroy();
-            OnClosed?.Invoke(Definition.destroyOnClose);
+            InvokeOnClosed();
         }
         else
         {
@@ -112,19 +112,24 @@ public abstract class BasePopup : MonoBehaviour
 
         canvasGroup.alpha = 0;
 
-        OnClosed?.Invoke(Definition.destroyOnClose);
+        InvokeOnClosed();
 
         IsFading = false;
 
         CheckDestroy();
     }
 
-    private void CheckDestroy()
+    protected void CheckDestroy()
     {
         if (Definition.destroyOnClose)
             Destroy(gameObject);
         else
             gameObject.SetActive(false);
+    }
+
+    protected void InvokeOnClosed()
+    {
+        OnClosed?.Invoke(Definition.destroyOnClose);
     }
 
     protected virtual void OnDestroy()
