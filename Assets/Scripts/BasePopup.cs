@@ -24,12 +24,12 @@ public abstract class PopupData
 public abstract class BasePopup : MonoBehaviour
 {
     private CanvasGroup canvasGroup;
-    
+
     public PopupData PopupData { get; private set; }
     public PopupDefinition Definition { get; private set; }
 
     public event Action OnOpened;
-    public event Action OnClosed;
+    public event Action<bool> OnClosed;
 
     public bool IsFading { get; private set; }
 
@@ -57,9 +57,17 @@ public abstract class BasePopup : MonoBehaviour
         StartCoroutine(FadeIn());
     }
 
-    public virtual void Close()
+    public virtual void Close(bool immediate = false)
     {
-        StartCoroutine(FadeOut());
+        if (immediate)
+        {
+            CheckDestroy();
+            OnClosed?.Invoke(Definition.destroyOnClose);
+        }
+        else
+        {
+            StartCoroutine(FadeOut());
+        }
     }
 
     private IEnumerator FadeIn()
@@ -104,10 +112,15 @@ public abstract class BasePopup : MonoBehaviour
 
         canvasGroup.alpha = 0;
 
-        OnClosed?.Invoke();
+        OnClosed?.Invoke(Definition.destroyOnClose);
 
         IsFading = false;
 
+        CheckDestroy();
+    }
+
+    private void CheckDestroy()
+    {
         if (Definition.destroyOnClose)
             Destroy(gameObject);
         else

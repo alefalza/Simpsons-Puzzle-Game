@@ -51,7 +51,7 @@ namespace UI
 
         public virtual void HidePausePopup()
         {
-            (OpenedPopup as PausePopup)?.Close();
+            OpenedPopup.Close();
         }
 
         public virtual void ShowGameOverOverlay(int finalScore)

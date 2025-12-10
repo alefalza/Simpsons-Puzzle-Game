@@ -2,11 +2,8 @@ using UnityEngine;
 
 public class PopupFactory : IPopupFactory
 {
-    public BasePopup CreatePopup(PopupDefinition def, PopupData data, Transform parent)
+    public BasePopup CreatePopup(PopupDefinition definition, Transform parent)
     {
-        var instance = Object.Instantiate(def.prefab, parent);
-        instance.Setup(data, def);
-        
-        return instance;
+        return Object.Instantiate(definition.prefab, parent);
     }
 }

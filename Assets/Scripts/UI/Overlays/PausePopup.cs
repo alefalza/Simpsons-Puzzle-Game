@@ -12,8 +12,6 @@ namespace UI.Overlays
         [SerializeField] private Button menuButton;
 
         private SceneService sceneService;
-
-        public Action OnResume;
     
         protected override void Awake()
         {
@@ -27,14 +25,14 @@ namespace UI.Overlays
 
         private void OnResumeClicked()
         {
-            OnResume?.Invoke();
+            (PopupData as PausePopupData)?.OnResume?.Invoke();
             Close();
         }
 
         private void OnBackToMenuClicked()
         {
             sceneService.LoadScene("MainMenuScene");
-            Close();
+            Close(true);
         }
 
         protected override void OnDestroy()

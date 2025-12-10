@@ -12,11 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c1c68cd4cffa4afab9393dc4c399b1d, type: 3}
   m_Name: GameOverPopupDefinition
   m_EditorClassIdentifier: 
-  popupId: GameOver
-  prefab: {fileID: 0}
-  blocksInput: 1
+  id: GameOverPopup
+  prefab: {fileID: 7047570459705113954, guid: e8ef014f94e944f988c5fe6b2ab59ce4, type: 3}
+  defaultPriority: 1
   destroyOnClose: 1
-  overrideFadeDuration: 0
   fadeInDuration: 0.15
   fadeOutDuration: 0.15
-  sortingOrderOffset: 0

@@ -2,5 +2,5 @@ using UnityEngine;
 
 public interface IPopupFactory
 {
-    BasePopup CreatePopup(PopupDefinition def, PopupData data, Transform parent);
+    BasePopup CreatePopup(PopupDefinition definition, Transform parent);
 }

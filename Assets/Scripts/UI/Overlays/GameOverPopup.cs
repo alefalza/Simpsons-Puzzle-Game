@@ -37,12 +37,13 @@ namespace UI.Overlays
         private void OnRetryClicked()
         {
             sceneService.LoadScene(currentScene);
+            Close();
         }
 
         private void OnBackToMenuClicked()
         {
             sceneService.LoadScene("MainMenuScene");
-            Close();
+            Close(true);
         }
 
         protected override void OnDestroy()

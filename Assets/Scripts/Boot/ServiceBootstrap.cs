@@ -11,7 +11,6 @@ namespace Boot
     {
         [Header("Definitions")]
         [SerializeField] private ServiceConfiguration serviceDefinitions;
-        [SerializeField] private PopupLibrary popupLibrary;
 
         [Header("Audio Components")]
         [SerializeField] private AudioSource musicSource;
@@ -25,7 +24,6 @@ namespace Boot
         public AudioSource SfxSource => sfxSource;
         public Transform PopupRoot => popupRoot;
         public GameObject LoadingOverlay => loadingOverlay;
-        public PopupLibrary PopupLibrary => popupLibrary;
 
         private void Awake()
         {
