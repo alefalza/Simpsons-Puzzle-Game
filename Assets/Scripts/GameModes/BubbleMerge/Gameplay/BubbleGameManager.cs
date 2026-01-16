@@ -8,14 +8,14 @@ namespace GameModes.BubbleMerge.Gameplay
     public class BubbleGameManager : BaseGameManager<BubbleGameManager>
     {
         [SerializeField] private BubbleSpawner spawner;
-
+        
+        protected override string GameModeName => "BubbleMerge";
+        
         private int score = 0;
         private bool hasWon = false;
         
         private BubbleHUDController BubbleHUDController => hudController as BubbleHUDController;
-
-        protected override string GameModeName => "BubbleMerge";
-
+        
         public int MaxTier => spawner.MaxTier;
         
         private int ScorePerTier => levelData != null ? ((BubbleMergeLevelDefinition)levelData).scorePerTier : GameConstants.BubbleMerge.ScorePerTier;

@@ -21,7 +21,9 @@ namespace GameModes.DrinkSort.Gameplay
         
         [Header("Tray Reserve Settings")]
         [SerializeField] private TrayReserve.ItemData[] trayReserveItems; // Items available for tray reserves
-        
+
+        protected override string GameModeName => "DrinkSort";
+
         private float currentTime;
         private int totalItemsUsed = 0;
         private int score = 0;

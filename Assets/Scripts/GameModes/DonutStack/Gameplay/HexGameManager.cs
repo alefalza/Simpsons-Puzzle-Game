@@ -18,7 +18,9 @@ namespace GameModes.DonutStack.Gameplay
         [Header("Game Settings")]
         [SerializeField] private Transform stackContainer;
         [SerializeField] private Transform dragLayer;
-        
+
+        protected override string GameModeName => "DonutStack";
+
         // Properties that get values from levelData or default values
         private int GridRadius => levelData != null ? ((DonutStackLevelDefinition)levelData).gridRadius : 3;
         private int StacksPerTurn => levelData != null ? ((DonutStackLevelDefinition)levelData).stacksPerTurn : 3;
