@@ -3,12 +3,12 @@ using UnityEngine;
 [System.Serializable]
 public class SettingsData
 {
-    public float MusicVolume = 1f;
-    public float SFXVolume = 1f;
-    public bool HapticsEnabled = true;
-    public bool NotificationsEnabled = true;
-    public bool AutoPauseEnabled = true;
-    public string Language = "en";
+    public float musicVolume = 1f;
+    public float sfXVolume = 1f;
+    public bool hapticsEnabled = true;
+    public bool notificationsEnabled = true;
+    public bool autoPauseEnabled = true;
+    public string language = "en";
 
     private const string KEY = "SETTINGS_DATA";
 

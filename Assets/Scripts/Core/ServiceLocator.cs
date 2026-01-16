@@ -6,11 +6,12 @@ using UnityEngine;
 namespace Core
 {
     /// <summary>
-    /// Improved Service Locator with auto-initialization
+    /// Improved Service Locator with auto-initialization and type caching
     /// </summary>
     public static class ServiceLocator
     {
         private static readonly Dictionary<Type, IService> services = new();
+        private static readonly Dictionary<Type, Type> typeCache = new();
         private static bool isInitialized = false;
 
         public static void Initialize(ServiceConfiguration config, ServiceBootstrap bootstrap)
@@ -63,16 +64,27 @@ namespace Core
 
         public static T Get<T>() where T : class, IService
         {
-            Type type = typeof(T);
-            
             if (!isInitialized)
             {
                 Debug.LogError("[ServiceLocator] Not initialized! Call Initialize first.");
                 return null;
             }
 
+            Type type = typeof(T);
+            
+            // Try cached type first
+            if (typeCache.TryGetValue(type, out Type cachedType))
+            {
+                type = cachedType;
+            }
+
             if (services.TryGetValue(type, out IService service))
             {
+                // Cache the type for faster future lookups
+                if (!typeCache.ContainsKey(typeof(T)))
+                {
+                    typeCache[typeof(T)] = type;
+                }
                 return service as T;
             }
 
@@ -103,6 +115,7 @@ namespace Core
             }
 
             services.Clear();
+            typeCache.Clear();
             isInitialized = false;
         }
     }

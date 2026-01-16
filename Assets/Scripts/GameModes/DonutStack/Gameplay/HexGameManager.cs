@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using GameModes.Core;
 using GameModes.DonutStack.Core;
-using GameModes.DonutStack.UI;
 using UnityEngine;
 
 namespace GameModes.DonutStack.Gameplay
 {
-    public class HexGameManager : MonoBehaviour
+    public class HexGameManager : BaseGameManager<HexGameManager>
     {
         [Header("Grid Settings")]
         [SerializeField] private HexGrid hexGrid;
@@ -22,52 +22,20 @@ namespace GameModes.DonutStack.Gameplay
         [SerializeField] private Transform dragLayer;
         [SerializeField] private int piecesToDestroy = 10;
     
-        [Header("HUD")]
-        [SerializeField] private HexHUDController hudController;
-        
         private readonly List<PieceStack> currentTurnStacks = new List<PieceStack>();
         
         private int score = 0;
-
-        public static HexGameManager Instance { get; private set; }
         
         public Transform StackContainer => stackContainer;
         public Transform DragLayer => dragLayer;
-        
-        public bool IsPaused { get; private set; } = false;
-        public bool IsInputBlocked { get; private set; } = false;
         public bool IsProcessingMatches { get; private set; } = false;
 
-        private void Awake()
+        protected override void Start()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
-        }
-
-        private void Start()
-        {
+            base.Start();
             hexGrid.Initialize(gridRadius);
             UpdateScoreUI();
             GenerateNewTurn();
-        }
-
-        private void Update()
-        {
-            GetInput();
-        }
-
-        private void GetInput()
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-                TogglePause();
-            
-            if (IsInputBlocked) return;
         }
         
         private void UpdateScoreUI()
@@ -122,7 +90,7 @@ namespace GameModes.DonutStack.Gameplay
         
             if (AllStacksPlaced())
             {
-                Invoke(nameof(GenerateNewTurn), 0.5f);
+                Invoke(nameof(GenerateNewTurn), GameConstants.DonutStack.NewTurnDelay);
             }
         }
 
@@ -168,7 +136,7 @@ namespace GameModes.DonutStack.Gameplay
 
                         neighbour.Stack.ArrangePieces();
 
-                        yield return new WaitForSeconds(0.2f);
+                        yield return new WaitForSeconds(GameConstants.DonutStack.MatchProcessDelay);
 
                         // If origin stack ends up empty after moving its pieces to the target stack, destroy it.
                         if (cell.Stack.PieceCount == 0)
@@ -187,7 +155,7 @@ namespace GameModes.DonutStack.Gameplay
                         if (neighbour.IsOccupied && topColorCount >= piecesToDestroy)
                         {
                             yield return StartCoroutine(
-                                neighbour.Stack.RemoveTopGroupWithDelay(piecesToDestroy, 0.05f)
+                                neighbour.Stack.RemoveTopGroupWithDelay(piecesToDestroy, GameConstants.DonutStack.PieceRemoveDelay)
                             );
                             
                             score += topColorCount;
@@ -201,7 +169,7 @@ namespace GameModes.DonutStack.Gameplay
                                 yield break;
                             }
 
-                            yield return new WaitForSeconds(0.2f);
+                            yield return new WaitForSeconds(GameConstants.DonutStack.PostDestroyDelay);
                         }
                         else if (neighbour.IsOccupied)
                         {
@@ -221,39 +189,6 @@ namespace GameModes.DonutStack.Gameplay
                 }
             }
         }
-
-        #region Pause Logic
-        private void TogglePause()
-        {
-            if (!hudController.CanTogglePause()) return;
-
-            if (!IsPaused)
-                Pause();
-            else
-                Resume();
-        }
-
-        private void Pause()
-        {
-            IsPaused = true;
-            IsInputBlocked = true;
-
-            hudController.ShowPausePopup();
-        }
-
-        private void Resume()
-        {
-            IsPaused = false;
-            IsInputBlocked = false;
-
-            hudController.HidePausePopup();
-        }
-
-        public void TogglePauseFromOverlay()
-        {
-            Resume();
-        }
-        #endregion
 
         private void CheckGameOver()
         {

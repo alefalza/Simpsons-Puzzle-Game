@@ -1,9 +1,13 @@
+using Core.Services.PopupService;
 using UnityEngine;
 
-public class PopupFactory : IPopupFactory
+namespace Core.Services.PopupService
 {
-    public BasePopup CreatePopup(PopupDefinition definition, Transform parent)
+    public class PopupFactory : IPopupFactory
     {
-        return Object.Instantiate(definition.prefab, parent);
+        public BasePopup CreatePopup(PopupDefinition definition, Transform parent)
+        {
+            return Object.Instantiate(definition.prefab, parent);
+        }
     }
 }

@@ -39,15 +39,15 @@ namespace UI.MainMenu.Tabs.Settings
         {
             var data = settingsManager.Data;
 
-            musicSlider.SetValueWithoutNotify(data.MusicVolume);
-            sfxSlider.SetValueWithoutNotify(data.SFXVolume);
-            hapticsToggle.SetIsOnWithoutNotify(data.HapticsEnabled);
-            notificationsToggle.SetIsOnWithoutNotify(data.NotificationsEnabled);
-            autoPauseToggle.SetIsOnWithoutNotify(data.AutoPauseEnabled);
+            musicSlider.SetValueWithoutNotify(data.musicVolume);
+            sfxSlider.SetValueWithoutNotify(data.sfXVolume);
+            hapticsToggle.SetIsOnWithoutNotify(data.hapticsEnabled);
+            notificationsToggle.SetIsOnWithoutNotify(data.notificationsEnabled);
+            autoPauseToggle.SetIsOnWithoutNotify(data.autoPauseEnabled);
 
             // Language mapping
             int index = languageDropdown.options.FindIndex(o =>
-                o.text.ToLower().StartsWith(data.Language.ToLower()));
+                o.text.ToLower().StartsWith(data.language.ToLower()));
 
             if (index >= 0)
                 languageDropdown.SetValueWithoutNotify(index);

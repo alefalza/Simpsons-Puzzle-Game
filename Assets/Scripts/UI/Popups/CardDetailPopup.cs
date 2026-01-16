@@ -1,5 +1,6 @@
 using System.Collections;
 using Collectables;
+using Core.Services.PopupService;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +9,7 @@ namespace UI.Popups
 {
     public class CardDetailPopup : BasePopup
     {
-        [Header("UI References")]
+        [Header("UI Elements")]
         [SerializeField] private RectTransform panel;
         [SerializeField] private TMP_Text cardName;
         [SerializeField] private Image cardIcon;
@@ -22,7 +23,6 @@ namespace UI.Popups
         protected override void Awake()
         {
             base.Awake();
-            
             closeButton.onClick.AddListener(() => Close());
         }
 
@@ -39,14 +39,9 @@ namespace UI.Popups
         public override void Close(bool immediate = false)
         {
             if (immediate)
-            {
-                CheckDestroy();
-                InvokeOnClosed();
-            }
+                CheckDestroyAndInvokeOnClosed();
             else
-            {
                 StartCoroutine(ScaleOut());
-            }
         }
 
         private void SetUIData(CardData cardData)
@@ -104,8 +99,7 @@ namespace UI.Popups
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;
 
-            CheckDestroy();
-            InvokeOnClosed();
+            CheckDestroyAndInvokeOnClosed();
         }
 
         private float EaseOutBack(float t)
@@ -119,7 +113,6 @@ namespace UI.Popups
         protected override void OnDestroy()
         {
             closeButton.onClick.RemoveListener(() => Close());
-            
             base.OnDestroy();
         }
     }

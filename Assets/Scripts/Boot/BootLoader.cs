@@ -12,8 +12,6 @@ namespace Boot
         [Header("Boot Overlay (local to BootScene)")]
         [SerializeField] private GameObject bootOverlay;
 
-        private const string MAIN_MENU_SCENE = "MainMenuScene";
-
         private IEnumerator Start()
         {
             if (bootOverlay != null)
@@ -33,12 +31,12 @@ namespace Boot
             }
 
             // Load Main Menu (Single)
-            AsyncOperation loadOp = SceneManager.LoadSceneAsync(MAIN_MENU_SCENE, LoadSceneMode.Single);
+            AsyncOperation loadOp = SceneManager.LoadSceneAsync(GameConstants.MAIN_MENU_SCENE, LoadSceneMode.Single);
 
             // Set main menu active on completion
             loadOp.completed += _ =>
             {
-                Scene menu = SceneManager.GetSceneByName(MAIN_MENU_SCENE);
+                Scene menu = SceneManager.GetSceneByName(GameConstants.MAIN_MENU_SCENE);
                 SceneManager.SetActiveScene(menu);
             };
 

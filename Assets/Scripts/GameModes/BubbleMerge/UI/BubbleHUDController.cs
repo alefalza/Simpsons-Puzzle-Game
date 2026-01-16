@@ -7,7 +7,7 @@ namespace GameModes.BubbleMerge.UI
 {
     public class BubbleHUDController : BaseHUDController
     {
-        [Header("UI")]
+        [Header("UI Elements")]
         [SerializeField] private BubbleIconUI currentBubbleIcon;
         [SerializeField] private BubbleIconUI nextBubbleIcon;
 

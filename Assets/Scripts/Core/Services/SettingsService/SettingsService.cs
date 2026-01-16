@@ -19,39 +19,39 @@ namespace Core.Services.SettingsService
 
         public void SetMusicVolume(float value)
         {
-            Data.MusicVolume = value;
+            Data.musicVolume = value;
             AudioService.SetMusicVolume(value);
             Data.Save();
         }
 
         public void SetSFXVolume(float value)
         {
-            Data.SFXVolume = value;
+            Data.sfXVolume = value;
             AudioService.SetSFXVolume(value);
             Data.Save();
         }
 
         public void SetHaptics(bool enabled)
         {
-            Data.HapticsEnabled = enabled;
+            Data.hapticsEnabled = enabled;
             Data.Save();
         }
 
         public void SetNotifications(bool enabled)
         {
-            Data.NotificationsEnabled = enabled;
+            Data.notificationsEnabled = enabled;
             Data.Save();
         }
 
         public void SetAutoPause(bool enabled)
         {
-            Data.AutoPauseEnabled = enabled;
+            Data.autoPauseEnabled = enabled;
             Data.Save();
         }
 
         public void SetLanguage(string code)
         {
-            Data.Language = code;
+            Data.language = code;
             // TODO: LocalizationSystem
             Data.Save();
         }

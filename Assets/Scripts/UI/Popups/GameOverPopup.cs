@@ -1,4 +1,5 @@
 using Core;
+using Core.Services.PopupService;
 using Core.Services.SceneService;
 using TMPro;
 using UnityEngine;
@@ -42,7 +43,7 @@ namespace UI.Popups
 
         private void OnBackToMenuClicked()
         {
-            sceneService.LoadScene("MainMenuScene");
+            sceneService.LoadScene(GameConstants.MAIN_MENU_SCENE);
             Close(true);
         }
 

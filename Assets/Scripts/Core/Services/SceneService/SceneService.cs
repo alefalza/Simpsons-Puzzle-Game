@@ -53,7 +53,7 @@ namespace Core.Services.SceneService
             UIService.ShowLoadingOverlay(true);
 
             // Optional: tiny delay to show overlay clearly
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSecondsRealtime(0.25f);
 
             AsyncOperation op = SceneManager.LoadSceneAsync(sceneName, mode);
 

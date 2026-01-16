@@ -1,69 +1,50 @@
 using GameModes.BubbleMerge.Core;
 using GameModes.BubbleMerge.UI;
+using GameModes.Core;
 using UnityEngine;
 
 namespace GameModes.BubbleMerge.Gameplay
 {
-    public class BubbleGameManager : MonoBehaviour
+    public class BubbleGameManager : BaseGameManager<BubbleGameManager>
     {
         [SerializeField] private BubbleSpawner spawner;
-        [SerializeField] private BubbleHUDController hudController;
 
         private int score = 0;
-
-        public static BubbleGameManager Instance { get; private set; }
-
+        
+        private BubbleHUDController BubbleHUDController => hudController as BubbleHUDController;
+        
         public int MaxTier => spawner.MaxTier;
-        public bool IsPaused { get; private set; } = false;
-        public bool IsInputBlocked { get; private set; } = false;
 
-        private void Awake()
+        protected override void Start()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
-        }
-
-        private void Start()
-        {
+            base.Start();
             score = 0;
             spawner.Init();
             InitHUDController();
         }
 
-        private void Update()
-        {
-            GetInput();
-        }
-
-        private void GetInput()
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-                TogglePause();
-            
-            if (IsInputBlocked) return;
-        }
-
         private void InitHUDController()
         {
-            hudController.UpdateScore(0);
-            UpdateHUD(spawner.CurrentTier, spawner.NextTier);
+            if (BubbleHUDController != null)
+            {
+                BubbleHUDController.UpdateScore(0);
+                UpdateHUD(spawner.CurrentTier, spawner.NextTier);
+            }
         }
 
         public void UpdateHUD(int current, int next)
         {
-            hudController.UpdateCurrentBubbleIcon(current);
-            hudController.UpdateNextBubbleIcon(next);
+            if (BubbleHUDController != null)
+            {
+                BubbleHUDController.UpdateCurrentBubbleIcon(current);
+                BubbleHUDController.UpdateNextBubbleIcon(next);
+            }
         }
 
         public Bubble SpawnMergedBubble(int tier, Vector3 position)
         {
-            AddScore(tier * 10);
+            AddScore(tier * GameConstants.BubbleMerge.ScorePerTier);
+            
             return spawner.SpawnBubble(tier, position);
         }
 
@@ -75,48 +56,33 @@ namespace GameModes.BubbleMerge.Gameplay
         private void AddScore(int amount)
         {
             score += amount;
-            hudController.UpdateScore(score);
+            
+            if (BubbleHUDController != null)
+            {
+                BubbleHUDController.UpdateScore(score);
+            }
         }
 
-        #region Pause Logic
-        private void TogglePause()
+        protected override void OnPaused()
         {
-            if (!hudController.CanTogglePause()) return;
-
-            if (!IsPaused)
-                Pause();
-            else
-                Resume();
-        }
-
-        private void Pause()
-        {
-            IsPaused = true;
-            IsInputBlocked = true;
+            base.OnPaused();
             spawner.enabled = false;
-
-            hudController.ShowPausePopup();
         }
 
-        private void Resume()
+        protected override void OnResumed()
         {
-            IsPaused = false;
-            IsInputBlocked = false;
+            base.OnResumed();
             spawner.enabled = true;
-
-            hudController.HidePausePopup();
         }
-
-        public void TogglePauseFromOverlay()
-        {
-            Resume();
-        }
-        #endregion
 
         public void OnGameOver()
         {
             IsInputBlocked = true;
-            hudController.ShowGameOverOverlay(score);
+            
+            if (BubbleHUDController != null)
+            {
+                BubbleHUDController.ShowGameOverOverlay(score);
+            }
         }
     }
 }

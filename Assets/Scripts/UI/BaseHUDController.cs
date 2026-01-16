@@ -5,18 +5,9 @@ using UnityEngine;
 
 namespace UI
 {
-    public interface IHUDController
-    {
-        public void UpdateScore(int newScore);
-        public bool CanTogglePause();
-        public void ShowPausePopup();
-        public void HidePausePopup();
-        public void ShowGameOverOverlay(int finalScore);
-    }
-    
     public abstract class BaseHUDController : MonoBehaviour, IHUDController
     {
-        [Header("UI")]
+        [Header("UI Elements")]
         [SerializeField] private ScoreUI scoreUI;
 
         [Header("Popup Definitions")]
