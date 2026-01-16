@@ -1,3 +1,6 @@
+using Core;
+using Core.Services.LevelProgressionService;
+using GameModes.BubbleMerge.Core;
 using UI;
 using UnityEngine;
 
@@ -5,10 +8,18 @@ namespace GameModes.Core
 {
     public abstract class BaseGameManager<T> : MonoBehaviour where T : BaseGameManager<T>
     {
+        [Header("Level Configuration")]
+        [Tooltip("If not assigned, will load automatically from LevelProgressionService")]
+        [SerializeField] protected LevelDefinition levelData;
+        
         [SerializeField] protected BaseHUDController hudController;
         
         public static T Instance { get; private set; }
 
+        protected virtual string GameModeName => typeof(T).Name;
+        
+        protected int currentLevelNumber = 1;
+        
         public bool IsPaused { get; protected set; }
         public bool IsInputBlocked { get; protected set; }
 
@@ -18,6 +29,8 @@ namespace GameModes.Core
                 Instance = this as T;
             else
                 Destroy(gameObject);
+
+            LoadLevelFromProgression();
         }
 
         protected virtual void Start() { }
@@ -25,6 +38,30 @@ namespace GameModes.Core
         protected virtual void Update()
         {
             HandleInput();
+        }
+        
+        private void LoadLevelFromProgression()
+        {
+            // If levelData is manually assigned, don't override it (for testing purposes)
+            if (levelData != null)
+            {
+                Debug.Log("[BubbleGameManager] Using manually assigned level definition");
+                return;
+            }
+
+            currentLevelNumber = LevelProgressionService.GetNextPlayableLevel(GameModeName);
+            
+            var levelDef = LevelProgressionService.GetNextPlayableLevelDefinition(GameModeName);
+            
+            if (levelDef != null && levelDef is BubbleMergeLevelDefinition bubbleLevelDef)
+            {
+                levelData = bubbleLevelDef;
+                Debug.Log($"[BubbleGameManager] Loaded level {currentLevelNumber}: {levelDef.name}");
+            }
+            else
+            {
+                Debug.LogWarning($"[BubbleGameManager] Could not load level definition for level {currentLevelNumber}");
+            }
         }
 
         protected virtual void HandleInput()
@@ -88,6 +125,12 @@ namespace GameModes.Core
         
         #endregion
 
+        protected void MarkLevelAsCompleted()
+        {
+            LevelProgressionService.CompleteLevel(GameModeName, currentLevelNumber);
+            Debug.Log($"[BubbleGameManager] Level {currentLevelNumber} completed!");
+        }
+        
         protected virtual void OnDestroy()
         {
             if (Instance == this as T)
@@ -95,5 +138,8 @@ namespace GameModes.Core
                 Instance = null;
             }
         }
+        
+        private ILevelProgressionService levelProgressionService;
+        private ILevelProgressionService LevelProgressionService => levelProgressionService ??= ServiceLocator.Get<ILevelProgressionService>();
     }
 }

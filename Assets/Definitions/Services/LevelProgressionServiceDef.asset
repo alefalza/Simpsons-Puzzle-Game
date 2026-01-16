@@ -9,7 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e61399ce12ab5f648be780c5686bcb67, type: 3}
-  m_Name: BubbleMergeLevelDefinition
+  m_Script: {fileID: 11500000, guid: e08ea43c3dbe98743a90f7e97719cc4e, type: 3}
+  m_Name: LevelProgressionServiceDef
   m_EditorClassIdentifier: 
-  scorePerTier: 10

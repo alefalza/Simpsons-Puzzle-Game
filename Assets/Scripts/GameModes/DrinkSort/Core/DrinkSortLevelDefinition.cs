@@ -3,7 +3,7 @@ using UnityEngine;
 namespace GameModes.DrinkSort.Core
 {
     [CreateAssetMenu(menuName = "GameModes/DrinkSort/LevelDefinition", fileName =  "DrinkSortLevelDefinition")]
-    public class DrinkSortLevelDefinition : ScriptableObject
+    public class DrinkSortLevelDefinition : LevelDefinition
     {
         [Header("Score Settings")]
         [Tooltip("Points awarded per match")]

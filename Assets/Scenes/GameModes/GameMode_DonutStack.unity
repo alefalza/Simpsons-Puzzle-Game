@@ -698,7 +698,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hudController: {fileID: 1601575534}
-  levelData: {fileID: 11400000, guid: 228c9b07dca2aa94fa422b0a30ff150d, type: 2}
+  levelData: {fileID: 0}
   hexGrid: {fileID: 1590626947}
   pieceStackPrefab: {fileID: 5863030423550925337, guid: 7d4ccbbf6c87dd6409e953f1b29dabb6, type: 3}
   stackContainer: {fileID: 115978805}

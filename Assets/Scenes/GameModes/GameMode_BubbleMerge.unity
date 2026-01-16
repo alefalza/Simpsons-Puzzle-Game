@@ -318,7 +318,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hudController: {fileID: 164501948}
-  levelData: {fileID: 11400000, guid: d5913472dcbf31c4ea2fc8742be5e6dc, type: 2}
+  levelData: {fileID: 0}
   spawner: {fileID: 1534036341}
 --- !u!114 &164501948
 MonoBehaviour:

@@ -9,9 +9,6 @@ namespace GameModes.DonutStack.Gameplay
 {
     public class HexGameManager : BaseGameManager<HexGameManager>
     {
-        [Header("Level Configuration")]
-        [SerializeField] private DonutStackLevelDefinition levelData;
-        
         [Header("Grid Settings")]
         [SerializeField] private HexGrid hexGrid;
     
@@ -23,13 +20,13 @@ namespace GameModes.DonutStack.Gameplay
         [SerializeField] private Transform dragLayer;
         
         // Properties that get values from levelData or default values
-        private int GridRadius => levelData != null ? levelData.gridRadius : 3;
-        private int StacksPerTurn => levelData != null ? levelData.stacksPerTurn : 3;
-        private int PiecesToDestroy => levelData != null ? levelData.piecesToDestroy : 10;
-        private float MatchProcessDelay => levelData != null ? levelData.matchProcessDelay : GameConstants.DonutStack.MatchProcessDelay;
-        private float PieceRemoveDelay => levelData != null ? levelData.pieceRemoveDelay : GameConstants.DonutStack.PieceRemoveDelay;
-        private float PostDestroyDelay => levelData != null ? levelData.postDestroyDelay : GameConstants.DonutStack.PostDestroyDelay;
-        private float NewTurnDelay => levelData != null ? levelData.newTurnDelay : GameConstants.DonutStack.NewTurnDelay;
+        private int GridRadius => levelData != null ? ((DonutStackLevelDefinition)levelData).gridRadius : 3;
+        private int StacksPerTurn => levelData != null ? ((DonutStackLevelDefinition)levelData).stacksPerTurn : 3;
+        private int PiecesToDestroy => levelData != null ? ((DonutStackLevelDefinition)levelData).piecesToDestroy : 10;
+        private float MatchProcessDelay => levelData != null ? ((DonutStackLevelDefinition)levelData).matchProcessDelay : GameConstants.DonutStack.MatchProcessDelay;
+        private float PieceRemoveDelay => levelData != null ? ((DonutStackLevelDefinition)levelData).pieceRemoveDelay : GameConstants.DonutStack.PieceRemoveDelay;
+        private float PostDestroyDelay => levelData != null ? ((DonutStackLevelDefinition)levelData).postDestroyDelay : GameConstants.DonutStack.PostDestroyDelay;
+        private float NewTurnDelay => levelData != null ? ((DonutStackLevelDefinition)levelData).newTurnDelay : GameConstants.DonutStack.NewTurnDelay;
     
         private readonly List<PieceStack> currentTurnStacks = new List<PieceStack>();
         

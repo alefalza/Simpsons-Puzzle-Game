@@ -7,23 +7,25 @@ namespace GameModes.BubbleMerge.Gameplay
 {
     public class BubbleGameManager : BaseGameManager<BubbleGameManager>
     {
-        [Header("Level Configuration")]
-        [SerializeField] private BubbleMergeLevelDefinition levelData;
-        
         [SerializeField] private BubbleSpawner spawner;
 
         private int score = 0;
+        private bool hasWon = false;
         
         private BubbleHUDController BubbleHUDController => hudController as BubbleHUDController;
-        
+
+        protected override string GameModeName => "BubbleMerge";
+
         public int MaxTier => spawner.MaxTier;
         
-        private int ScorePerTier => levelData != null ? levelData.scorePerTier : GameConstants.BubbleMerge.ScorePerTier;
+        private int ScorePerTier => levelData != null ? ((BubbleMergeLevelDefinition)levelData).scorePerTier : GameConstants.BubbleMerge.ScorePerTier;
+        private int TargetScore => levelData != null ? ((BubbleMergeLevelDefinition)levelData).targetScore : 0;
 
         protected override void Start()
         {
             base.Start();
             score = 0;
+            hasWon = false;
             spawner.Init();
             InitHUDController();
         }
@@ -65,6 +67,19 @@ namespace GameModes.BubbleMerge.Gameplay
             if (BubbleHUDController != null)
             {
                 BubbleHUDController.UpdateScore(score);
+            }
+            
+            CheckWinCondition();
+        }
+
+        private void CheckWinCondition()
+        {
+            if (hasWon/* || IsInputBlocked*/) return;
+            
+            if (TargetScore > 0 && score >= TargetScore)
+            {
+                hasWon = true;
+                MarkLevelAsCompleted();
             }
         }
 

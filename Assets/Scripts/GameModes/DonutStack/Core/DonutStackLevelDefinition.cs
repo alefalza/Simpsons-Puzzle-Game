@@ -3,7 +3,7 @@ using UnityEngine;
 namespace GameModes.DonutStack.Core
 {
     [CreateAssetMenu(menuName = "GameModes/DonutStack/LevelDefinition", fileName =  "DonutStackLevelDefinition")]
-    public class DonutStackLevelDefinition : ScriptableObject
+    public class DonutStackLevelDefinition : LevelDefinition
     {
         [Header("Grid Settings")]
         [Tooltip("Radius of the hexagonal grid")]

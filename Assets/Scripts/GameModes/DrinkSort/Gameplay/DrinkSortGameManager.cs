@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Core;
+using Core.Services.LevelProgressionService;
 using GameModes.Core;
 using GameModes.DrinkSort.Core;
 using GameModes.DrinkSort.UI;
@@ -10,9 +12,6 @@ namespace GameModes.DrinkSort.Gameplay
 {
     public class DrinkSortGameManager : BaseGameManager<DrinkSortGameManager>
     {
-        [Header("Level Configuration")]
-        [SerializeField] private DrinkSortLevelDefinition levelData;
-        
         [Header("Grid Settings")]
         [SerializeField] private TrayGrid trayGrid;
         
@@ -31,17 +30,17 @@ namespace GameModes.DrinkSort.Gameplay
         private DrinkSortHUDController DrinkSortHUDController => hudController as DrinkSortHUDController;
         
         // Properties that get values from levelData or default values
-        private int GridWidth => levelData != null ? levelData.gridWidth : 4;
-        private int GridHeight => levelData != null ? levelData.gridHeight : 4;
-        private int InitialItemsPerTray => levelData != null ? levelData.initialItemsPerTray : 2;
-        private int ItemsToFillOnClear => levelData != null ? levelData.itemsToFillOnClear : 3;
-        private int InitialTrayReserveSize => levelData != null ? levelData.initialTrayReserveSize : 20;
-        private float TimeLimit => levelData != null ? levelData.timeLimit : 120f;
-        private int ScorePerMatch => levelData != null ? levelData.scorePerMatch : GameConstants.DrinkSort.ScorePerMatch;
-        private float InitialPopulateDelay => levelData != null ? levelData.initialPopulateDelay : GameConstants.DrinkSort.InitialPopulateDelay;
-        private float ItemPopulateDelay => levelData != null ? levelData.itemPopulateDelay : GameConstants.DrinkSort.ItemPopulateDelay;
-        private float MatchProcessDelay => levelData != null ? levelData.matchProcessDelay : GameConstants.DrinkSort.MatchProcessDelay;
-        private float PostPopulateDelay => levelData != null ? levelData.postPopulateDelay : GameConstants.DrinkSort.PostPopulateDelay;
+        private int GridWidth => levelData != null ? ((DrinkSortLevelDefinition)levelData).gridWidth : 4;
+        private int GridHeight => levelData != null ? ((DrinkSortLevelDefinition)levelData).gridHeight : 4;
+        private int InitialItemsPerTray => levelData != null ? ((DrinkSortLevelDefinition)levelData).initialItemsPerTray : 2;
+        private int ItemsToFillOnClear => levelData != null ? ((DrinkSortLevelDefinition)levelData).itemsToFillOnClear : 3;
+        private int InitialTrayReserveSize => levelData != null ? ((DrinkSortLevelDefinition)levelData).initialTrayReserveSize : 20;
+        private float TimeLimit => levelData != null ? ((DrinkSortLevelDefinition)levelData).timeLimit : 120f;
+        private int ScorePerMatch => levelData != null ? ((DrinkSortLevelDefinition)levelData).scorePerMatch : GameConstants.DrinkSort.ScorePerMatch;
+        private float InitialPopulateDelay => levelData != null ? ((DrinkSortLevelDefinition)levelData).initialPopulateDelay : GameConstants.DrinkSort.InitialPopulateDelay;
+        private float ItemPopulateDelay => levelData != null ? ((DrinkSortLevelDefinition)levelData).itemPopulateDelay : GameConstants.DrinkSort.ItemPopulateDelay;
+        private float MatchProcessDelay => levelData != null ? ((DrinkSortLevelDefinition)levelData).matchProcessDelay : GameConstants.DrinkSort.MatchProcessDelay;
+        private float PostPopulateDelay => levelData != null ? ((DrinkSortLevelDefinition)levelData).postPopulateDelay : GameConstants.DrinkSort.PostPopulateDelay;
         
         public float TimeRemaining => Mathf.Max(0, TimeLimit - currentTime);
         public int ItemsRemaining => GetTotalReserveCount();
@@ -243,6 +242,8 @@ namespace GameModes.DrinkSort.Gameplay
             
             isGameOver = true;
             IsInputBlocked = true;
+            
+            MarkLevelAsCompleted();
             
             if (hudController != null)
             {
