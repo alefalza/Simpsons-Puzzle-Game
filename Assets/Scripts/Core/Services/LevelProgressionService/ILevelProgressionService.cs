@@ -15,7 +15,7 @@ namespace Core.Services.LevelProgressionService
         /// <summary>
         /// Get the LevelDefinition for the next playable level of a game mode
         /// </summary>
-        ScriptableObject GetNextPlayableLevelDefinition(string gameModeName);
+        LevelDefinition GetNextPlayableLevelDefinition(string gameModeName);
 
         /// <summary>
         /// Mark a level as completed

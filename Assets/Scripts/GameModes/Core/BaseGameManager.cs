@@ -1,6 +1,5 @@
 using Core;
 using Core.Services.LevelProgressionService;
-using GameModes.BubbleMerge.Core;
 using UI;
 using UnityEngine;
 
@@ -53,9 +52,9 @@ namespace GameModes.Core
             
             var levelDef = LevelProgressionService.GetNextPlayableLevelDefinition(GameModeName);
             
-            if (levelDef != null && levelDef is BubbleMergeLevelDefinition bubbleLevelDef)
+            if (levelDef != null)
             {
-                levelData = bubbleLevelDef;
+                levelData = levelDef;
                 Debug.Log($"[BubbleGameManager] Loaded level {currentLevelNumber}: {levelDef.name}");
             }
             else

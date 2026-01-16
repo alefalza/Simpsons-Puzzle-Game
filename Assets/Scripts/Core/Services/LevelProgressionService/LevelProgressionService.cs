@@ -13,7 +13,7 @@ namespace Core.Services.LevelProgressionService
     public class LevelProgressionService : ILevelProgressionService
     {
         private LevelProgressionData progressionData;
-        private Dictionary<string, List<ScriptableObject>> levelDefinitionsCache;
+        private Dictionary<string, List<LevelDefinition>> levelDefinitionsCache;
 
         public LevelProgressionService() { }
         
@@ -22,7 +22,7 @@ namespace Core.Services.LevelProgressionService
             Debug.Log("[LevelProgressionService] Initializing...");
             
             progressionData = LevelProgressionData.Load();
-            levelDefinitionsCache = new Dictionary<string, List<ScriptableObject>>();
+            levelDefinitionsCache = new Dictionary<string, List<LevelDefinition>>();
             
             // Pre-load all level definitions by game mode
             LoadLevelDefinitionsCache();
@@ -34,19 +34,19 @@ namespace Core.Services.LevelProgressionService
             // Note: Level definitions should be in Resources/LevelDefinitions/ folder
             
             var bubbleMergeLevels = Resources.LoadAll<BubbleMergeLevelDefinition>("LevelDefinitions/BubbleMerge")
-                .Cast<ScriptableObject>()
+                .Cast<LevelDefinition>()
                 .OrderBy(ld => ld.name)
                 .ToList();
             levelDefinitionsCache["BubbleMerge"] = bubbleMergeLevels;
 
             var drinkSortLevels = Resources.LoadAll<DrinkSortLevelDefinition>("LevelDefinitions/DrinkSort")
-                .Cast<ScriptableObject>()
+                .Cast<LevelDefinition>()
                 .OrderBy(ld => ld.name)
                 .ToList();
             levelDefinitionsCache["DrinkSort"] = drinkSortLevels;
 
             var donutStackLevels = Resources.LoadAll<DonutStackLevelDefinition>("LevelDefinitions/DonutStack")
-                .Cast<ScriptableObject>()
+                .Cast<LevelDefinition>()
                 .OrderBy(ld => ld.name)
                 .ToList();
             levelDefinitionsCache["DonutStack"] = donutStackLevels;
@@ -68,7 +68,7 @@ namespace Core.Services.LevelProgressionService
             return progressionData.GetNextPlayableLevel(gameModeName);
         }
 
-        public ScriptableObject GetNextPlayableLevelDefinition(string gameModeName)
+        public LevelDefinition GetNextPlayableLevelDefinition(string gameModeName)
         {
             int nextPlayableLevel = GetNextPlayableLevel(gameModeName);
             return GetLevelDefinition(gameModeName, nextPlayableLevel);
@@ -77,7 +77,7 @@ namespace Core.Services.LevelProgressionService
         /// <summary>
         /// Get a specific level definition for a game mode
         /// </summary>
-        private ScriptableObject GetLevelDefinition(string gameModeName, int levelNumber)
+        private LevelDefinition GetLevelDefinition(string gameModeName, int levelNumber)
         {
             if (!levelDefinitionsCache.TryGetValue(gameModeName, out var levels) || levels == null || levels.Count == 0)
             {
@@ -130,4 +130,3 @@ namespace Core.Services.LevelProgressionService
         }
     }
 }
-
