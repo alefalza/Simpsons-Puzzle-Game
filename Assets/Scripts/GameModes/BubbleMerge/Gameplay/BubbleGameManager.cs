@@ -7,6 +7,9 @@ namespace GameModes.BubbleMerge.Gameplay
 {
     public class BubbleGameManager : BaseGameManager<BubbleGameManager>
     {
+        [Header("Level Configuration")]
+        [SerializeField] private BubbleMergeLevelDefinition levelData;
+        
         [SerializeField] private BubbleSpawner spawner;
 
         private int score = 0;
@@ -14,6 +17,8 @@ namespace GameModes.BubbleMerge.Gameplay
         private BubbleHUDController BubbleHUDController => hudController as BubbleHUDController;
         
         public int MaxTier => spawner.MaxTier;
+        
+        private int ScorePerTier => levelData != null ? levelData.scorePerTier : GameConstants.BubbleMerge.ScorePerTier;
 
         protected override void Start()
         {
@@ -43,7 +48,7 @@ namespace GameModes.BubbleMerge.Gameplay
 
         public Bubble SpawnMergedBubble(int tier, Vector3 position)
         {
-            AddScore(tier * GameConstants.BubbleMerge.ScorePerTier);
+            AddScore(tier * ScorePerTier);
             
             return spawner.SpawnBubble(tier, position);
         }

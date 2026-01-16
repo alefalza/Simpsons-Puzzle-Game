@@ -66,7 +66,7 @@ namespace GameModes.DrinkSort.Core
             
             ArrangeItems();
             
-            // Notificar al GameManager para que verifique matches
+            // Notify GameManager to check for matches
             if (items.Count >= 3)
             {
                 GameModes.DrinkSort.Gameplay.DrinkSortGameManager.Instance?.CheckTrayForMatch(this);

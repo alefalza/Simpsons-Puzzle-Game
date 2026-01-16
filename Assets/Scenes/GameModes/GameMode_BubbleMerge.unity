@@ -271,7 +271,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad346062390d74f90a7146a66750ccec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineRenderer: {fileID: 102109114}
   scrollSpeed: -3
 --- !u!1 &164501945
 GameObject:
@@ -318,8 +317,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a658a9d3e6a447719c25f3f768738d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawner: {fileID: 1534036341}
   hudController: {fileID: 164501948}
+  levelData: {fileID: 11400000, guid: d5913472dcbf31c4ea2fc8742be5e6dc, type: 2}
+  spawner: {fileID: 1534036341}
 --- !u!114 &164501948
 MonoBehaviour:
   m_ObjectHideFlags: 0

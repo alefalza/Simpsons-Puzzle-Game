@@ -897,17 +897,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad17a5d06bfad204e8a1a4c2ef05a6ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hudController: {fileID: 1499468659}
+  levelData: {fileID: 11400000, guid: aeafaf2594c605541a5f620cc661ac87, type: 2}
   trayGrid: {fileID: 258313207}
-  gridWidth: 4
-  gridHeight: 4
   itemReserve: {fileID: 0}
   itemsContainer: {fileID: 0}
-  initialItemsPerTray: 2
-  itemsToFillOnClear: 3
   trayReserveItems: []
-  initialTrayReserveSize: 20
-  timeLimit: 120
-  hudController: {fileID: 1499468659}
 --- !u!114 &1499468659
 MonoBehaviour:
   m_ObjectHideFlags: 0

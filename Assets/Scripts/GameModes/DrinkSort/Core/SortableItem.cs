@@ -54,7 +54,7 @@ namespace GameModes.DrinkSort.Core
             originalParent = transform.parent;
             isDragging = true;
             
-            // Asegurar que esté visible durante el arrastre
+            // Ensure it's visible during drag
             if (spriteRenderer != null)
             {
                 spriteRenderer.sortingOrder = 100;
@@ -75,12 +75,12 @@ namespace GameModes.DrinkSort.Core
             if (!isDragging) return;
             isDragging = false;
             
-            // Detectar bandeja bajo el puntero
+            // Detect tray under pointer
             Tray targetTray = DetectTrayUnderPointer(eventData);
             
             if (targetTray != null && targetTray != currentTray && targetTray.CanAddItem())
             {
-                // Mover a nueva bandeja
+                // Move to new tray
                 if (currentTray != null)
                 {
                     currentTray.RemoveItem(this);
@@ -91,12 +91,12 @@ namespace GameModes.DrinkSort.Core
             }
             else
             {
-                // Volver a posición original
+                // Return to original position
                 transform.position = originalPosition;
                 transform.SetParent(originalParent);
             }
             
-            // Restaurar sorting order
+            // Restore sorting order
             if (spriteRenderer != null)
             {
                 spriteRenderer.sortingOrder = 0;
@@ -117,7 +117,7 @@ namespace GameModes.DrinkSort.Core
                 }
             }
             
-            // Fallback: raycast físico
+            // Fallback: physics raycast
             Vector3 worldPos = mainCamera.ScreenToWorldPoint(eventData.position);
             worldPos.z = 0;
             Collider2D hit = Physics2D.OverlapPoint(worldPos);

@@ -47,11 +47,11 @@ namespace GameModes.DrinkSort.Gameplay
                 return;
             }
             
-            // Configurar GridLayoutGroup
+            // Configure GridLayoutGroup
             gridLayoutGroup.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             gridLayoutGroup.constraintCount = gridWidth;
             
-            // Crear bandejas
+            // Create trays
             int index = 0;
             for (int y = 0; y < gridHeight; y++)
             {

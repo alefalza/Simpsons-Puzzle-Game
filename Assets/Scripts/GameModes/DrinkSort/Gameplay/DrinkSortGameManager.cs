@@ -10,23 +10,18 @@ namespace GameModes.DrinkSort.Gameplay
 {
     public class DrinkSortGameManager : BaseGameManager<DrinkSortGameManager>
     {
+        [Header("Level Configuration")]
+        [SerializeField] private DrinkSortLevelDefinition levelData;
+        
         [Header("Grid Settings")]
         [SerializeField] private TrayGrid trayGrid;
-        [SerializeField] private int gridWidth = 4;
-        [SerializeField] private int gridHeight = 4;
         
         [Header("Item Settings")]
-        [SerializeField] private ItemReserve itemReserve; // Para obtener sprites y prefab
+        [SerializeField] private ItemReserve itemReserve; // To get sprites and prefab
         [SerializeField] private Transform itemsContainer;
-        [SerializeField] private int initialItemsPerTray = 2;
-        [SerializeField] private int itemsToFillOnClear = 3;
         
         [Header("Tray Reserve Settings")]
-        [SerializeField] private TrayReserve.ItemData[] trayReserveItems; // Items disponibles para las reservas de bandejas
-        [SerializeField] private int initialTrayReserveSize = 20;
-        
-        [Header("Game Settings")]
-        [SerializeField] private float timeLimit = 120f; // 2 minutos por defecto
+        [SerializeField] private TrayReserve.ItemData[] trayReserveItems; // Items available for tray reserves
         
         private float currentTime;
         private int totalItemsUsed = 0;
@@ -35,7 +30,20 @@ namespace GameModes.DrinkSort.Gameplay
         
         private DrinkSortHUDController DrinkSortHUDController => hudController as DrinkSortHUDController;
         
-        public float TimeRemaining => Mathf.Max(0, timeLimit - currentTime);
+        // Properties that get values from levelData or default values
+        private int GridWidth => levelData != null ? levelData.gridWidth : 4;
+        private int GridHeight => levelData != null ? levelData.gridHeight : 4;
+        private int InitialItemsPerTray => levelData != null ? levelData.initialItemsPerTray : 2;
+        private int ItemsToFillOnClear => levelData != null ? levelData.itemsToFillOnClear : 3;
+        private int InitialTrayReserveSize => levelData != null ? levelData.initialTrayReserveSize : 20;
+        private float TimeLimit => levelData != null ? levelData.timeLimit : 120f;
+        private int ScorePerMatch => levelData != null ? levelData.scorePerMatch : GameConstants.DrinkSort.ScorePerMatch;
+        private float InitialPopulateDelay => levelData != null ? levelData.initialPopulateDelay : GameConstants.DrinkSort.InitialPopulateDelay;
+        private float ItemPopulateDelay => levelData != null ? levelData.itemPopulateDelay : GameConstants.DrinkSort.ItemPopulateDelay;
+        private float MatchProcessDelay => levelData != null ? levelData.matchProcessDelay : GameConstants.DrinkSort.MatchProcessDelay;
+        private float PostPopulateDelay => levelData != null ? levelData.postPopulateDelay : GameConstants.DrinkSort.PostPopulateDelay;
+        
+        public float TimeRemaining => Mathf.Max(0, TimeLimit - currentTime);
         public int ItemsRemaining => GetTotalReserveCount();
         public int Score => score;
         
@@ -60,16 +68,16 @@ namespace GameModes.DrinkSort.Gameplay
             totalItemsUsed = 0;
             isGameOver = false;
             
-            // Inicializar grilla
-            trayGrid.Initialize(gridWidth, gridHeight);
+            // Initialize grid
+            trayGrid.Initialize(GridWidth, GridHeight);
             
-            // Inicializar reservas de cada bandeja
+            // Initialize reserves for each tray
             InitializeTrayReserves();
             
-            // Poblar bandejas inicialmente
+            // Populate trays initially
             StartCoroutine(PopulateInitialTrays());
             
-            // Actualizar HUD
+            // Update HUD
             UpdateHUD();
         }
         
@@ -77,19 +85,19 @@ namespace GameModes.DrinkSort.Gameplay
         {
             foreach (var tray in trayGrid.Trays.Values)
             {
-                tray.InitializeReserve(trayReserveItems, initialTrayReserveSize);
+                tray.InitializeReserve(trayReserveItems, InitialTrayReserveSize);
             }
         }
         
         private IEnumerator PopulateInitialTrays()
         {
-            yield return new WaitForSeconds(GameConstants.DrinkSort.InitialPopulateDelay);
+            yield return new WaitForSeconds(InitialPopulateDelay);
             
             List<Tray> emptyTrays = trayGrid.GetEmptyTrays();
             
             foreach (var tray in emptyTrays)
             {
-                int itemsToAdd = Random.Range(1, initialItemsPerTray + 1);
+                int itemsToAdd = Random.Range(1, InitialItemsPerTray + 1);
                 
                 tray.PopulateFromReserve(
                     itemsToAdd,
@@ -98,7 +106,7 @@ namespace GameModes.DrinkSort.Gameplay
                     itemsContainer != null ? itemsContainer : transform
                 );
                 
-                yield return new WaitForSeconds(GameConstants.DrinkSort.ItemPopulateDelay);
+                yield return new WaitForSeconds(ItemPopulateDelay);
             }
         }
         
@@ -127,35 +135,35 @@ namespace GameModes.DrinkSort.Gameplay
         {
             IsInputBlocked = true;
             
-            // Agregar puntuación
-            AddScore(GameConstants.DrinkSort.ScorePerMatch);
+            // Add score
+            AddScore(ScorePerMatch);
             
-            // Limpiar bandeja
+            // Clear tray
             tray.ClearItems();
             
-            yield return new WaitForSeconds(GameConstants.DrinkSort.MatchProcessDelay);
+            yield return new WaitForSeconds(MatchProcessDelay);
             
-            // Poblar bandeja desde su propia reserva
+            // Populate tray from its own reserve
             if (tray.Reserve.HasItems() && itemReserve != null)
             {
                 tray.PopulateFromReserve(
-                    itemsToFillOnClear,
+                    ItemsToFillOnClear,
                     itemReserve.ItemPrefab,
                     GetSpriteForType,
                     itemsContainer != null ? itemsContainer : transform
                 );
                 
-                totalItemsUsed += itemsToFillOnClear;
+                totalItemsUsed += ItemsToFillOnClear;
             }
             
-            yield return new WaitForSeconds(GameConstants.DrinkSort.PostPopulateDelay);
+            yield return new WaitForSeconds(PostPopulateDelay);
             
             IsInputBlocked = false;
             
-            // Actualizar HUD
+            // Update HUD
             UpdateHUD();
             
-            // Verificar condición de victoria
+            // Check win condition
             CheckWinCondition();
         }
         
@@ -204,8 +212,8 @@ namespace GameModes.DrinkSort.Gameplay
         
         private void CheckWinCondition()
         {
-            // Victoria: usar todos los elementos disponibles de todas las reservas
-            // y que no queden items en las bandejas
+            // Win: use all available items from all reserves
+            // and no items remain in the trays
             int totalReserveCount = GetTotalReserveCount();
             
             if (totalReserveCount == 0)
@@ -221,7 +229,7 @@ namespace GameModes.DrinkSort.Gameplay
                     }
                 }
                 
-                // Si todas las reservas están vacías y no hay items en las bandejas, ganaste
+                // If all reserves are empty and there are no items in the trays, you win
                 if (!hasRemainingItems)
                 {
                     OnGameWin();

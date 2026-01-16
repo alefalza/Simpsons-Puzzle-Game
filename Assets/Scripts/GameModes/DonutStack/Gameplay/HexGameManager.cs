@@ -9,18 +9,27 @@ namespace GameModes.DonutStack.Gameplay
 {
     public class HexGameManager : BaseGameManager<HexGameManager>
     {
+        [Header("Level Configuration")]
+        [SerializeField] private DonutStackLevelDefinition levelData;
+        
         [Header("Grid Settings")]
         [SerializeField] private HexGrid hexGrid;
-        [SerializeField] private int gridRadius = 3;
     
         [Header("Piece Settings")]
         [SerializeField] private PieceStack pieceStackPrefab;
         
         [Header("Game Settings")]
-        [SerializeField] private int stacksPerTurn = 3;
         [SerializeField] private Transform stackContainer;
         [SerializeField] private Transform dragLayer;
-        [SerializeField] private int piecesToDestroy = 10;
+        
+        // Properties that get values from levelData or default values
+        private int GridRadius => levelData != null ? levelData.gridRadius : 3;
+        private int StacksPerTurn => levelData != null ? levelData.stacksPerTurn : 3;
+        private int PiecesToDestroy => levelData != null ? levelData.piecesToDestroy : 10;
+        private float MatchProcessDelay => levelData != null ? levelData.matchProcessDelay : GameConstants.DonutStack.MatchProcessDelay;
+        private float PieceRemoveDelay => levelData != null ? levelData.pieceRemoveDelay : GameConstants.DonutStack.PieceRemoveDelay;
+        private float PostDestroyDelay => levelData != null ? levelData.postDestroyDelay : GameConstants.DonutStack.PostDestroyDelay;
+        private float NewTurnDelay => levelData != null ? levelData.newTurnDelay : GameConstants.DonutStack.NewTurnDelay;
     
         private readonly List<PieceStack> currentTurnStacks = new List<PieceStack>();
         
@@ -33,7 +42,7 @@ namespace GameModes.DonutStack.Gameplay
         protected override void Start()
         {
             base.Start();
-            hexGrid.Initialize(gridRadius);
+            hexGrid.Initialize(GridRadius);
             UpdateScoreUI();
             GenerateNewTurn();
         }
@@ -55,7 +64,7 @@ namespace GameModes.DonutStack.Gameplay
             
             currentTurnStacks.Clear();
 
-            for (int i = 0; i < stacksPerTurn; i++)
+            for (int i = 0; i < StacksPerTurn; i++)
             {
                 PieceStack stack = CreateRandomStack();
                 currentTurnStacks.Add(stack);
@@ -90,7 +99,7 @@ namespace GameModes.DonutStack.Gameplay
         
             if (AllStacksPlaced())
             {
-                Invoke(nameof(GenerateNewTurn), GameConstants.DonutStack.NewTurnDelay);
+                Invoke(nameof(GenerateNewTurn), NewTurnDelay);
             }
         }
 
@@ -136,7 +145,7 @@ namespace GameModes.DonutStack.Gameplay
 
                         neighbour.Stack.ArrangePieces();
 
-                        yield return new WaitForSeconds(GameConstants.DonutStack.MatchProcessDelay);
+                        yield return new WaitForSeconds(MatchProcessDelay);
 
                         // If origin stack ends up empty after moving its pieces to the target stack, destroy it.
                         if (cell.Stack.PieceCount == 0)
@@ -152,10 +161,10 @@ namespace GameModes.DonutStack.Gameplay
                         int topColorCount = neighbour.Stack.TopColorCount();
                         
                         // Destroy pieces of the same color if amount to destroy is reached.
-                        if (neighbour.IsOccupied && topColorCount >= piecesToDestroy)
+                        if (neighbour.IsOccupied && topColorCount >= PiecesToDestroy)
                         {
                             yield return StartCoroutine(
-                                neighbour.Stack.RemoveTopGroupWithDelay(piecesToDestroy, GameConstants.DonutStack.PieceRemoveDelay)
+                                neighbour.Stack.RemoveTopGroupWithDelay(PiecesToDestroy, PieceRemoveDelay)
                             );
                             
                             score += topColorCount;
@@ -169,7 +178,7 @@ namespace GameModes.DonutStack.Gameplay
                                 yield break;
                             }
 
-                            yield return new WaitForSeconds(GameConstants.DonutStack.PostDestroyDelay);
+                            yield return new WaitForSeconds(PostDestroyDelay);
                         }
                         else if (neighbour.IsOccupied)
                         {
