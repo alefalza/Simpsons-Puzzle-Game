@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace GameModes.DrinkSort.Core
 {
-    [CreateAssetMenu(menuName = "GameModes/DrinkSort/LevelDefinition", fileName =  "DrinkSortLevelDefinition")]
+    [CreateAssetMenu(menuName = "GameModes/DrinkSort/LevelDefinition", fileName = "DrinkSortLevelDefinition")]
     public class DrinkSortLevelDefinition : LevelDefinition
     {
         [Header("Score Settings")]

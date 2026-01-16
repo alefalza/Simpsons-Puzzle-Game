@@ -74,7 +74,7 @@ namespace GameModes.BubbleMerge.Gameplay
 
         private void CheckWinCondition()
         {
-            if (hasWon/* || IsInputBlocked*/) return;
+            if (hasWon || IsInputBlocked) return;
             
             if (TargetScore > 0 && score >= TargetScore)
             {

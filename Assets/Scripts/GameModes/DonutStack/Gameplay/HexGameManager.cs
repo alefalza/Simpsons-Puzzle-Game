@@ -22,7 +22,7 @@ namespace GameModes.DonutStack.Gameplay
         protected override string GameModeName => "DonutStack";
 
         // Properties that get values from levelData or default values
-        private int GridRadius => levelData != null ? ((DonutStackLevelDefinition)levelData).gridRadius : 3;
+        private int GridRadius => levelData != null ? ((DonutStackLevelDefinition)levelData).gridRadius : 1;
         private int StacksPerTurn => levelData != null ? ((DonutStackLevelDefinition)levelData).stacksPerTurn : 3;
         private int PiecesToDestroy => levelData != null ? ((DonutStackLevelDefinition)levelData).piecesToDestroy : 10;
         private float MatchProcessDelay => levelData != null ? ((DonutStackLevelDefinition)levelData).matchProcessDelay : GameConstants.DonutStack.MatchProcessDelay;

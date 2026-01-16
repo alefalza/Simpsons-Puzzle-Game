@@ -2,12 +2,12 @@ using UnityEngine;
 
 namespace GameModes.DonutStack.Core
 {
-    [CreateAssetMenu(menuName = "GameModes/DonutStack/LevelDefinition", fileName =  "DonutStackLevelDefinition")]
+    [CreateAssetMenu(menuName = "GameModes/DonutStack/LevelDefinition", fileName = "DonutStackLevelDefinition")]
     public class DonutStackLevelDefinition : LevelDefinition
     {
         [Header("Grid Settings")]
         [Tooltip("Radius of the hexagonal grid")]
-        public int gridRadius = 3;
+        public int gridRadius = 1;
         
         [Header("Game Settings")]
         [Tooltip("Number of stacks per turn")]
