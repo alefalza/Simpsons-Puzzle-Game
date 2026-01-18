@@ -7,9 +7,9 @@ namespace Core.Services.PopupService
     {
         private readonly IPopupFactory factory;
         private readonly Transform container;
-        private readonly Dictionary<string, BasePopup> popups = new();
+        private readonly Dictionary<string, IPopUp> popups = new();
 
-        private BasePopup openedPopup;
+        private IPopUp openedPopup;
         
         public PopupService(IPopupFactory factory, Transform container)
         {
@@ -33,12 +33,12 @@ namespace Core.Services.PopupService
             openedPopup.Open();
         }
 
-        private BasePopup GetOrCreatePopup(PopupDefinition definition)
+        private IPopUp GetOrCreatePopup(PopupDefinition definition)
         {
             if (popups.TryGetValue(definition.id, out var existing))
             {
-                if (!existing.gameObject.activeSelf)
-                    existing.gameObject.SetActive(true);
+                if (!existing.IsActive)
+                    existing.SetActive(true);
 
                 return existing;
             }
@@ -49,7 +49,7 @@ namespace Core.Services.PopupService
             return newPopup;
         }
 
-        public BasePopup GetOpenedPopup() => openedPopup;
+        public IPopUp GetOpenedPopup() => openedPopup;
         
         private void OnPopupClosed(bool destroyOnClose)
         {

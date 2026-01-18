@@ -16,7 +16,7 @@ namespace UI
 
         private IPopupService popupService;
 
-        private BasePopup OpenedPopup => popupService.GetOpenedPopup();
+        private IPopUp OpenedPopup => popupService.GetOpenedPopup();
 
         private void Awake()
         {

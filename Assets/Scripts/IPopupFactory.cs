@@ -1,10 +1,7 @@
 using Core.Services.PopupService;
 using UnityEngine;
 
-namespace Core.Services.PopupService
+public interface IPopupFactory
 {
-    public interface IPopupFactory
-    {
-        BasePopup CreatePopup(PopupDefinition definition, Transform parent);
-    }
+    IPopUp CreatePopup(PopupDefinition definition, Transform parent);
 }
