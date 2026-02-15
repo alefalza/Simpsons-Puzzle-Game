@@ -1,64 +1,61 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace GameModes.DrinkSort.Core
 {
     public class SortableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         [SerializeField] private SortableItemType itemType = SortableItemType.None;
-        [SerializeField] private SpriteRenderer spriteRenderer;
+        [SerializeField] private Image image;
         
         private Camera mainCamera;
         private Vector3 originalPosition;
         private Transform originalParent;
-        private Tray currentTray;
+        private Tray parentTray;
         private bool isDragging = false;
         
         public SortableItemType ItemType => itemType;
-        public Tray CurrentTray => currentTray;
+        public Tray ParentTray => parentTray;
         
         private void Awake()
         {
             mainCamera = Camera.main;
         }
         
-        public void Initialize(SortableItemType type, Sprite sprite)
+        public void Initialize(SortableItemType type, Color color)
         {
             itemType = type;
-            if (spriteRenderer != null && sprite != null)
+            
+            if (image != null)
             {
-                spriteRenderer.sprite = sprite;
+                image.color = color;
             }
         }
         
         public void SetTray(Tray tray)
         {
-            currentTray = tray;
+            parentTray = tray;
         }
         
         public void RemoveFromTray()
         {
-            if (currentTray != null)
+            if (parentTray != null)
             {
-                currentTray.RemoveItem(this);
-                currentTray = null;
+                parentTray.RemoveItem(this);
+                parentTray = null;
             }
         }
         
         #region Drag Events
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (currentTray == null) return;
+            if (parentTray == null) return;
             
             originalPosition = transform.position;
             originalParent = transform.parent;
             isDragging = true;
-            
-            // Ensure it's visible during drag
-            if (spriteRenderer != null)
-            {
-                spriteRenderer.sortingOrder = 100;
-            }
         }
         
         public void OnDrag(PointerEventData eventData)
@@ -73,21 +70,62 @@ namespace GameModes.DrinkSort.Core
         public void OnEndDrag(PointerEventData eventData)
         {
             if (!isDragging) return;
+            
             isDragging = false;
             
             // Detect tray under pointer
             Tray targetTray = DetectTrayUnderPointer(eventData);
             
-            if (targetTray != null && targetTray != currentTray && targetTray.CanAddItem())
+            if (targetTray != null && targetTray.CanAddItem())
             {
-                // Move to new tray
-                if (currentTray != null)
+                // Get mouse position to find the closest slot
+                Vector3 worldPos = mainCamera.ScreenToWorldPoint(eventData.position);
+                worldPos.z = 0;
+                int slotIndex = targetTray.GetSlotIndexForPosition(worldPos);
+                
+                if (slotIndex == -1)
                 {
-                    currentTray.RemoveItem(this);
+                    // If no slot is found, return to the original position
+                    transform.position = originalPosition;
+                    transform.SetParent(originalParent);
+                    return;
                 }
                 
-                targetTray.AddItem(this);
-                currentTray = targetTray;
+                // If it's the same tray, verify that the target slot is free or different
+                if (targetTray == parentTray)
+                {
+                    if (targetTray.IsSlotFree(slotIndex))
+                    {
+                        // Remove from the current slot and add to the new slot
+                        targetTray.RemoveItem(this);
+                        targetTray.AddItem(this, slotIndex);
+                    }
+                    else
+                    {
+                        // Slot is occupied, return to the original position
+                        transform.position = originalPosition;
+                        transform.SetParent(originalParent);
+                    }
+                }
+                else
+                {
+                    // Move to the new tray
+                    if (parentTray != null)
+                    {
+                        parentTray.RemoveItem(this);
+                    }
+                    
+                    if (targetTray.AddItem(this, slotIndex))
+                    {
+                        parentTray = targetTray;
+                    }
+                    else
+                    {
+                        // Could not be added, return to the original position
+                        transform.position = originalPosition;
+                        transform.SetParent(originalParent);
+                    }
+                }
             }
             else
             {
@@ -95,22 +133,17 @@ namespace GameModes.DrinkSort.Core
                 transform.position = originalPosition;
                 transform.SetParent(originalParent);
             }
-            
-            // Restore sorting order
-            if (spriteRenderer != null)
-            {
-                spriteRenderer.sortingOrder = 0;
-            }
         }
         
         private Tray DetectTrayUnderPointer(PointerEventData eventData)
         {
-            var results = new System.Collections.Generic.List<RaycastResult>();
+            var results = new List<RaycastResult>();
             EventSystem.current.RaycastAll(eventData, results);
             
             foreach (var result in results)
             {
                 Tray tray = result.gameObject.GetComponent<Tray>();
+                
                 if (tray != null)
                 {
                     return tray;
@@ -121,6 +154,7 @@ namespace GameModes.DrinkSort.Core
             Vector3 worldPos = mainCamera.ScreenToWorldPoint(eventData.position);
             worldPos.z = 0;
             Collider2D hit = Physics2D.OverlapPoint(worldPos);
+            
             if (hit != null)
             {
                 return hit.GetComponent<Tray>();
@@ -131,4 +165,3 @@ namespace GameModes.DrinkSort.Core
         #endregion
     }
 }
-

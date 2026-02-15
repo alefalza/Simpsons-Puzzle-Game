@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: DrinkSortLevelDefinition
   m_EditorClassIdentifier: 
   scorePerMatch: 10
-  gridWidth: 4
+  gridWidth: 3
   gridHeight: 4
   initialItemsPerTray: 2
   itemsToFillOnClear: 3
-  initialTrayReserveSize: 20
+  initialTrayReserveSize: 3
   timeLimit: 120
   initialPopulateDelay: 0.1
   itemPopulateDelay: 0.05

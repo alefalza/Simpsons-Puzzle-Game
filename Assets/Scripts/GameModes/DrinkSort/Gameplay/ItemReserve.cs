@@ -12,116 +12,52 @@ namespace GameModes.DrinkSort.Gameplay
         public class ItemData
         {
             public SortableItemType itemType;
-            public Sprite itemSprite;
-            public int weight = 100;
+            public Color itemColor = Color.white;
         }
         
         [SerializeField] private ItemData[] availableItems;
         [SerializeField] private SortableItem itemPrefab;
         
-        private Queue<SortableItemType> reserveQueue = new Queue<SortableItemType>();
-        private Dictionary<SortableItemType, Sprite> itemSprites = new Dictionary<SortableItemType, Sprite>();
+        private Dictionary<SortableItemType, Color> itemColors = new Dictionary<SortableItemType, Color>();
         
-        public int ReserveCount => reserveQueue.Count;
         public SortableItem ItemPrefab => itemPrefab;
         
         private void OnEnable()
         {
-            InitializeSprites();
+            InitializeColors();
         }
         
-        private void InitializeSprites()
+        private void InitializeColors()
         {
-            itemSprites.Clear();
+            itemColors.Clear();
             
             if (availableItems != null)
             {
                 foreach (var itemData in availableItems)
                 {
-                    if (itemData.itemSprite != null)
-                    {
-                        itemSprites[itemData.itemType] = itemData.itemSprite;
-                    }
+                    itemColors[itemData.itemType] = itemData.itemColor;
                 }
             }
         }
         
-        public void Initialize(int initialReserveSize)
+        public Color GetColorForType(SortableItemType itemType)
         {
-            reserveQueue.Clear();
-            
-            for (int i = 0; i < initialReserveSize; i++)
+            if (itemColors.TryGetValue(itemType, out Color color))
             {
-                SortableItemType randomType = GetRandomItemType();
-                reserveQueue.Enqueue(randomType);
-            }
-        }
-        
-        public SortableItemType PopNextItem()
-        {
-            if (reserveQueue.Count == 0)
-            {
-                return SortableItemType.None;
+                return color;
             }
             
-            return reserveQueue.Dequeue();
+            return Color.white;
         }
         
-        public void AddItemsToReserve(int count)
-        {
-            for (int i = 0; i < count; i++)
-            {
-                SortableItemType randomType = GetRandomItemType();
-                reserveQueue.Enqueue(randomType);
-            }
-        }
-        
-        private SortableItemType GetRandomItemType()
+        public SortableItemType GetRandomAvailableType()
         {
             if (availableItems == null || availableItems.Length == 0)
             {
                 return SortableItemType.None;
             }
             
-            // Weighted random selection
-            int totalWeight = 0;
-            foreach (var item in availableItems)
-            {
-                totalWeight += item.weight;
-            }
-            
-            if (totalWeight <= 0)
-            {
-                return availableItems[0].itemType;
-            }
-            
-            int randomValue = Random.Range(0, totalWeight);
-            int currentWeight = 0;
-            
-            foreach (var item in availableItems)
-            {
-                currentWeight += item.weight;
-                if (randomValue < currentWeight)
-                {
-                    return item.itemType;
-                }
-            }
-            
-            return availableItems[availableItems.Length - 1].itemType;
-        }
-        
-        public Sprite GetSpriteForType(SortableItemType itemType)
-        {
-            itemSprites.TryGetValue(itemType, out Sprite sprite);
-            return sprite;
-        }
-        
-        public bool HasItems()
-        {
-            return reserveQueue.Count > 0;
+            return availableItems[Random.Range(0, availableItems.Length)].itemType;
         }
     }
 }
-
-
-

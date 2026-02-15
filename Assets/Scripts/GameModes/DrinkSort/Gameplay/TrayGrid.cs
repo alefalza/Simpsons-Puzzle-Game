@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GameModes.DrinkSort.Core;
 using UnityEngine;
@@ -9,17 +10,16 @@ namespace GameModes.DrinkSort.Gameplay
     public class TrayGrid : MonoBehaviour
     {
         [SerializeField] private Tray trayPrefab;
-        [SerializeField] private int gridWidth = 4;
-        [SerializeField] private int gridHeight = 4;
         
         private GridLayoutGroup gridLayoutGroup;
-        private readonly Dictionary<Vector2Int, Tray> trays = new Dictionary<Vector2Int, Tray>();
-        
-        public int GridWidth => gridWidth;
-        public int GridHeight => gridHeight;
-        public int TotalTrays => gridWidth * gridHeight;
-        public Dictionary<Vector2Int, Tray> Trays => trays;
-        
+        private int gridWidth;
+        private int gridHeight;
+        private SortableItem itemPrefab;
+        private Func<SortableItemType, Color> getColorFunc;
+        private Func<SortableItemType> getRandomTypeFunc;
+
+        public Dictionary<Vector2Int, Tray> Trays { get; } = new Dictionary<Vector2Int, Tray>();
+
         private void Awake()
         {
             gridLayoutGroup = GetComponent<GridLayoutGroup>();
@@ -30,13 +30,28 @@ namespace GameModes.DrinkSort.Gameplay
             }
         }
         
-        public void Initialize(int width, int height)
+        public void Initialize(int width, int height, SortableItem prefab, Func<SortableItemType, Color> getColorFunc, Func<SortableItemType> getRandomTypeFunc)
         {
             gridWidth = width;
             gridHeight = height;
-            
+            itemPrefab = prefab;
+            this.getColorFunc = getColorFunc;
+            this.getRandomTypeFunc = getRandomTypeFunc;
             ClearGrid();
             CreateGrid();
+        }
+        
+        private void ClearGrid()
+        {
+            foreach (var tray in Trays.Values)
+            {
+                if (tray != null)
+                {
+                    Destroy(tray.gameObject);
+                }
+            }
+            
+            Trays.Clear();
         }
         
         private void CreateGrid()
@@ -47,12 +62,11 @@ namespace GameModes.DrinkSort.Gameplay
                 return;
             }
             
-            // Configure GridLayoutGroup
             gridLayoutGroup.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             gridLayoutGroup.constraintCount = gridWidth;
             
-            // Create trays
             int index = 0;
+            
             for (int y = 0; y < gridHeight; y++)
             {
                 for (int x = 0; x < gridWidth; x++)
@@ -60,29 +74,34 @@ namespace GameModes.DrinkSort.Gameplay
                     Vector2Int gridPos = new Vector2Int(x, y);
                     
                     Tray tray = Instantiate(trayPrefab, transform);
-                    tray.Initialize(gridPos, index);
+                    tray.Initialize(gridPos, index, itemPrefab, getColorFunc, getRandomTypeFunc);
                     
-                    trays[gridPos] = tray;
+                    Trays[gridPos] = tray;
                     index++;
                 }
             }
         }
         
+        #region Helpers
         public Tray GetTrayByIndex(int index)
         {
             int count = 0;
-            foreach (var tray in trays.Values)
+            
+            foreach (var tray in Trays.Values)
             {
                 if (count == index)
                     return tray;
+                
                 count++;
             }
+            
             return null;
         }
         
         public Tray GetTray(Vector2Int position)
         {
-            trays.TryGetValue(position, out Tray tray);
+            Trays.TryGetValue(position, out Tray tray);
+            
             return tray;
         }
         
@@ -90,7 +109,7 @@ namespace GameModes.DrinkSort.Gameplay
         {
             List<Tray> emptyTrays = new List<Tray>();
             
-            foreach (var tray in trays.Values)
+            foreach (var tray in Trays.Values)
             {
                 if (tray.IsEmpty)
                 {
@@ -105,7 +124,7 @@ namespace GameModes.DrinkSort.Gameplay
         {
             List<Tray> traysWithSpace = new List<Tray>();
             
-            foreach (var tray in trays.Values)
+            foreach (var tray in Trays.Values)
             {
                 if (tray.CanAddItem())
                 {
@@ -118,7 +137,7 @@ namespace GameModes.DrinkSort.Gameplay
         
         public bool HasEmptyTrays()
         {
-            foreach (var tray in trays.Values)
+            foreach (var tray in Trays.Values)
             {
                 if (tray.IsEmpty)
                 {
@@ -129,31 +148,20 @@ namespace GameModes.DrinkSort.Gameplay
             return false;
         }
         
-        private void ClearGrid()
-        {
-            foreach (var tray in trays.Values)
-            {
-                if (tray != null)
-                {
-                    Destroy(tray.gameObject);
-                }
-            }
-            
-            trays.Clear();
-        }
-        
         public int GetEmptyTrayCount()
         {
             int count = 0;
-            foreach (var tray in trays.Values)
+            
+            foreach (var tray in Trays.Values)
             {
                 if (tray.IsEmpty)
                 {
                     count++;
                 }
             }
+            
             return count;
         }
+        #endregion
     }
 }
-

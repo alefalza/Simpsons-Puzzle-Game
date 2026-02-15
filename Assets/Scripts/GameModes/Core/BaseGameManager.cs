@@ -74,7 +74,6 @@ namespace GameModes.Core
         }
 
         #region Pause Logic
-        
         protected virtual void TogglePause()
         {
             if (hudController == null || !hudController.CanTogglePause()) return;
@@ -121,7 +120,6 @@ namespace GameModes.Core
         protected virtual void OnPaused() { }
 
         protected virtual void OnResumed() { }
-        
         #endregion
 
         protected void MarkLevelAsCompleted()

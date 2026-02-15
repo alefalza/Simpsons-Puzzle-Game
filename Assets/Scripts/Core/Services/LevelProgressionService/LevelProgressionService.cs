@@ -12,6 +12,10 @@ namespace Core.Services.LevelProgressionService
     /// </summary>
     public class LevelProgressionService : ILevelProgressionService
     {
+        private const string BUBBLE_MERGE_LEVEL_DEFINITIONS_PATH = "LevelDefinitions/BubbleMerge";
+        private const string DRINK_SORT_LEVEL_DEFINITIONS_PATH = "LevelDefinitions/DrinkSort";
+        private const string DONUT_STACK_LEVEL_DEFINITIONS_PATH = "LevelDefinitions/DonutStack";
+        
         private LevelProgressionData progressionData;
         private Dictionary<string, List<LevelDefinition>> levelDefinitionsCache;
 
@@ -33,19 +37,19 @@ namespace Core.Services.LevelProgressionService
             // Load all level definitions from Resources folder
             // Note: Level definitions should be in Resources/LevelDefinitions/ folder
             
-            var bubbleMergeLevels = Resources.LoadAll<BubbleMergeLevelDefinition>("LevelDefinitions/BubbleMerge")
+            var bubbleMergeLevels = Resources.LoadAll<BubbleMergeLevelDefinition>(BUBBLE_MERGE_LEVEL_DEFINITIONS_PATH)
                 .Cast<LevelDefinition>()
                 .OrderBy(ld => ld.name)
                 .ToList();
             levelDefinitionsCache["BubbleMerge"] = bubbleMergeLevels;
 
-            var drinkSortLevels = Resources.LoadAll<DrinkSortLevelDefinition>("LevelDefinitions/DrinkSort")
+            var drinkSortLevels = Resources.LoadAll<DrinkSortLevelDefinition>(DRINK_SORT_LEVEL_DEFINITIONS_PATH)
                 .Cast<LevelDefinition>()
                 .OrderBy(ld => ld.name)
                 .ToList();
             levelDefinitionsCache["DrinkSort"] = drinkSortLevels;
 
-            var donutStackLevels = Resources.LoadAll<DonutStackLevelDefinition>("LevelDefinitions/DonutStack")
+            var donutStackLevels = Resources.LoadAll<DonutStackLevelDefinition>(DONUT_STACK_LEVEL_DEFINITIONS_PATH)
                 .Cast<LevelDefinition>()
                 .OrderBy(ld => ld.name)
                 .ToList();

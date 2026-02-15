@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 124364239}
   - component: {fileID: 124364238}
   - component: {fileID: 124364237}
+  - component: {fileID: 124364241}
   m_Layer: 5
   m_Name: GameplayCanvas
   m_TagString: Untagged
@@ -188,7 +189,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 2
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 275443014}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -221,6 +222,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1080, y: 1920}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &124364241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 124364236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e74d8b1e2a8364b479a3e1265118468c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hudCanvas: {fileID: 456096024}
+  worldCanvas: {fileID: 124364240}
 --- !u!1 &258313204
 GameObject:
   m_ObjectHideFlags: 0
@@ -275,13 +290,13 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 1
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 100, y: 100}
-  m_Spacing: {x: 0, y: 0}
-  m_Constraint: 0
-  m_ConstraintCount: 2
+  m_CellSize: {x: 250, y: 150}
+  m_Spacing: {x: 10, y: 10}
+  m_Constraint: 1
+  m_ConstraintCount: 3
 --- !u!114 &258313207
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -295,8 +310,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trayPrefab: {fileID: 4935679194552040543, guid: 3120228fd494c1d4bad6a1eb74198c30, type: 3}
-  gridWidth: 4
-  gridHeight: 4
+  itemPrefab: {fileID: 0}
+  itemsContainer: {fileID: 0}
 --- !u!1 &275443012
 GameObject:
   m_ObjectHideFlags: 0
@@ -897,12 +912,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad17a5d06bfad204e8a1a4c2ef05a6ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hudController: {fileID: 1499468659}
   levelData: {fileID: 0}
+  hudController: {fileID: 1499468659}
   trayGrid: {fileID: 258313207}
-  itemReserve: {fileID: 0}
-  itemsContainer: {fileID: 0}
-  trayReserveItems: []
+  itemReserve: {fileID: 11400000, guid: 0666e8727cd57a2409097426ddebca6c, type: 2}
 --- !u!114 &1499468659
 MonoBehaviour:
   m_ObjectHideFlags: 0
