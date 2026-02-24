@@ -16,7 +16,7 @@ namespace GameModes.DonutStack.Gameplay
         [SerializeField] private Core.DonutStack donutStackPrefab;
         
         [Header("Game Settings")]
-        [SerializeField] private Transform stackContainer;
+        [SerializeField] private StackSlot[] stackSlots;
         [SerializeField] private Transform dragLayer;
 
         protected override string GameModeName => "DonutStack";
@@ -34,7 +34,6 @@ namespace GameModes.DonutStack.Gameplay
         
         private int score = 0;
         
-        public Transform StackContainer => stackContainer;
         public Transform DragLayer => dragLayer;
         public bool IsProcessingMatches { get; private set; } = false;
 
@@ -72,7 +71,8 @@ namespace GameModes.DonutStack.Gameplay
 
         private Core.DonutStack CreateRandomStack()
         {
-            Core.DonutStack stack = Instantiate(donutStackPrefab, stackContainer.transform);
+            StackSlot parentSlot = stackSlots.First(x => !x.IsOccupied);
+            Core.DonutStack stack = Instantiate(donutStackPrefab, parentSlot.transform);
         
             if (stack == null)
             {
@@ -80,7 +80,7 @@ namespace GameModes.DonutStack.Gameplay
                 return null;
             }
             
-            stack.Initialize();
+            stack.Initialize(parentSlot);
         
             return stack;
         }

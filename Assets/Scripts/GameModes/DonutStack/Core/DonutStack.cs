@@ -30,7 +30,9 @@ namespace GameModes.DonutStack.Core
         private RectTransform rectTransform;
         private Canvas canvas;
         private Vector2 originalPos;
+        private Transform originalParent;
         private Renderer textRenderer;
+        private StackSlot parentSlot;
 
         public int PieceCount => pieces.Count;
         public bool IsPlaced { get; private set; } = false;
@@ -40,9 +42,12 @@ namespace GameModes.DonutStack.Core
             rectTransform = GetComponent<RectTransform>();
         }
 
-        public void Initialize()
+        public void Initialize(StackSlot slot)
         {
             canvas = DonutStackGameManager.Instance.DragLayer.GetComponentInParent<Canvas>();
+            
+            parentSlot = slot;
+            parentSlot.SetOccupied(true);
             
             int pieceCount = Random.Range(minStackHeight, maxStackHeight + 1);
         
@@ -178,19 +183,24 @@ namespace GameModes.DonutStack.Core
             if (IsPlaced) return;
             
             originalPos = rectTransform.anchoredPosition;
+            originalParent = transform.parent;
             transform.SetParent(DonutStackGameManager.Instance.DragLayer, worldPositionStays: false);
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                (RectTransform)canvas.transform,
-                eventData.position,
-                canvas.worldCamera,
-                out var pos
-            );
+            if (IsPlaced) return;
 
-            rectTransform.anchoredPosition = pos;
+            var dragLayerRect = (RectTransform)DonutStackGameManager.Instance.DragLayer;
+
+            if (RectTransformUtility.ScreenPointToWorldPointInRectangle(
+                    dragLayerRect,
+                    eventData.position,
+                    canvas.worldCamera,
+                    out var worldPos))
+            {
+                rectTransform.position = worldPos;
+            }
         }
 
         public void OnEndDrag(PointerEventData eventData)
@@ -200,10 +210,11 @@ namespace GameModes.DonutStack.Core
             if (cell != null && !cell.IsOccupied)
             {
                 DonutStackGameManager.Instance.TryPlaceStack(cell, this);
+                parentSlot.SetOccupied(false);
             }
             else
             {
-                transform.SetParent(DonutStackGameManager.Instance.StackContainer, worldPositionStays: false);
+                transform.SetParent(originalParent, worldPositionStays: false);
                 rectTransform.anchoredPosition = originalPos;
             }
         }
