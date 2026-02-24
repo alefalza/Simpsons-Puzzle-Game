@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modeName: Donut Stack
   sceneName: GameMode_DonutStack
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 9e747281f7fa8a9499d509534e897caf, type: 3}

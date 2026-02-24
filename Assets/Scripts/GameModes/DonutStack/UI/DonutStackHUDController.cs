@@ -3,11 +3,11 @@ using UI;
 
 namespace GameModes.DonutStack.UI
 {
-    public class HexHUDController : BaseHUDController
+    public class DonutStackHUDController : BaseHUDController
     {
         protected override void OnResumeClicked()
         {
-            HexGameManager.Instance.TogglePauseFromOverlay();
+            DonutStackGameManager.Instance.TogglePauseFromOverlay();
         }
     }
 }

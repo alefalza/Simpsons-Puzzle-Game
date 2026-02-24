@@ -1,18 +1,17 @@
-using GameModes.DonutStack.Core;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace GameModes.DonutStack.Gameplay
 {
-    public class HexCell : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class GridCell : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] private Image cellImage;
         [SerializeField] private Color normalColor = new Color(0.8f, 0.8f, 0.8f, 0.5f);
         [SerializeField] private Color hoverColor = new Color(1f, 1f, 0.5f, 0.7f);
 
         public Vector2Int AxialCoords { get; private set; }
-        public PieceStack Stack { get; private set; }
+        public Core.DonutStack Stack { get; private set; }
         
         public bool IsOccupied => Stack != null;
 
@@ -26,7 +25,7 @@ namespace GameModes.DonutStack.Gameplay
             AxialCoords = coords;
         }
         
-        public void SetStack(PieceStack newStack)
+        public void SetStack(Core.DonutStack newStack)
         {
             Stack = newStack;
         }

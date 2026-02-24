@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modeName: Flaming Moes
   sceneName: GameMode_FlamingMoes
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 67764fbc5837c804b82f656b33458ec3, type: 3}

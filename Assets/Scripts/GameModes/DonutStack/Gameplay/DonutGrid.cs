@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace GameModes.DonutStack.Gameplay
 {
-    public class HexGrid : MonoBehaviour
+    public class DonutGrid : MonoBehaviour
     {
-        [SerializeField] private HexCell hexCellPrefab;
+        [SerializeField] private GridCell gridCellPrefab;
         [SerializeField] private float hexSize = 1f;
         
         private readonly Vector2Int[] hexDirections = new Vector2Int[]
@@ -18,7 +18,7 @@ namespace GameModes.DonutStack.Gameplay
             new Vector2Int(0, 1)
         };
         
-        private readonly Dictionary<Vector2Int, HexCell> cells = new Dictionary<Vector2Int, HexCell>();
+        private readonly Dictionary<Vector2Int, GridCell> cells = new Dictionary<Vector2Int, GridCell>();
 
         public void Initialize(int radius)
         {
@@ -34,15 +34,15 @@ namespace GameModes.DonutStack.Gameplay
             }
         }
         
-        public List<HexCell> GetNeighbours(HexCell cell)
+        public List<GridCell> GetNeighbours(GridCell cell)
         {
-            List<HexCell> neighbours = new List<HexCell>();
+            List<GridCell> neighbours = new List<GridCell>();
         
             foreach (var direction in hexDirections)
             {
                 Vector2Int neighbourCoords = cell.AxialCoords + direction;
             
-                if (cells.TryGetValue(neighbourCoords, out HexCell neighbour))
+                if (cells.TryGetValue(neighbourCoords, out GridCell neighbour))
                 {
                     neighbours.Add(neighbour);
                 }
@@ -51,9 +51,9 @@ namespace GameModes.DonutStack.Gameplay
             return neighbours;
         }
 
-        public HexCell GetCell(Vector2Int coords)
+        public GridCell GetCell(Vector2Int coords)
         {
-            cells.TryGetValue(coords, out HexCell cell);
+            cells.TryGetValue(coords, out GridCell cell);
         
             return cell;
         }
@@ -75,7 +75,7 @@ namespace GameModes.DonutStack.Gameplay
         {
             Vector2Int axialCoords = new Vector2Int(q, r);
         
-            var cell = Instantiate(hexCellPrefab, transform);
+            var cell = Instantiate(gridCellPrefab, transform);
             cell.name = $"HexCell_{q}_{r}";
             cell.Initialize(axialCoords);
             cell.GetComponent<RectTransform>().anchoredPosition = AxialToUI(axialCoords);

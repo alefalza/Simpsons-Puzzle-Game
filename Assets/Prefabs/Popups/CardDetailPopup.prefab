@@ -412,7 +412,7 @@ MonoBehaviour:
   cardDescription: {fileID: 7853632023345304671}
   closeButton: {fileID: 3676807814173308658}
   fadeDuration: 0.25
-  startScale: 0.6
+  initialScale: 0.6
 --- !u!1 &7123051085122964380
 GameObject:
   m_ObjectHideFlags: 0

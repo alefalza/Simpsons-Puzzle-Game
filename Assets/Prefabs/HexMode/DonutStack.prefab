@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 679584672247351458}
   - component: {fileID: 5863030423550925337}
   m_Layer: 0
-  m_Name: PieceStack
+  m_Name: DonutStack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -38,7 +38,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1, y: 1}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3537435754639790316
 CanvasRenderer:
@@ -93,8 +93,8 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 1
-  m_PreferredHeight: 1
+  m_PreferredWidth: 100
+  m_PreferredHeight: 100
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -110,10 +110,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87f95e95eaaa4564cad8cef5eec1b1a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  piecePrefab: {fileID: 1125557765035750209, guid: 29c86a0dc7bebd2428b50e1035d39e52, type: 3}
-  pieceSpacing: 0.15
+  donutPrefab: {fileID: 1125557765035750209, guid: 29c86a0dc7bebd2428b50e1035d39e52, type: 3}
+  pieceSpacing: 15
   topCountText: {fileID: 7673381334066802913}
-  availableColors: 010000000200000004000000
+  availableColors: 01000000020000000300000004000000
   minStackHeight: 2
   maxStackHeight: 4
 --- !u!1 &6243891334656356876
@@ -245,8 +245,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 5
-  m_fontSizeBase: 5
+  m_fontSize: 400
+  m_fontSizeBase: 400
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

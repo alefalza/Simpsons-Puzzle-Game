@@ -8,24 +8,24 @@ using Random = UnityEngine.Random;
 
 namespace GameModes.DonutStack.Core
 {
-    public class PieceStack : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class DonutStack : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        [SerializeField] private Piece piecePrefab;
+        [SerializeField] private Donut donutPrefab;
         [SerializeField] private float pieceSpacing = 0.15f;
         [SerializeField] private TextMeshPro topCountText;
 
-        [SerializeField] private PieceColor[] availableColors = new PieceColor[] 
+        [SerializeField] private DonutColor[] availableColors = new DonutColor[] 
         { 
-            PieceColor.Red, 
-            PieceColor.Blue, 
-            PieceColor.Green, 
-            PieceColor.Yellow 
+            DonutColor.Red, 
+            DonutColor.Blue, 
+            DonutColor.Green, 
+            DonutColor.Yellow 
         };
         
         [SerializeField] private int minStackHeight = 1;
         [SerializeField] private int maxStackHeight = 4;
         
-        private readonly List<Piece> pieces = new List<Piece>();
+        private readonly List<Donut> pieces = new List<Donut>();
         
         private RectTransform rectTransform;
         private Canvas canvas;
@@ -42,25 +42,25 @@ namespace GameModes.DonutStack.Core
 
         public void Initialize()
         {
-            canvas = HexGameManager.Instance.DragLayer.GetComponentInParent<Canvas>();
+            canvas = DonutStackGameManager.Instance.DragLayer.GetComponentInParent<Canvas>();
             
             int pieceCount = Random.Range(minStackHeight, maxStackHeight + 1);
         
             for (int i = 0; i < pieceCount; i++)
             {
-                PieceColor color = availableColors[Random.Range(0, availableColors.Length)];
-                Piece piece = Instantiate(piecePrefab, transform);
-                piece.Initialize(color);
-                AddPiece(piece);
+                DonutColor color = availableColors[Random.Range(0, availableColors.Length)];
+                Donut donut = Instantiate(donutPrefab, transform);
+                donut.Initialize(color);
+                AddPiece(donut);
             }
             
             ArrangePieces();
         }
 
-        public void AddPiece(Piece piece)
+        public void AddPiece(Donut donut)
         {
-            pieces.Add(piece);
-            piece.transform.SetParent(transform);
+            pieces.Add(donut);
+            donut.transform.SetParent(transform);
         }
 
         public void ArrangePieces()
@@ -73,16 +73,16 @@ namespace GameModes.DonutStack.Core
             UpdateTopCountText();
         }
         
-        public PieceColor GetTopColor()
+        public DonutColor GetTopColor()
         {
-            if (pieces.Count == 0) return PieceColor.None;
+            if (pieces.Count == 0) return DonutColor.None;
             
             return pieces[pieces.Count - 1].Color;
         }
 
-        public List<Piece> RemovePiecesOfColor(PieceColor color)
+        public List<Donut> RemovePiecesOfColor(DonutColor color)
         {
-            List<Piece> removedPieces = new List<Piece>();
+            List<Donut> removedPieces = new List<Donut>();
 
             for (int i = pieces.Count - 1; i >= 0; i--)
             {
@@ -100,7 +100,7 @@ namespace GameModes.DonutStack.Core
             return removedPieces;
         }
 
-        public void PlaceOnCell(HexCell cell)
+        public void PlaceOnCell(GridCell cell)
         {
             IsPlaced = true;
             transform.position = cell.transform.position;
@@ -113,7 +113,7 @@ namespace GameModes.DonutStack.Core
             if (topCount < minCount)
                 yield break;
 
-            PieceColor topColor = GetTopColor();
+            DonutColor topColor = GetTopColor();
 
             for (int i = pieces.Count - 1; i >= 0; i--)
             {
@@ -158,7 +158,7 @@ namespace GameModes.DonutStack.Core
         {
             if (pieces.Count == 0) return 0;
 
-            PieceColor topColor = GetTopColor();
+            DonutColor topColor = GetTopColor();
             int count = 0;
 
             for (int i = pieces.Count - 1; i >= 0; i--)
@@ -178,7 +178,7 @@ namespace GameModes.DonutStack.Core
             if (IsPlaced) return;
             
             originalPos = rectTransform.anchoredPosition;
-            transform.SetParent(HexGameManager.Instance.DragLayer, worldPositionStays: false);
+            transform.SetParent(DonutStackGameManager.Instance.DragLayer, worldPositionStays: false);
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -199,23 +199,23 @@ namespace GameModes.DonutStack.Core
 
             if (cell != null && !cell.IsOccupied)
             {
-                HexGameManager.Instance.TryPlaceStack(cell, this);
+                DonutStackGameManager.Instance.TryPlaceStack(cell, this);
             }
             else
             {
-                transform.SetParent(HexGameManager.Instance.StackContainer, worldPositionStays: false);
+                transform.SetParent(DonutStackGameManager.Instance.StackContainer, worldPositionStays: false);
                 rectTransform.anchoredPosition = originalPos;
             }
         }
         
-        private HexCell DetectCellUnderPointer(PointerEventData eventData)
+        private GridCell DetectCellUnderPointer(PointerEventData eventData)
         {
             var results = new List<RaycastResult>();
             EventSystem.current.RaycastAll(eventData, results);
 
             foreach (var r in results)
             {
-                if (r.gameObject.TryGetComponent<HexCell>(out var cell))
+                if (r.gameObject.TryGetComponent<GridCell>(out var cell))
                     return cell;
             }
 

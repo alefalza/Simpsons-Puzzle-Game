@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modeName: Bubble Merge
   sceneName: GameMode_BubbleMerge
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 13e6cff3654e8fa438fa77f8a1acfd6a, type: 3}

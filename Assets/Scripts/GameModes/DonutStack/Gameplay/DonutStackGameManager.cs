@@ -7,13 +7,13 @@ using UnityEngine;
 
 namespace GameModes.DonutStack.Gameplay
 {
-    public class HexGameManager : BaseGameManager<HexGameManager>
+    public class DonutStackGameManager : BaseGameManager<DonutStackGameManager>
     {
         [Header("Grid Settings")]
-        [SerializeField] private HexGrid hexGrid;
+        [SerializeField] private DonutGrid donutGrid;
     
         [Header("Piece Settings")]
-        [SerializeField] private PieceStack pieceStackPrefab;
+        [SerializeField] private Core.DonutStack donutStackPrefab;
         
         [Header("Game Settings")]
         [SerializeField] private Transform stackContainer;
@@ -30,7 +30,7 @@ namespace GameModes.DonutStack.Gameplay
         private float PostDestroyDelay => levelData != null ? ((DonutStackLevelDefinition)levelData).postDestroyDelay : GameConstants.DonutStack.PostDestroyDelay;
         private float NewTurnDelay => levelData != null ? ((DonutStackLevelDefinition)levelData).newTurnDelay : GameConstants.DonutStack.NewTurnDelay;
     
-        private readonly List<PieceStack> currentTurnStacks = new List<PieceStack>();
+        private readonly List<Core.DonutStack> currentTurnStacks = new List<Core.DonutStack>();
         
         private int score = 0;
         
@@ -41,7 +41,7 @@ namespace GameModes.DonutStack.Gameplay
         protected override void Start()
         {
             base.Start();
-            hexGrid.Initialize(GridRadius);
+            donutGrid.Initialize(GridRadius);
             UpdateScoreUI();
             GenerateNewTurn();
         }
@@ -65,14 +65,14 @@ namespace GameModes.DonutStack.Gameplay
 
             for (int i = 0; i < StacksPerTurn; i++)
             {
-                PieceStack stack = CreateRandomStack();
+                Core.DonutStack stack = CreateRandomStack();
                 currentTurnStacks.Add(stack);
             }
         }
 
-        private PieceStack CreateRandomStack()
+        private Core.DonutStack CreateRandomStack()
         {
-            PieceStack stack = Instantiate(pieceStackPrefab, stackContainer.transform);
+            Core.DonutStack stack = Instantiate(donutStackPrefab, stackContainer.transform);
         
             if (stack == null)
             {
@@ -85,7 +85,7 @@ namespace GameModes.DonutStack.Gameplay
             return stack;
         }
 
-        public void TryPlaceStack(HexCell cell, PieceStack stack)
+        public void TryPlaceStack(GridCell cell, Core.DonutStack stack)
         {
             if (stack == null || IsProcessingMatches) return;
             if (cell.IsOccupied) return;
@@ -107,7 +107,7 @@ namespace GameModes.DonutStack.Gameplay
             return currentTurnStacks.All(stack => stack == null || stack.IsPlaced);
         }
 
-        private IEnumerator ProcessMatchesRecursive(HexCell startCell)
+        private IEnumerator ProcessMatchesRecursive(GridCell startCell)
         {
             IsProcessingMatches = true;
         
@@ -117,7 +117,7 @@ namespace GameModes.DonutStack.Gameplay
             CheckGameOver();
         }
 
-        private IEnumerator ProcessCellMatchesRecursively(HexCell cell)
+        private IEnumerator ProcessCellMatchesRecursively(GridCell cell)
         {
             if (!cell.IsOccupied) yield break;
 
@@ -127,8 +127,8 @@ namespace GameModes.DonutStack.Gameplay
             {
                 foundMatch = false;
 
-                List<HexCell> neighbours = hexGrid.GetNeighbours(cell);
-                PieceColor currentTopColor = cell.Stack.GetTopColor();
+                List<GridCell> neighbours = donutGrid.GetNeighbours(cell);
+                DonutColor currentTopColor = cell.Stack.GetTopColor();
 
                 foreach (var neighbour in neighbours)
                 {
@@ -137,7 +137,7 @@ namespace GameModes.DonutStack.Gameplay
                     // If colors at the top match, move pieces from one stack to the other.
                     if (neighbour.Stack.GetTopColor() == currentTopColor)
                     {
-                        List<Piece> piecesToMove = cell.Stack.RemovePiecesOfColor(currentTopColor);
+                        List<Donut> piecesToMove = cell.Stack.RemovePiecesOfColor(currentTopColor);
 
                         foreach (var piece in piecesToMove)
                             neighbour.Stack.AddPiece(piece);
@@ -200,7 +200,7 @@ namespace GameModes.DonutStack.Gameplay
 
         private void CheckGameOver()
         {
-            if (!hexGrid.HasEmptyCells() && currentTurnStacks.Count > 0)
+            if (!donutGrid.HasEmptyCells() && currentTurnStacks.Count > 0)
             {
                 bool canPlaceAny = false;
             
