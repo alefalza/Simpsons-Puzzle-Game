@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 6839996500576349020}
   - component: {fileID: 872096555905411416}
-  - component: {fileID: 2054242685452983934}
+  - component: {fileID: 2165283011407685460}
   - component: {fileID: 6985237755696838229}
   - component: {fileID: 5654422667225085171}
   m_Layer: 6
-  m_Name: Bubble_01
+  m_Name: Bubble_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7772339910304673244}
@@ -48,7 +48,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.5
+  m_Mass: 2
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
@@ -63,7 +63,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!58 &2054242685452983934
+--- !u!58 &2165283011407685460
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -98,7 +98,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.63
+  m_Radius: 0.68
 --- !u!114 &6985237755696838229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,8 +111,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75898be01b72a4d4889031ff403ff926, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tier: 0
-  spawnWeight: 50
+  tier: 3
+  spawnWeight: 0
   mergeCooldown: 0.05
 --- !u!114 &5654422667225085171
 MonoBehaviour:
@@ -152,7 +152,7 @@ Transform:
   m_GameObject: {fileID: 9056736852978301328}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.515, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -202,12 +202,12 @@ SpriteRenderer:
   m_SortingLayerID: 131769341
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 0614102eaefc3c844849e2d408aa9a29, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 972f5c5db8e0e49008fca247b1ed3300, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.28, y: 1.28}
+  m_Size: {x: 2.56, y: 2.56}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

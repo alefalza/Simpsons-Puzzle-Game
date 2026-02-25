@@ -2,13 +2,12 @@ using Core;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Core.Services;
 using Core.Services.SceneService;
 
 public class GameModeButton : MonoBehaviour
 {
     [SerializeField] private Image icon;
-    [SerializeField] private TextMeshProUGUI label;
+    [SerializeField] private TextMeshProUGUI text;
 
     private Button button;
     private GameModeData data;
@@ -24,8 +23,8 @@ public class GameModeButton : MonoBehaviour
     {
         data = modeData;
 
-        if (label != null)
-            label.text = data.modeName;
+        if (text != null)
+            text.text = data.modeName;
 
         if (icon != null && data.icon != null)
             icon.sprite = data.icon;

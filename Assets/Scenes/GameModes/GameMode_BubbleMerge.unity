@@ -317,8 +317,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a658a9d3e6a447719c25f3f768738d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hudController: {fileID: 164501948}
   levelData: {fileID: 0}
+  hudController: {fileID: 164501948}
   spawner: {fileID: 1534036341}
 --- !u!114 &164501948
 MonoBehaviour:
@@ -338,6 +338,8 @@ MonoBehaviour:
   currentBubbleIcon: {fileID: 1208971333}
   nextBubbleIcon: {fileID: 663035330}
   bubbleTierIcons:
+  - {fileID: 21300000, guid: 0614102eaefc3c844849e2d408aa9a29, type: 3}
+  - {fileID: 21300000, guid: 285bd703e7033fb4eb731a0fbdc816db, type: 3}
   - {fileID: 21300000, guid: 01a147392ffcb4edd9ca38a0f31d3c20, type: 3}
   - {fileID: 21300000, guid: 972f5c5db8e0e49008fca247b1ed3300, type: 3}
   - {fileID: 21300000, guid: af708b3d8ae164b0481638f318ea4172, type: 3}
@@ -1424,6 +1426,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bubblePrefabs:
+  - {fileID: 6985237755696838229, guid: a570d6a35e107a94b9c40bda7b036a05, type: 3}
+  - {fileID: 6985237755696838229, guid: 6bc4d7141b30f394b94aaa3ec9f92a01, type: 3}
   - {fileID: 6985237755696838229, guid: edffa8d29eac74a44ab05597a3f2146e, type: 3}
   - {fileID: 6985237755696838229, guid: d0514c2ea5a604161878586978c107b9, type: 3}
   - {fileID: 6985237755696838229, guid: 89bd322b6eb95416a873aa39d09a0863, type: 3}

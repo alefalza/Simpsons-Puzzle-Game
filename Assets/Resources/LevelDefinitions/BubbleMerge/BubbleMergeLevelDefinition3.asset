@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scorePerTier: 10
   targetScore: 100
+  spawnWeightsPerTier: 320000001e000000140000000000000000000000

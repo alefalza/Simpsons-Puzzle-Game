@@ -23,10 +23,10 @@ namespace GameModes.BubbleMerge.Gameplay
 
         protected override void Start()
         {
-            base.Start();
+            base.Start();            
             score = 0;
             hasWon = false;
-            spawner.Init();
+            spawner.Init(levelData as BubbleMergeLevelDefinition);
             InitHUDController();
         }
 

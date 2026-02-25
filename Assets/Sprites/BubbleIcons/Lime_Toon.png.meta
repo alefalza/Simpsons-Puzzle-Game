@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 01a147392ffcb4edd9ca38a0f31d3c20
+guid: 0614102eaefc3c844849e2d408aa9a29
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2340962801232045221
-    second: Apple_Toon_0
+      213: -9138830507969131219
+    second: Lime_Toon_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,29 +96,16 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Apple_Toon_0
+      name: Lime_Toon_0
       rect:
         serializedVersion: 2
-        x: 9
+        x: 0
         y: 0
-        width: 110
+        width: 128
         height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -128,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5a4e6d7c345cc7020800000000000000
-      internalID: 2340962801232045221
+      spriteID: d2d4ff5921a5c2180800000000000000
+      internalID: -9138830507969131219
       vertices: []
       indices: 
       edges: []
@@ -148,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Apple_Toon_0: 2340962801232045221
+      Lime_Toon_0: -9138830507969131219
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

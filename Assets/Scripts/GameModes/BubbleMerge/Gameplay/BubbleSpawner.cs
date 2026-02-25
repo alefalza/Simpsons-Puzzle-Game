@@ -19,6 +19,7 @@ namespace GameModes.BubbleMerge.Gameplay
         
         private Camera mainCamera;
         private bool isDragging = false;
+        private int[] levelSpawnWeights;
         
         public int CurrentTier { get; private set; }
         public int NextTier { get; private set; }
@@ -30,8 +31,12 @@ namespace GameModes.BubbleMerge.Gameplay
             mainCamera = Camera.main;
         }
 
-        public void Init()
+        public void Init(BubbleMergeLevelDefinition levelDefinition)
         {
+            levelSpawnWeights = levelDefinition != null
+                ? levelDefinition.GetSpawnWeights(bubblePrefabs.Length)
+                : null;
+
             CurrentTier = GetRandomWeightedTier();
             NextTier = GetRandomWeightedTier();
         }
@@ -116,8 +121,10 @@ namespace GameModes.BubbleMerge.Gameplay
         {
             int totalWeight = 0;
 
-            foreach (var bubble in bubblePrefabs)
-                totalWeight += bubble.SpawnWeight;
+            for (int i = 0; i < bubblePrefabs.Length; i++)
+            {
+                totalWeight += GetWeightForTier(i);
+            }
 
             if (totalWeight <= 0)
                 return 0;
@@ -127,12 +134,25 @@ namespace GameModes.BubbleMerge.Gameplay
 
             for (int i = 0; i < bubblePrefabs.Length; i++)
             {
-                cumulative += bubblePrefabs[i].SpawnWeight;
+                cumulative += GetWeightForTier(i);
                 if (randomValue < cumulative)
                     return i;
             }
 
             return 0;
+        }
+
+        private int GetWeightForTier(int tierIndex)
+        {
+            if (levelSpawnWeights == null ||
+                tierIndex < 0 ||
+                tierIndex >= levelSpawnWeights.Length)
+            {
+                // Si no hay configuración válida, no se genera este tier
+                return 0;
+            }
+
+            return Mathf.Max(0, levelSpawnWeights[tierIndex]);
         }
     }
 }

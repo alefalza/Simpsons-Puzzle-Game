@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 01a147392ffcb4edd9ca38a0f31d3c20
+guid: 285bd703e7033fb4eb731a0fbdc816db
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2340962801232045221
-    second: Apple_Toon_0
+      213: 4825467418869539289
+    second: Kiwi_Toon_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,30 +96,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Apple_Toon_0
+      name: Kiwi_Toon_0
       rect:
         serializedVersion: 2
-        x: 9
-        y: 0
-        width: 110
-        height: 128
+        x: 0
+        y: 5
+        width: 128
+        height: 117
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5a4e6d7c345cc7020800000000000000
-      internalID: 2340962801232045221
+      spriteID: 9d1a0f01d0187f240800000000000000
+      internalID: 4825467418869539289
       vertices: []
       indices: 
       edges: []
@@ -148,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Apple_Toon_0: 2340962801232045221
+      Kiwi_Toon_0: 4825467418869539289
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
