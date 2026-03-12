@@ -7,7 +7,7 @@ namespace Boot
     public class BootLoader : MonoBehaviour
     {
         [Header("Managers Root Prefab")]
-        [SerializeField] private GameObject managersRoot;
+        [SerializeField] private ServiceBootstrap managersRoot;
 
         [Header("Boot Overlay (local to BootScene)")]
         [SerializeField] private GameObject bootOverlay;
@@ -22,8 +22,8 @@ namespace Boot
 
             if (managersRoot != null)
             {
-                GameObject root = Instantiate(managersRoot, null);
-                DontDestroyOnLoad(root);
+                ServiceBootstrap root = Instantiate(managersRoot, null);
+                //DontDestroyOnLoad(root);
             }
             else
             {

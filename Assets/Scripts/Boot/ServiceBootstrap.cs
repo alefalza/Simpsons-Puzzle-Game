@@ -4,8 +4,8 @@ using UnityEngine;
 namespace Boot
 {
     /// <summary>
-    /// Bootstrap that initializes all services at startup
-    /// Holds references to scene components that services might need
+    /// Bootstrap that initializes all services at startup.
+    /// Holds references to scene components that services might need.
     /// </summary>
     public class ServiceBootstrap : MonoBehaviour
     {

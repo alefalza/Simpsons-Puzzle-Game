@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GameModes.DrinkSort.Gameplay;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -49,6 +50,7 @@ namespace GameModes.DrinkSort.Core
         }
         
         #region Drag Events
+        
         public void OnBeginDrag(PointerEventData eventData)
         {
             if (parentTray == null) return;
@@ -56,6 +58,7 @@ namespace GameModes.DrinkSort.Core
             originalPosition = transform.position;
             originalParent = transform.parent;
             isDragging = true;
+            transform.SetParent(DrinkSortGameManager.Instance.DragLayer, worldPositionStays: false);
         }
         
         public void OnDrag(PointerEventData eventData)
@@ -162,6 +165,7 @@ namespace GameModes.DrinkSort.Core
             
             return null;
         }
+        
         #endregion
     }
 }

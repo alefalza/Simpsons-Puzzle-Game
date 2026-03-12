@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CanvasScaleSync : MonoBehaviour
+public class CanvasScaler : MonoBehaviour
 {
     public RectTransform hudCanvas;
     public RectTransform worldCanvas;

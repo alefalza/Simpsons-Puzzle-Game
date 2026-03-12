@@ -178,6 +178,7 @@ namespace GameModes.DonutStack.Core
         }
 
         #region Drag Events
+        
         public void OnBeginDrag(PointerEventData eventData)
         {
             if (IsPlaced) return;
@@ -232,6 +233,7 @@ namespace GameModes.DonutStack.Core
 
             return null;
         }
+        
         #endregion
     }
 }

@@ -14,6 +14,9 @@ namespace GameModes.DrinkSort.Gameplay
         [Header("Item Settings")]
         [SerializeField] private ItemReserve itemReserve;
 
+        [Header("Game Settings")]
+        [SerializeField] private Transform dragLayer;
+
         protected override string GameModeName => "DrinkSort";
 
         private float currentTime;
@@ -28,7 +31,8 @@ namespace GameModes.DrinkSort.Gameplay
         private float TimeLimit => levelData != null ? ((DrinkSortLevelDefinition)levelData).timeLimit : 120f;
         private int ScorePerMatch => levelData != null ? ((DrinkSortLevelDefinition)levelData).scorePerMatch : GameConstants.DrinkSort.ScorePerMatch;
         private float MatchProcessDelay => levelData != null ? ((DrinkSortLevelDefinition)levelData).matchProcessDelay : GameConstants.DrinkSort.MatchProcessDelay;
-        
+
+        public Transform DragLayer => dragLayer;
         public float TimeRemaining => Mathf.Max(0, TimeLimit - currentTime);
         public int ItemsRemaining => GetTotalItemCount();
         public int Score => score;
