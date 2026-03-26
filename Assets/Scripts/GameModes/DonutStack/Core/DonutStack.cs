@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 
 namespace GameModes.DonutStack.Core
 {
-    public class DonutStack : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class DonutStack : DraggableItem
     {
         [SerializeField] private Donut donutPrefab;
         [SerializeField] private float pieceSpacing = 0.15f;
@@ -27,20 +27,12 @@ namespace GameModes.DonutStack.Core
         
         private readonly List<Donut> pieces = new List<Donut>();
         
-        private RectTransform rectTransform;
         private Canvas canvas;
-        private Vector2 originalPos;
-        private Transform originalParent;
         private Renderer textRenderer;
         private StackSlot parentSlot;
 
         public int PieceCount => pieces.Count;
         public bool IsPlaced { get; private set; } = false;
-
-        private void Awake()
-        {
-            rectTransform = GetComponent<RectTransform>();
-        }
 
         public void Initialize(StackSlot slot)
         {
@@ -48,7 +40,13 @@ namespace GameModes.DonutStack.Core
             
             parentSlot = slot;
             parentSlot.SetOccupied(true);
-            
+
+            InstantiatePieces();
+            ArrangePieces();
+        }
+
+        private void InstantiatePieces()
+        {
             int pieceCount = Random.Range(minStackHeight, maxStackHeight + 1);
         
             for (int i = 0; i < pieceCount; i++)
@@ -58,10 +56,8 @@ namespace GameModes.DonutStack.Core
                 donut.Initialize(color);
                 AddPiece(donut);
             }
-            
-            ArrangePieces();
         }
-
+        
         public void AddPiece(Donut donut)
         {
             pieces.Add(donut);
@@ -76,6 +72,50 @@ namespace GameModes.DonutStack.Core
             }
 
             UpdateTopCountText();
+        }
+        
+        private void UpdateTopCountText()
+        {
+            int topCount = TopColorCount();
+
+            if (topCount > 1)
+            {
+                topCountText.text = topCount.ToString();
+                float posY = pieceSpacing * (pieces.Count - 1);
+                topCountText.transform.localPosition = new Vector3(0, posY, -0.1f);
+        
+                textRenderer ??= topCountText.GetComponent<Renderer>();
+                
+                if (textRenderer != null)
+                {
+                    textRenderer.sortingLayerName = "HUD";
+                    textRenderer.sortingOrder = 0;
+                }
+        
+                topCountText.gameObject.SetActive(true);
+            }
+            else
+            {
+                topCountText.gameObject.SetActive(false);
+            }
+        }
+        
+        public int TopColorCount()
+        {
+            if (pieces.Count == 0) return 0;
+
+            DonutColor topColor = GetTopColor();
+            int count = 0;
+
+            for (int i = pieces.Count - 1; i >= 0; i--)
+            {
+                if (pieces[i].Color == topColor)
+                    count++;
+                else
+                    break;
+            }
+
+            return count;
         }
         
         public DonutColor GetTopColor()
@@ -133,65 +173,19 @@ namespace GameModes.DonutStack.Core
             }
         }
         
-        private void UpdateTopCountText()
-        {
-            int topCount = TopColorCount();
-
-            if (topCount > 1)
-            {
-                topCountText.text = topCount.ToString();
-                float posY = pieceSpacing * (pieces.Count - 1);
-                topCountText.transform.localPosition = new Vector3(0, posY, -0.1f);
-        
-                textRenderer ??= topCountText.GetComponent<Renderer>();
-                
-                if (textRenderer != null)
-                {
-                    textRenderer.sortingLayerName = "HUD";
-                    textRenderer.sortingOrder = 0;
-                }
-        
-                topCountText.gameObject.SetActive(true);
-            }
-            else
-            {
-                topCountText.gameObject.SetActive(false);
-            }
-        }
-        
-        public int TopColorCount()
-        {
-            if (pieces.Count == 0) return 0;
-
-            DonutColor topColor = GetTopColor();
-            int count = 0;
-
-            for (int i = pieces.Count - 1; i >= 0; i--)
-            {
-                if (pieces[i].Color == topColor)
-                    count++;
-                else
-                    break;
-            }
-
-            return count;
-        }
-
         #region Drag Events
         
-        public void OnBeginDrag(PointerEventData eventData)
+        public override void OnBeginDrag(PointerEventData eventData)
         {
             if (IsPlaced) return;
             
-            originalPos = rectTransform.anchoredPosition;
-            originalParent = transform.parent;
+            base.OnBeginDrag(eventData);
+            
             transform.SetParent(DonutStackGameManager.Instance.DragLayer, worldPositionStays: false);
         }
 
-        public void OnDrag(PointerEventData eventData)
+        public override void OnDrag(PointerEventData eventData)
         {
-            if (IsPlaced) return;
-
             var dragLayerRect = (RectTransform)DonutStackGameManager.Instance.DragLayer;
 
             if (RectTransformUtility.ScreenPointToWorldPointInRectangle(
@@ -200,12 +194,14 @@ namespace GameModes.DonutStack.Core
                     canvas.worldCamera,
                     out var worldPos))
             {
-                rectTransform.position = worldPos;
+                transform.position = worldPos;
             }
         }
 
-        public void OnEndDrag(PointerEventData eventData)
+        public override void OnEndDrag(PointerEventData eventData)
         {
+            base.OnEndDrag(eventData);
+            
             var cell = DetectCellUnderPointer(eventData);
 
             if (cell != null && !cell.IsOccupied)
@@ -216,22 +212,13 @@ namespace GameModes.DonutStack.Core
             else
             {
                 transform.SetParent(originalParent, worldPositionStays: false);
-                rectTransform.anchoredPosition = originalPos;
+                transform.position = originalPosition;
             }
         }
         
         private GridCell DetectCellUnderPointer(PointerEventData eventData)
         {
-            var results = new List<RaycastResult>();
-            EventSystem.current.RaycastAll(eventData, results);
-
-            foreach (var r in results)
-            {
-                if (r.gameObject.TryGetComponent<GridCell>(out var cell))
-                    return cell;
-            }
-
-            return null;
+            return DetectObjectUnderPointer<GridCell>(eventData);
         }
         
         #endregion

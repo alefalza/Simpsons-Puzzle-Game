@@ -31,7 +31,7 @@ namespace GameModes.BubbleMerge.UI
 
         protected override void OnResumeClicked()
         {
-            BubbleGameManager.Instance.TogglePauseFromOverlay();
+            BubbleGameManager.Instance.TogglePause();
         }
     }
 }

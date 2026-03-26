@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using GameModes.DrinkSort.Gameplay;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -6,16 +5,13 @@ using UnityEngine.UI;
 
 namespace GameModes.DrinkSort.Core
 {
-    public class SortableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class SortableItem : DraggableItem
     {
         [SerializeField] private SortableItemType itemType = SortableItemType.None;
         [SerializeField] private Image image;
         
         private Camera mainCamera;
-        private Vector3 originalPosition;
-        private Transform originalParent;
         private Tray parentTray;
-        private bool isDragging = false;
         
         public SortableItemType ItemType => itemType;
         public Tray ParentTray => parentTray;
@@ -51,17 +47,16 @@ namespace GameModes.DrinkSort.Core
         
         #region Drag Events
         
-        public void OnBeginDrag(PointerEventData eventData)
+        public override void OnBeginDrag(PointerEventData eventData)
         {
             if (parentTray == null) return;
             
-            originalPosition = transform.position;
-            originalParent = transform.parent;
-            isDragging = true;
+            base.OnBeginDrag(eventData);
+            
             transform.SetParent(DrinkSortGameManager.Instance.DragLayer, worldPositionStays: false);
         }
         
-        public void OnDrag(PointerEventData eventData)
+        public override void OnDrag(PointerEventData eventData)
         {
             if (!isDragging) return;
             
@@ -70,11 +65,9 @@ namespace GameModes.DrinkSort.Core
             transform.position = worldPos;
         }
         
-        public void OnEndDrag(PointerEventData eventData)
+        public override void OnEndDrag(PointerEventData eventData)
         {
-            if (!isDragging) return;
-            
-            isDragging = false;
+            base.OnEndDrag(eventData);
             
             // Detect tray under pointer
             Tray targetTray = DetectTrayUnderPointer(eventData);
@@ -140,30 +133,7 @@ namespace GameModes.DrinkSort.Core
         
         private Tray DetectTrayUnderPointer(PointerEventData eventData)
         {
-            var results = new List<RaycastResult>();
-            EventSystem.current.RaycastAll(eventData, results);
-            
-            foreach (var result in results)
-            {
-                Tray tray = result.gameObject.GetComponent<Tray>();
-                
-                if (tray != null)
-                {
-                    return tray;
-                }
-            }
-            
-            // Fallback: physics raycast
-            Vector3 worldPos = mainCamera.ScreenToWorldPoint(eventData.position);
-            worldPos.z = 0;
-            Collider2D hit = Physics2D.OverlapPoint(worldPos);
-            
-            if (hit != null)
-            {
-                return hit.GetComponent<Tray>();
-            }
-            
-            return null;
+            return DetectObjectUnderPointer<Tray>(eventData);
         }
         
         #endregion

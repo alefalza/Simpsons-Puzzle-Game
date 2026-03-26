@@ -74,7 +74,7 @@ namespace GameModes.Core
         }
 
         #region Pause Logic
-        protected virtual void TogglePause()
+        public virtual void TogglePause()
         {
             if (hudController == null || !hudController.CanTogglePause()) return;
 
@@ -110,11 +110,6 @@ namespace GameModes.Core
             }
 
             OnResumed();
-        }
-
-        public virtual void TogglePauseFromOverlay()
-        {
-            Resume();
         }
 
         protected virtual void OnPaused() { }

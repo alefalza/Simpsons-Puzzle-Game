@@ -7,7 +7,7 @@ namespace GameModes.DonutStack.UI
     {
         protected override void OnResumeClicked()
         {
-            DonutStackGameManager.Instance.TogglePauseFromOverlay();
+            DonutStackGameManager.Instance.TogglePause();
         }
     }
 }

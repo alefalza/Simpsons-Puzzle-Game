@@ -15,7 +15,7 @@ namespace GameModes.DrinkSort.UI
         
         protected override void OnResumeClicked()
         {
-            DrinkSortGameManager.Instance.TogglePauseFromOverlay();
+            DrinkSortGameManager.Instance.TogglePause();
         }
         
         public void UpdateTimer(float timeRemaining)
