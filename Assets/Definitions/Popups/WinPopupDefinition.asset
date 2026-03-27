@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1c1c68cd4cffa4afab9393dc4c399b1d, type: 3}
-  m_Name: PausePopupDefinition
-  m_EditorClassIdentifier: 
-  id: PausePopup
-  prefab: {fileID: 7302075663463691656, guid: c18e7d4558132534287622bd8c4c0906, type: 3}
+  m_Name: WinPopupDefinition
+  m_EditorClassIdentifier: Assembly-CSharp::PopupDefinition
+  id: WinPopup
+  prefab: {fileID: 3756521581399484218, guid: 93ddcd66bc9f085488752ce9f2b7669b, type: 3}
   defaultPriority: 1
-  destroyOnClose: 0
+  destroyOnClose: 1
   fadeInDuration: 0.15
   fadeOutDuration: 0.15

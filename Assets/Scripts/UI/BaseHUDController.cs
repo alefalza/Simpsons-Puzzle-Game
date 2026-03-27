@@ -13,6 +13,7 @@ namespace UI
         [Header("Popup Definitions")]
         [SerializeField] private PopupDefinition pausePopupDefinition;
         [SerializeField] private PopupDefinition gameOverPopupDefinition;
+        [SerializeField] private PopupDefinition winPopupDefinition;
 
         private IPopupService popupService;
 
@@ -48,6 +49,11 @@ namespace UI
         public virtual void ShowGameOverOverlay(int finalScore)
         {
             popupService.Push(gameOverPopupDefinition, new GameOverPopupData(Priority.Low, finalScore));
+        }
+
+        public virtual void ShowWinPopup(int finalScore)
+        {
+            popupService.Push(winPopupDefinition, new WinPopup.WinPopupData(Priority.Low, finalScore));
         }
     }
 }

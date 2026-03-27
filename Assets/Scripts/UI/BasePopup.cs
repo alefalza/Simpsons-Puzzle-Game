@@ -51,6 +51,8 @@ public abstract class BasePopup : MonoBehaviour, IPopUp
         gameObject.SetActive(isActive);
     }
 
+    #region Animations
+    
     private IEnumerator FadeIn()
     {
         IsFading = true;
@@ -99,6 +101,8 @@ public abstract class BasePopup : MonoBehaviour, IPopUp
             
         IsFading = false;
     }
+    
+    #endregion
 
     protected void CheckDestroyAndInvokeOnClosed()
     {

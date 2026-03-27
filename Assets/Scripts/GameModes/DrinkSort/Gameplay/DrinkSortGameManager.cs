@@ -375,7 +375,7 @@ namespace GameModes.DrinkSort.Gameplay
             
             if (hudController != null)
             {
-                hudController.ShowGameOverOverlay(0);
+                hudController.ShowWinPopup(0);
             }
         }
         

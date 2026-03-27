@@ -864,6 +864,7 @@ MonoBehaviour:
   scoreUI: {fileID: 1606851425}
   pausePopupDefinition: {fileID: 11400000, guid: 3eb7eef81f58d421f88bfd2c327f336f, type: 2}
   gameOverPopupDefinition: {fileID: 11400000, guid: 9b4307631e92b4feea1e9e2ce2230cb9, type: 2}
+  winPopupDefinition: {fileID: 11400000, guid: 847b472b76056a94f8ee2f77b6588baa, type: 2}
   timerText: {fileID: 720514900}
   itemsRemainingText: {fileID: 484553100}
 --- !u!1001 &1606851423
