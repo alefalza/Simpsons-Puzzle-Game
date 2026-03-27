@@ -27,12 +27,11 @@ namespace GameModes.DrinkSort.UI
             
             timerText.text = $"{minutes:00}:{seconds:00}";
             
-            // Change color when time is low (optional)
-            if (timeRemaining <= 30f)
+            if (timeRemaining <= 10f)
             {
                 timerText.color = Color.red;
             }
-            else if (timeRemaining <= 60f)
+            else if (timeRemaining <= 15f)
             {
                 timerText.color = Color.yellow;
             }

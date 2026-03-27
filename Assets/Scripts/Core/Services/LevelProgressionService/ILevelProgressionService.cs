@@ -26,5 +26,15 @@ namespace Core.Services.LevelProgressionService
         /// Get the highest completed level for a game mode
         /// </summary>
         int GetLastCompletedLevel(string gameModeName);
+
+        /// <summary>
+        /// Reset progression in-memory only (not persisted unless caller saves later).
+        /// </summary>
+        void ResetProgressionInMemory();
+
+        /// <summary>
+        /// Reset progression and delete persisted data (PlayerPrefs).
+        /// </summary>
+        void ResetProgressionAndDeleteSaved();
     }
 }

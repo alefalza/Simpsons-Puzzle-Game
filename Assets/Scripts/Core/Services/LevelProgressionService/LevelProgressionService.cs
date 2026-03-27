@@ -127,6 +127,28 @@ namespace Core.Services.LevelProgressionService
             return progressionData.GetLastCompletedLevel(gameModeName);
         }
 
+        public void ResetProgressionInMemory()
+        {
+            if (progressionData == null)
+            {
+                progressionData = LevelProgressionData.Load();
+            }
+
+            progressionData.ResetInMemory();
+            Debug.Log("[LevelProgressionService] Progression reset in-memory.");
+        }
+
+        public void ResetProgressionAndDeleteSaved()
+        {
+            if (progressionData == null)
+            {
+                progressionData = LevelProgressionData.Load();
+            }
+
+            progressionData.ResetAndDeleteSaved();
+            Debug.Log("[LevelProgressionService] Progression reset and saved data deleted.");
+        }
+
         public void Shutdown()
         {
             Debug.Log("[LevelProgressionService] Shutting down...");

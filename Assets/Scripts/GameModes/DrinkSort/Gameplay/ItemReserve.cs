@@ -59,5 +59,26 @@ namespace GameModes.DrinkSort.Gameplay
             
             return availableItems[Random.Range(0, availableItems.Length)].itemType;
         }
+
+        public List<SortableItemType> GetAvailableTypes()
+        {
+            List<SortableItemType> availableTypes = new List<SortableItemType>();
+            if (availableItems == null)
+            {
+                return availableTypes;
+            }
+
+            foreach (var itemData in availableItems)
+            {
+                if (itemData == null || itemData.itemType == SortableItemType.None || availableTypes.Contains(itemData.itemType))
+                {
+                    continue;
+                }
+
+                availableTypes.Add(itemData.itemType);
+            }
+
+            return availableTypes;
+        }
     }
 }

@@ -5,10 +5,13 @@ namespace GameModes.DrinkSort.Core
     [CreateAssetMenu(menuName = "GameModes/DrinkSort/LevelDefinition", fileName = "DrinkSortLevelDefinition")]
     public class DrinkSortLevelDefinition : LevelDefinition
     {
-        [Header("Score Settings")]
-        [Tooltip("Points awarded per match")]
-        public int scorePerMatch = 10;
-        
+        [System.Serializable]
+        private struct ItemTypeWeight
+        {
+            public SortableItemType itemType;
+            [Min(0)] public int weight;
+        }
+
         [Header("Grid Settings")]
         [Tooltip("Width of the tray grid")]
         public int gridWidth = 4;
@@ -16,10 +19,11 @@ namespace GameModes.DrinkSort.Core
         public int gridHeight = 4;
         
         [Header("Item Settings")]
-        [Tooltip("Initial amount of items per tray")]
-        public int initialItemsPerTray = 2;
-        [Tooltip("Amount of items to add when a tray is cleared")]
-        public int itemsToFillOnClear = 3;
+        [Tooltip("Optional per-type spawn weights. If empty, all available types use weight 1")]
+        [SerializeField] private ItemTypeWeight[] spawnWeights;
+        [Tooltip("Initial tray population percentage. 100 = full trays, 0 = empty trays")]
+        [Range(0, 100)]
+        public int trayPopulationPercent = 66;
         
         [Header("Tray Reserve Settings")]
         [Tooltip("Initial size of each tray's reserve")]
@@ -38,5 +42,28 @@ namespace GameModes.DrinkSort.Core
         public float matchProcessDelay = 0.2f;
         [Tooltip("Delay after populating a tray")]
         public float postPopulateDelay = 0.1f;
+
+        public int GetSpawnWeight(SortableItemType itemType)
+        {
+            if (itemType == SortableItemType.None)
+            {
+                return 0;
+            }
+
+            if (spawnWeights == null || spawnWeights.Length == 0)
+            {
+                return 1;
+            }
+
+            for (int i = 0; i < spawnWeights.Length; i++)
+            {
+                if (spawnWeights[i].itemType == itemType)
+                {
+                    return Mathf.Max(0, spawnWeights[i].weight);
+                }
+            }
+
+            return 1;
+        }
     }
 }

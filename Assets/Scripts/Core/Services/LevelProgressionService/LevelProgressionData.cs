@@ -94,6 +94,37 @@ namespace Core.Services.LevelProgressionService
             
             return data;
         }
+        
+        /// <summary>
+        /// Reset progression in-memory (does not persist unless you call Save()).
+        /// </summary>
+        public void ResetInMemory()
+        {
+            completedLevels.Clear();
+            gameModeNames.Clear();
+            levelNumbers.Clear();
+        }
+
+        /// <summary>
+        /// Reset progression and persist the reset (clears PlayerPrefs entry).
+        /// </summary>
+        public void ResetAndDeleteSaved()
+        {
+            ResetInMemory();
+            DeleteSaved();
+        }
+
+        /// <summary>
+        /// Deletes the saved progression data from PlayerPrefs.
+        /// </summary>
+        public static void DeleteSaved()
+        {
+            if (PlayerPrefs.HasKey(KEY))
+            {
+                PlayerPrefs.DeleteKey(KEY);
+                PlayerPrefs.Save();
+            }
+        }
 
         [SerializeField] private List<string> gameModeNames = new List<string>();
         [SerializeField] private List<int> levelNumbers = new List<int>();

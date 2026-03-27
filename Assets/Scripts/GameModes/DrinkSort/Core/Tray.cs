@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using GameModes.DrinkSort.Gameplay;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace GameModes.DrinkSort.Core
 {
@@ -30,37 +29,11 @@ namespace GameModes.DrinkSort.Core
             }
         }
         
-        public void Initialize(Vector2Int position, int index, SortableItem itemPrefab, System.Func<SortableItemType, Color> getColorFunc, System.Func<SortableItemType> getRandomTypeFunc)
+        public void Initialize(Vector2Int position, int index)
         {
             gridPosition = position;
             trayIndex = index;
             gameObject.name = $"Tray_{position.x}_{position.y}";
-            
-            int itemCount = Random.Range(0, maxItems + 1);
-            PopulateWithRandomItems(itemCount, itemPrefab, getColorFunc, getRandomTypeFunc);
-        }
-        
-        private void PopulateWithRandomItems(int itemCount, SortableItem itemPrefab, System.Func<SortableItemType, Color> getColorFunc, System.Func<SortableItemType> getRandomTypeFunc)
-        {
-            if (itemPrefab == null || getColorFunc == null || getRandomTypeFunc == null) return;
-            
-            for (int i = 0; i < itemCount && CanAddItem(); i++)
-            {
-                SortableItemType randomType = getRandomTypeFunc();
-                
-                if (randomType == SortableItemType.None) continue; // Skip if no valid type
-                
-                // Find a free slot
-                int freeSlotIndex = GetFreeSlotIndex();
-                if (freeSlotIndex == -1) break; // No free slots
-                
-                Transform slotTransform = slots[freeSlotIndex] != null ? slots[freeSlotIndex] : transform;
-                SortableItem newItem = Instantiate(itemPrefab, slotTransform);
-                Color itemColor = getColorFunc(randomType);
-                
-                newItem.Initialize(randomType, itemColor);
-                AddItemToSlot(newItem, freeSlotIndex);
-            }
         }
         
         public bool CanAddItem()
@@ -90,7 +63,7 @@ namespace GameModes.DrinkSort.Core
             return AddItemToSlot(item, slotIndex);
         }
         
-        private bool AddItemToSlot(SortableItem item, int slotIndex)
+        private bool AddItemToSlot(SortableItem item, int slotIndex, bool notifyMatchCheck = true)
         {
             if (slotIndex < 0 || slotIndex >= maxItems || slotItems[slotIndex] != null)
             {
@@ -107,12 +80,33 @@ namespace GameModes.DrinkSort.Core
             item.transform.localPosition = Vector3.zero;
             
             // Notify GameManager to check for matches
-            if (items.Count >= 3)
+            if (notifyMatchCheck && items.Count >= 3)
             {
                 DrinkSortGameManager.Instance?.CheckTrayForMatch(this);
             }
             
             return true;
+        }
+
+        public bool TrySpawnInitialItem(SortableItem itemPrefab, SortableItemType itemType, System.Func<SortableItemType, Color> getColorFunc)
+        {
+            if (itemPrefab == null || getColorFunc == null || itemType == SortableItemType.None || !CanAddItem())
+            {
+                return false;
+            }
+
+            int freeSlotIndex = GetFreeSlotIndex();
+            if (freeSlotIndex == -1)
+            {
+                return false;
+            }
+
+            Transform slotTransform = slots[freeSlotIndex] != null ? slots[freeSlotIndex] : transform;
+            SortableItem newItem = Instantiate(itemPrefab, slotTransform);
+            Color itemColor = getColorFunc(itemType);
+            newItem.Initialize(itemType, itemColor);
+
+            return AddItemToSlot(newItem, freeSlotIndex, notifyMatchCheck: false);
         }
         
         public bool RemoveItem(SortableItem item)
