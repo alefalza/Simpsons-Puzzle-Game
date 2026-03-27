@@ -326,6 +326,7 @@ namespace GameModes.DrinkSort.Gameplay
         {
             if (DrinkSortHUDController != null)
             {
+                DrinkSortHUDController.SetLevelText(currentLevelNumber);
                 DrinkSortHUDController.UpdateTimer(TimeRemaining);
                 DrinkSortHUDController.UpdateItemsRemaining(GetTotalItemCount());
             }

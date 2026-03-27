@@ -335,6 +335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed69fa4e78bf34a089198bc02268404c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelText: {fileID: 1093735254}
   scoreUI: {fileID: 1093735253}
   pausePopupDefinition: {fileID: 11400000, guid: 3eb7eef81f58d421f88bfd2c327f336f, type: 2}
   gameOverPopupDefinition: {fileID: 11400000, guid: 9b4307631e92b4feea1e9e2ce2230cb9, type: 2}
@@ -1012,6 +1013,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 35dbcd2f8b17d4e96984b5ce5c8866f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1093735254 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1930829164147028546, guid: c7ffb846a6ac4074e97cef9c28429839, type: 3}
+  m_PrefabInstance: {fileID: 1093735251}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1158359278

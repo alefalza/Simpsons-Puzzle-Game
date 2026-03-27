@@ -17,7 +17,7 @@ namespace GameModes.Core
 
         protected virtual string GameModeName => typeof(T).Name;
         
-        private int currentLevelNumber = 1;
+        protected int currentLevelNumber = 1;
         
         public bool IsPaused { get; protected set; }
         public bool IsInputBlocked { get; protected set; }

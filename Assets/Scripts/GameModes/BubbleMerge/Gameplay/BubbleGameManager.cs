@@ -34,6 +34,7 @@ namespace GameModes.BubbleMerge.Gameplay
         {
             if (BubbleHUDController != null)
             {
+                BubbleHUDController.SetLevelText(currentLevelNumber);
                 BubbleHUDController.UpdateScore(0);
                 UpdateHUD(spawner.CurrentTier, spawner.NextTier);
             }

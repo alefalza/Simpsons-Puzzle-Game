@@ -718,6 +718,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 756326784c8c47fa89de9ddc18c42117, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelText: {fileID: 1924982997}
   scoreUI: {fileID: 1924982995}
   pausePopupDefinition: {fileID: 11400000, guid: 3eb7eef81f58d421f88bfd2c327f336f, type: 2}
   gameOverPopupDefinition: {fileID: 11400000, guid: 9b4307631e92b4feea1e9e2ce2230cb9, type: 2}
@@ -867,6 +868,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6851734298464411519, guid: c7ffb846a6ac4074e97cef9c28429839, type: 3}
   m_PrefabInstance: {fileID: 1924982994}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1924982997 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1930829164147028546, guid: c7ffb846a6ac4074e97cef9c28429839, type: 3}
+  m_PrefabInstance: {fileID: 1924982994}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

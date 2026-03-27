@@ -1,5 +1,6 @@
 ﻿using Core;
 using Core.Services.PopupService;
+using TMPro;
 using UI.Popups;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace UI
     public abstract class BaseHUDController : MonoBehaviour, IHUDController
     {
         [Header("UI Elements")]
+        [SerializeField] private TMP_Text levelText;
         [SerializeField] private ScoreUI scoreUI;
 
         [Header("Popup Definitions")]
@@ -24,6 +26,11 @@ namespace UI
             popupService = ServiceLocator.Get<IPopupService>();
         }
 
+        public void SetLevelText(int levelNumber)
+        {
+            levelText.text = $"Level: {levelNumber.ToString()}";
+        }
+        
         public virtual void UpdateScore(int newScore)
         {
             scoreUI.SetScore(newScore);

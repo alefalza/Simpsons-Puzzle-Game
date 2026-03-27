@@ -41,6 +41,7 @@ namespace GameModes.DonutStack.Gameplay
         {
             base.Start();
             donutGrid.Initialize(GridRadius);
+            hudController.SetLevelText(currentLevelNumber);
             UpdateScoreUI();
             GenerateNewTurn();
         }
