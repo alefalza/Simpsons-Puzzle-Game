@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4cabbb4326b99f40ac44f973978dfad, type: 3}
   m_Name: DonutStackLevelDefinition
   m_EditorClassIdentifier: 
+  levelNumber: 1
   gridRadius: 1
   stacksPerTurn: 3
   piecesToDestroy: 10

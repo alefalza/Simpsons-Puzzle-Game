@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6338810a9546cfc4fa466e3eef0cffab, type: 3}
   m_Name: DrinkSortLevelDefinition3
   m_EditorClassIdentifier: 
-  scorePerMatch: 10
+  levelNumber: 3
   gridWidth: 3
   gridHeight: 4
   spawnWeights:
@@ -23,7 +23,6 @@ MonoBehaviour:
   - itemType: 3
     weight: 33
   trayPopulationPercent: 75
-  itemsToFillOnClear: 3
   initialTrayReserveSize: 3
   timeLimit: 60
   initialPopulateDelay: 0.1

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e61399ce12ab5f648be780c5686bcb67, type: 3}
   m_Name: BubbleMergeLevelDefinition2
   m_EditorClassIdentifier: 
+  levelNumber: 2
   scorePerTier: 10
   targetScore: 70
   spawnWeightsPerTier: 320000001e000000140000000000000000000000

@@ -47,10 +47,9 @@ namespace GameModes.Core
                 Debug.Log("[BubbleGameManager] Using manually assigned level definition");
                 return;
             }
-
-            currentLevelNumber = LevelProgressionService.GetNextPlayableLevel(GameModeName);
             
             var levelDef = LevelProgressionService.GetNextPlayableLevelDefinition(GameModeName);
+            currentLevelNumber = levelDef.levelNumber;
             
             if (levelDef != null)
             {
