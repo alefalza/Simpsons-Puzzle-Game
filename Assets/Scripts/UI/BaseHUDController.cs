@@ -36,7 +36,7 @@ namespace UI
 
         public virtual void ShowPausePopup()
         {   
-            popupService.Push(pausePopupDefinition, new PausePopupData(Priority.Low, OnResumeClicked));
+            popupService.Push(pausePopupDefinition, new PausePopupData(pausePopupDefinition.defaultPriority, OnResumeClicked));
         }
 
         protected abstract void OnResumeClicked();
@@ -48,12 +48,12 @@ namespace UI
 
         public virtual void ShowGameOverOverlay(int finalScore)
         {
-            popupService.Push(gameOverPopupDefinition, new GameOverPopupData(Priority.Low, finalScore));
+            popupService.Push(gameOverPopupDefinition, new GameOverPopupData(gameOverPopupDefinition.defaultPriority, finalScore));
         }
 
         public virtual void ShowWinPopup(int finalScore)
         {
-            popupService.Push(winPopupDefinition, new WinPopup.WinPopupData(Priority.Low, finalScore));
+            popupService.Push(winPopupDefinition, new WinPopup.WinPopupData(winPopupDefinition.defaultPriority, finalScore));
         }
     }
 }
