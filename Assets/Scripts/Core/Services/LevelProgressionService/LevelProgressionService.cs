@@ -39,19 +39,19 @@ namespace Core.Services.LevelProgressionService
             
             var bubbleMergeLevels = Resources.LoadAll<BubbleMergeLevelDefinition>(BUBBLE_MERGE_LEVEL_DEFINITIONS_PATH)
                 .Cast<LevelDefinition>()
-                .OrderBy(ld => ld.name)
+                .OrderBy(ld => ld.levelNumber)
                 .ToList();
             levelDefinitionsCache["BubbleMerge"] = bubbleMergeLevels;
 
             var drinkSortLevels = Resources.LoadAll<DrinkSortLevelDefinition>(DRINK_SORT_LEVEL_DEFINITIONS_PATH)
                 .Cast<LevelDefinition>()
-                .OrderBy(ld => ld.name)
+                .OrderBy(ld => ld.levelNumber)
                 .ToList();
             levelDefinitionsCache["DrinkSort"] = drinkSortLevels;
 
             var donutStackLevels = Resources.LoadAll<DonutStackLevelDefinition>(DONUT_STACK_LEVEL_DEFINITIONS_PATH)
                 .Cast<LevelDefinition>()
-                .OrderBy(ld => ld.name)
+                .OrderBy(ld => ld.levelNumber)
                 .ToList();
             levelDefinitionsCache["DonutStack"] = donutStackLevels;
 

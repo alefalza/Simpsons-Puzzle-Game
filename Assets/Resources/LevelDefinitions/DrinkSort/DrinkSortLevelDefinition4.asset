@@ -10,19 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6338810a9546cfc4fa466e3eef0cffab, type: 3}
-  m_Name: DrinkSortLevelDefinition1
+  m_Name: DrinkSortLevelDefinition4
   m_EditorClassIdentifier: 
-  levelNumber: 1
+  levelNumber: 4
   gridWidth: 3
   gridHeight: 4
   spawnWeights:
   - itemType: 1
-    weight: 50
+    weight: 34
   - itemType: 2
-    weight: 50
-  trayPopulationPercent: 30
+    weight: 33
+  - itemType: 3
+    weight: 33
+  trayPopulationPercent: 55
   initialTrayReserveSize: 3
-  timeLimit: 180
+  timeLimit: 140
   initialPopulateDelay: 0.1
   itemPopulateDelay: 0.05
   matchProcessDelay: 0.2

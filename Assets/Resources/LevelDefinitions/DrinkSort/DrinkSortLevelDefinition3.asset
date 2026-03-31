@@ -17,14 +17,14 @@ MonoBehaviour:
   gridHeight: 4
   spawnWeights:
   - itemType: 1
-    weight: 33
+    weight: 34
   - itemType: 2
     weight: 33
   - itemType: 3
     weight: 33
-  trayPopulationPercent: 75
+  trayPopulationPercent: 45
   initialTrayReserveSize: 3
-  timeLimit: 60
+  timeLimit: 150
   initialPopulateDelay: 0.1
   itemPopulateDelay: 0.05
   matchProcessDelay: 0.2
