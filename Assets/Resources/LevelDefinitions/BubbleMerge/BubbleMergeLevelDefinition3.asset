@@ -13,6 +13,4 @@ MonoBehaviour:
   m_Name: BubbleMergeLevelDefinition3
   m_EditorClassIdentifier: 
   levelNumber: 3
-  scorePerTier: 10
-  targetScore: 100
-  spawnWeightsPerTier: 320000001e000000140000000000000000000000
+  spawnWeightsPerTier: 50000000140000000000000000000000

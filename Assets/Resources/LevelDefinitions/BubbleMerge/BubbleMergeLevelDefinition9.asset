@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e61399ce12ab5f648be780c5686bcb67, type: 3}
-  m_Name: BubbleMergeLevelDefinition1
+  m_Name: BubbleMergeLevelDefinition9
   m_EditorClassIdentifier: 
-  levelNumber: 1
-  spawnWeightsPerTier: 64000000000000000000000000000000
+  levelNumber: 9
+  spawnWeightsPerTier: 320000001e0000000a0000000a000000

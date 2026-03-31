@@ -18,9 +18,6 @@ namespace GameModes.BubbleMerge.Gameplay
         
         public int MaxTier => spawner.MaxTier;
         
-        private int ScorePerTier => levelData != null ? ((BubbleMergeLevelDefinition)levelData).scorePerTier : GameConstants.BubbleMerge.ScorePerTier;
-        private int TargetScore => levelData != null ? ((BubbleMergeLevelDefinition)levelData).targetScore : 0;
-
         protected override void Start()
         {
             base.Start();            
@@ -35,7 +32,6 @@ namespace GameModes.BubbleMerge.Gameplay
             if (BubbleHUDController != null)
             {
                 BubbleHUDController.SetLevelText(currentLevelNumber);
-                BubbleHUDController.UpdateScore(0);
                 UpdateHUD(spawner.CurrentTier, spawner.NextTier);
             }
         }
@@ -51,9 +47,9 @@ namespace GameModes.BubbleMerge.Gameplay
 
         public Bubble SpawnMergedBubble(int tier, Vector3 position)
         {
-            AddScore(tier * ScorePerTier);
-            
-            return spawner.SpawnBubble(tier, position);
+            Bubble bubble = spawner.SpawnBubble(tier, position);
+            CheckWinCondition(bubble);
+            return bubble;
         }
 
         public Bubble GetBubblePrefabByTier(int tier)
@@ -61,26 +57,27 @@ namespace GameModes.BubbleMerge.Gameplay
             return spawner.BubblePrefabs[tier];
         }
         
-        private void AddScore(int amount)
-        {
-            score += amount;
-            
-            if (BubbleHUDController != null)
-            {
-                BubbleHUDController.UpdateScore(score);
-            }
-            
-            CheckWinCondition();
-        }
-
-        private void CheckWinCondition()
+        private void CheckWinCondition(Bubble bubble)
         {
             if (hasWon || IsInputBlocked) return;
             
-            if (TargetScore > 0 && score >= TargetScore)
+            if (bubble.Tier == spawner.MaxTier)
             {
-                hasWon = true;
-                MarkLevelAsCompleted();
+                OnGameWin();
+            }
+        }
+        
+        private void OnGameWin()
+        {
+            hasWon = true;
+            IsInputBlocked = true;
+            spawner.enabled = false;
+            
+            MarkLevelAsCompleted();
+            
+            if (hudController != null)
+            {
+                hudController.ShowWinPopup(0);
             }
         }
 
