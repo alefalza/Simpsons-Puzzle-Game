@@ -115,7 +115,7 @@ namespace GameModes.DonutStack.Gameplay
             yield return StartCoroutine(ProcessCellMatchesRecursively(startCell));
         
             IsProcessingMatches = false;
-            CheckGameOver();
+            CheckLoseCondition();
         }
 
         private IEnumerator ProcessCellMatchesRecursively(GridCell cell)
@@ -199,8 +199,26 @@ namespace GameModes.DonutStack.Gameplay
             }
         }
 
-        private void CheckGameOver()
+        private void CheckWinCondition()
         {
+            if (hasLost) return;
+            
+            OnGameWon();
+        }
+
+        protected override void OnGameWon(int finalScore = 0)
+        {
+            IsInputBlocked = true;
+            
+            MarkLevelAsCompleted();
+            
+            base.OnGameWon(finalScore);
+        }
+
+        private void CheckLoseCondition()
+        {
+            if (hasWon) return;
+            
             if (!donutGrid.HasEmptyCells() && currentTurnStacks.Count > 0)
             {
                 bool canPlaceAny = false;
@@ -216,15 +234,16 @@ namespace GameModes.DonutStack.Gameplay
             
                 if (canPlaceAny)
                 {
-                    OnGameOver();
+                    OnGameLost();
                 }
             }
         }
         
-        private void OnGameOver()
+        protected override void OnGameLost(int finalScore = 0)
         {
             IsInputBlocked = true;
-            hudController.ShowGameOverOverlay(score);
+            
+            base.OnGameLost(finalScore);
         }
     }
 }

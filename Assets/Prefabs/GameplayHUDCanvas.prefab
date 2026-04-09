@@ -266,6 +266,7 @@ GameObject:
   - component: {fileID: 9218434453457190130}
   - component: {fileID: 3667324116526288862}
   - component: {fileID: 1671411062883346865}
+  - component: {fileID: 972392439243164168}
   m_Layer: 5
   m_Name: PauseButton
   m_TagString: Untagged
@@ -351,6 +352,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ButtonScaler
   pressedScale: {x: 0.9, y: 0.9, z: 0.9}
   duration: 0.1
+--- !u!114 &972392439243164168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4252107408220001861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5f0d6c76a4ce2a4c876549dab269e6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonSound
+  hoverSound: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: 7ab1c20388c02964d91fa37a5247299b, type: 3}
 --- !u!1 &4734269673650591665
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,14 +17,7 @@ namespace UI
         [SerializeField] private PopupDefinition gameOverPopupDefinition;
         [SerializeField] private PopupDefinition winPopupDefinition;
 
-        private IPopupService popupService;
-
-        private IPopUp OpenedPopup => popupService.GetOpenedPopup();
-
-        private void Awake()
-        {
-            popupService = ServiceLocator.Get<IPopupService>();
-        }
+        private IPopUp OpenedPopup => PopupService.GetOpenedPopup();
 
         public void SetLevelText(int levelNumber)
         {
@@ -43,24 +36,30 @@ namespace UI
 
         public virtual void ShowPausePopup()
         {   
-            popupService.Push(pausePopupDefinition, new PausePopupData(pausePopupDefinition.defaultPriority, OnResumeClicked));
+            PopupService.Push(pausePopupDefinition, new PausePopupData(pausePopupDefinition.defaultPriority, OnResumeClicked));
         }
 
         protected abstract void OnResumeClicked();
 
         public virtual void HidePausePopup()
         {
-            OpenedPopup.Close();
+            if (OpenedPopup != null && OpenedPopup is PausePopup && !OpenedPopup.IsFading)
+            {
+                OpenedPopup.Close();
+            }
         }
 
-        public virtual void ShowGameOverOverlay(int finalScore)
+        public virtual void ShowGameOverPopup(int finalScore)
         {
-            popupService.Push(gameOverPopupDefinition, new GameOverPopupData(gameOverPopupDefinition.defaultPriority, finalScore));
+            PopupService.Push(gameOverPopupDefinition, new GameOverPopupData(gameOverPopupDefinition.defaultPriority, finalScore));
         }
 
         public virtual void ShowWinPopup(int finalScore)
         {
-            popupService.Push(winPopupDefinition, new WinPopup.WinPopupData(winPopupDefinition.defaultPriority, finalScore));
+            PopupService.Push(winPopupDefinition, new WinPopup.WinPopupData(winPopupDefinition.defaultPriority, finalScore));
         }
+        
+        private IPopupService popupService;
+        private IPopupService PopupService => popupService ??= ServiceLocator.Get<IPopupService>();
     }
 }

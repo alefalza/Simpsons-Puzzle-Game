@@ -8,7 +8,7 @@ namespace Core.Services.AudioService
     {
         public override IService CreateInstance(ServiceBootstrap bootstrap)
         {
-            return new AudioService(bootstrap.MusicSource, bootstrap.SfxSource);
+            return new AudioService(bootstrap.MainMixer, bootstrap.MusicSource, bootstrap.SfxSource);
         }
     }
 }

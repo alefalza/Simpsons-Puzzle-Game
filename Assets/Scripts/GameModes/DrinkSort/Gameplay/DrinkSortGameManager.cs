@@ -22,7 +22,6 @@ namespace GameModes.DrinkSort.Gameplay
         protected override string GameModeName => "DrinkSort";
 
         private float currentTime;
-        private bool isGameOver = false;
         
         private DrinkSortHUDController DrinkSortHUDController => hudController as DrinkSortHUDController;
         private readonly List<WeightedType> weightedLevelTypes = new List<WeightedType>();
@@ -49,7 +48,7 @@ namespace GameModes.DrinkSort.Gameplay
         {
             base.Update();
             
-            if (IsPaused || isGameOver) return;
+            if (IsPaused || hasLost) return;
             
             UpdateTimer();
         }
@@ -57,7 +56,7 @@ namespace GameModes.DrinkSort.Gameplay
         private void InitializeGame()
         {
             currentTime = 0f;
-            isGameOver = false;
+            hasLost = false;
             ConfigureLevelTypeWeights();
             
             trayGrid.Initialize(
@@ -316,9 +315,9 @@ namespace GameModes.DrinkSort.Gameplay
             
             UpdateHUD();
             
-            if (TimeRemaining <= 0 && !isGameOver)
+            if (TimeRemaining <= 0 && !hasLost)
             {
-                OnGameOver();
+                CheckLoseCondition();
             }
         }
         
@@ -346,7 +345,8 @@ namespace GameModes.DrinkSort.Gameplay
         
         private void CheckWinCondition()
         {
-            // Win: no items remain in the trays
+            if (hasLost) return;
+            
             bool hasRemainingItems = false;
             
             foreach (var tray in trayGrid.Trays.Values)
@@ -358,39 +358,33 @@ namespace GameModes.DrinkSort.Gameplay
                 }
             }
             
-            // If there are no items in the trays, you win
             if (!hasRemainingItems)
             {
-                OnGameWin();
+                OnGameWon();
             }
         }
-        
-        private void OnGameWin()
+
+        protected override void OnGameWon(int finalScore = 0)
         {
-            if (isGameOver) return;
-            
-            isGameOver = true;
             IsInputBlocked = true;
             
             MarkLevelAsCompleted();
             
-            if (hudController != null)
-            {
-                hudController.ShowWinPopup(0);
-            }
+            base.OnGameWon(finalScore);
         }
-        
-        private void OnGameOver()
+
+        private void CheckLoseCondition()
         {
-            if (isGameOver) return;
+            if (hasWon) return;
             
-            isGameOver = true;
+            OnGameLost();
+        }
+
+        protected override void OnGameLost(int finalScore = 0)
+        {
             IsInputBlocked = true;
             
-            if (hudController != null)
-            {
-                hudController.ShowGameOverOverlay(0);
-            }
+            base.OnGameLost(finalScore);
         }
     }
 }

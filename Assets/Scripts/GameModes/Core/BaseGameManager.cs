@@ -10,7 +10,6 @@ namespace GameModes.Core
         [Header("Level Configuration")]
         [Tooltip("If not assigned, will load automatically from LevelProgressionService")]
         [SerializeField] protected LevelDefinition levelData;
-        
         [SerializeField] protected BaseHUDController hudController;
         
         public static T Instance { get; private set; }
@@ -18,8 +17,10 @@ namespace GameModes.Core
         protected virtual string GameModeName => typeof(T).Name;
         
         protected int currentLevelNumber = 1;
+        protected bool hasWon = false;
+        protected bool hasLost = false;
         
-        public bool IsPaused { get; protected set; }
+        public bool IsPaused { get; private set; }
         public bool IsInputBlocked { get; protected set; }
 
         protected virtual void Awake()
@@ -44,25 +45,25 @@ namespace GameModes.Core
             // If levelData is manually assigned, don't override it (for testing purposes)
             if (levelData != null)
             {
-                Debug.Log("[BubbleGameManager] Using manually assigned level definition");
+                Debug.Log($"[{GameModeName}] Using manually assigned level definition");
                 return;
             }
             
             var levelDef = LevelProgressionService.GetNextPlayableLevelDefinition(GameModeName);
-            currentLevelNumber = levelDef.levelNumber;
             
             if (levelDef != null)
             {
+                currentLevelNumber = levelDef.levelNumber;
                 levelData = levelDef;
-                Debug.Log($"[BubbleGameManager] Loaded level {currentLevelNumber}: {levelDef.name}");
+                Debug.Log($"[{GameModeName}] Loaded level {currentLevelNumber}: {levelDef.name}");
             }
             else
             {
-                Debug.LogWarning($"[BubbleGameManager] Could not load level definition for level {currentLevelNumber}");
+                Debug.LogWarning($"[{GameModeName}] Could not load level definition for level {currentLevelNumber}");
             }
         }
 
-        protected virtual void HandleInput()
+        private void HandleInput()
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
@@ -73,7 +74,7 @@ namespace GameModes.Core
         }
 
         #region Pause Logic
-        public virtual void TogglePause()
+        public void TogglePause()
         {
             if (hudController == null || !hudController.CanTogglePause()) return;
 
@@ -83,7 +84,7 @@ namespace GameModes.Core
                 Resume();
         }
 
-        protected virtual void Pause()
+        private void Pause()
         {
             IsPaused = true;
             IsInputBlocked = true;
@@ -97,7 +98,7 @@ namespace GameModes.Core
             OnPaused();
         }
 
-        protected virtual void Resume()
+        private void Resume()
         {
             IsPaused = false;
             IsInputBlocked = false;
@@ -119,9 +120,29 @@ namespace GameModes.Core
         protected void MarkLevelAsCompleted()
         {
             LevelProgressionService.CompleteLevel(GameModeName, currentLevelNumber);
-            Debug.Log($"[BubbleGameManager] Level {currentLevelNumber} completed!");
+            Debug.Log($"[{GameModeName}] Level {currentLevelNumber} is completed!");
         }
-        
+
+        protected virtual void OnGameWon(int finalScore = 0)
+        {
+            hasWon = true;
+            
+            if (hudController != null)
+            {
+                hudController.ShowWinPopup(finalScore);
+            }
+        }
+
+        protected virtual void OnGameLost(int finalScore = 0)
+        {
+            hasLost = true;
+            
+            if (hudController != null)
+            {
+                hudController.ShowGameOverPopup(finalScore);
+            }
+        }
+
         protected virtual void OnDestroy()
         {
             if (Instance == this as T)

@@ -1,14 +1,17 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace Core.Services.AudioService
 {
     public class AudioService : IAudioService
     {
+        private readonly AudioMixer mainMixer;
         private readonly AudioSource musicSource;
         private readonly AudioSource sfxSource;
 
-        public AudioService(AudioSource music, AudioSource sfx)
+        public AudioService(AudioMixer mixer, AudioSource music, AudioSource sfx)
         {
+            mainMixer = mixer;
             musicSource = music;
             sfxSource = sfx;
         }
@@ -41,14 +44,18 @@ namespace Core.Services.AudioService
 
         public void SetMusicVolume(float volume)
         {
-            if (musicSource != null)
-                musicSource.volume = Mathf.Clamp01(volume);
+            SetMainMixerVolume("MusicVol", volume);
         }
 
         public void SetSFXVolume(float volume)
         {
-            if (sfxSource != null)
-                sfxSource.volume = Mathf.Clamp01(volume);
+            SetMainMixerVolume("SFXVol", volume);
+        }
+
+        private void SetMainMixerVolume(string name, float volume)
+        {
+            float value = Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20;
+            mainMixer.SetFloat(name, value);
         }
 
         public void Shutdown()

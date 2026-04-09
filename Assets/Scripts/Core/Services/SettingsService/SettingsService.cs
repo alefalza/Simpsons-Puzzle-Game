@@ -1,5 +1,4 @@
 ﻿using Core.Services.AudioService;
-using UI.MainMenu.Tabs.Settings;
 using UnityEngine;
 
 namespace Core.Services.SettingsService

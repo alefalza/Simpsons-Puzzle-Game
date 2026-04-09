@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4072503649508172642}
   - component: {fileID: 2299389672339533980}
+  - component: {fileID: 7934639995520284203}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -82,6 +83,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7934639995520284203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57445066095483739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5f0d6c76a4ce2a4c876549dab269e6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonSound
+  hoverSound: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: 587cba8d17592564995a6653ed275ee6, type: 3}
+  sfxGroup: {fileID: -7483298497501649131, guid: ba4266c5a4c3f154a996c1aee7e34346, type: 2}
 --- !u!1 &1386461752397172582
 GameObject:
   m_ObjectHideFlags: 0

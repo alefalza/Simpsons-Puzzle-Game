@@ -6,6 +6,6 @@ namespace UI
         public bool CanTogglePause();
         public void ShowPausePopup();
         public void HidePausePopup();
-        public void ShowGameOverOverlay(int finalScore);
+        public void ShowGameOverPopup(int finalScore);
     }
 }

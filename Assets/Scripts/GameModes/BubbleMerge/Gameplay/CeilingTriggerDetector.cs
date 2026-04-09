@@ -16,7 +16,7 @@ namespace GameModes.BubbleMerge.Gameplay
             gameOverTriggered = true;
             Debug.Log("[Ceiling] Bubble touched ceiling → GAME OVER");
 
-            BubbleGameManager.Instance.OnGameOver();
+            BubbleGameManager.Instance.CheckLoseCondition();
         }
     }
 }

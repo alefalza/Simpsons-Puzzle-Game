@@ -74,10 +74,10 @@ AudioSource:
   m_GameObject: {fileID: 2295669435506429087}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -7483298497501649131, guid: ba4266c5a4c3f154a996c1aee7e34346, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -678,6 +678,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serviceDefinitions: {fileID: 11400000, guid: 0744aed76f4f96b4f882d77d03cc37a4, type: 2}
+  mainMixer: {fileID: 24100000, guid: ba4266c5a4c3f154a996c1aee7e34346, type: 2}
   musicSource: {fileID: 4935226758557160055}
   sfxSource: {fileID: 640028887835824790}
   popupRoot: {fileID: 4229017695341292995}

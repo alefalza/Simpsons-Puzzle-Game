@@ -1,5 +1,6 @@
 using Core;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace Boot
 {
@@ -13,6 +14,7 @@ namespace Boot
         [SerializeField] private ServiceConfiguration serviceDefinitions;
 
         [Header("Audio Components")]
+        [SerializeField] private AudioMixer mainMixer;
         [SerializeField] private AudioSource musicSource;
         [SerializeField] private AudioSource sfxSource;
 
@@ -20,6 +22,7 @@ namespace Boot
         [SerializeField] private Transform popupRoot;
         [SerializeField] private GameObject loadingOverlay;
 
+        public AudioMixer MainMixer => mainMixer;
         public AudioSource MusicSource => musicSource;
         public AudioSource SfxSource => sfxSource;
         public Transform PopupRoot => popupRoot;

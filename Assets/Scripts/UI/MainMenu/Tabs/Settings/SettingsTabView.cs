@@ -1,4 +1,5 @@
 using Core;
+using Core.Services.AudioService;
 using Core.Services.SettingsService;
 using TMPro;
 using UnityEngine;
@@ -25,16 +26,10 @@ namespace UI.MainMenu.Tabs.Settings
         private void Start()
         {
             LoadUIFromData();
-
-            // Listeners
-            musicSlider.onValueChanged.AddListener(settingsManager.SetMusicVolume);
-            sfxSlider.onValueChanged.AddListener(settingsManager.SetSFXVolume);
-            hapticsToggle.onValueChanged.AddListener(settingsManager.SetHaptics);
-            notificationsToggle.onValueChanged.AddListener(settingsManager.SetNotifications);
-            autoPauseToggle.onValueChanged.AddListener(settingsManager.SetAutoPause);
-            languageDropdown.onValueChanged.AddListener(OnLanguageSelected);
+            Initialize();
+            SubscribeToNotifications();
         }
-
+        
         private void LoadUIFromData()
         {
             var data = settingsManager.Data;
@@ -53,6 +48,22 @@ namespace UI.MainMenu.Tabs.Settings
                 languageDropdown.SetValueWithoutNotify(index);
         }
 
+        private void Initialize()
+        {
+            AudioService.SetSFXVolume(sfxSlider.value);
+            AudioService.SetMusicVolume(musicSlider.value);
+        }
+        
+        private void SubscribeToNotifications()
+        {
+            musicSlider.onValueChanged.AddListener(settingsManager.SetMusicVolume);
+            sfxSlider.onValueChanged.AddListener(settingsManager.SetSFXVolume);
+            hapticsToggle.onValueChanged.AddListener(settingsManager.SetHaptics);
+            notificationsToggle.onValueChanged.AddListener(settingsManager.SetNotifications);
+            autoPauseToggle.onValueChanged.AddListener(settingsManager.SetAutoPause);
+            languageDropdown.onValueChanged.AddListener(OnLanguageSelected);
+        }
+
         private void OnLanguageSelected(int index)
         {
             string code = languageDropdown.options[index].text.ToLower() switch
@@ -64,5 +75,8 @@ namespace UI.MainMenu.Tabs.Settings
 
             settingsManager.SetLanguage(code);
         }
+        
+        private IAudioService audioService;
+        private IAudioService AudioService => audioService ??= ServiceLocator.Get<IAudioService>();
     }
 }

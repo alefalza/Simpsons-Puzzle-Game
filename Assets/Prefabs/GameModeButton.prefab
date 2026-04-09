@@ -124,6 +124,7 @@ GameObject:
   - component: {fileID: 1749508180288387876}
   - component: {fileID: 6006539240338979038}
   - component: {fileID: 5697990270237792627}
+  - component: {fileID: 7874835257660707524}
   m_Layer: 5
   m_Name: GameModeButton
   m_TagString: Untagged
@@ -224,6 +225,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pressedScale: {x: 0.9, y: 0.9, z: 0.9}
   duration: 0.1
+--- !u!114 &7874835257660707524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5874467641111163947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5f0d6c76a4ce2a4c876549dab269e6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonSound
+  hoverSound: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: 155009e8671019f4e821014bcfac07ad, type: 3}
 --- !u!1 &5888996193509185630
 GameObject:
   m_ObjectHideFlags: 0
@@ -402,6 +417,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
