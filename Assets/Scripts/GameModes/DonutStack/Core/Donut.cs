@@ -20,36 +20,22 @@ namespace GameModes.DonutStack.Core
     [RequireComponent(typeof(Image))]
     public class Donut : MonoBehaviour
     {
-        [SerializeField]
-        private Sprite[] colorSprites;
-        
-        private Image image;
+        [SerializeField] private Image image;
         
         public DonutColor Color { get; private set; }
-
-        private void Awake()
-        {
-            image = GetComponent<Image>();
-        }
 
         private void Start()
         {
             image.color = UnityEngine.Color.white;
         }
 
-        public void Initialize(DonutColor color)
+        public void Initialize(DonutColor color, Sprite sprite)
         {
             Color = color;
-
-            int index = (int)color;
             
-            if (colorSprites != null && index >= 0 && index < colorSprites.Length)
+            if (sprite != null)
             {
-                image.sprite = colorSprites[index];
-            }
-            else
-            {
-                image.sprite = null;
+                image.sprite = sprite;
             }
         }
     }

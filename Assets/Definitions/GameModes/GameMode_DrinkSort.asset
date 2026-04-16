@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: de6621dff12ff45c788ebd7803a01ffd, type: 3}
-  m_Name: GameMode_FlamingMoes
+  m_Name: GameMode_DrinkSort
   m_EditorClassIdentifier: 
   modeName: Flaming Moes
-  sceneName: GameMode_FlamingMoes
+  sceneName: GameMode_DrinkSort
   icon: {fileID: 21300000, guid: 67764fbc5837c804b82f656b33458ec3, type: 3}

@@ -88,9 +88,9 @@ namespace GameModes.DrinkSort.Core
             return true;
         }
 
-        public bool TrySpawnInitialItem(SortableItem itemPrefab, SortableItemType itemType, System.Func<SortableItemType, Color> getColorFunc)
+        public bool TrySpawnInitialItem(SortableItem itemPrefab, SortableItemType itemType, System.Func<SortableItemType, Sprite> getSpriteFunc)
         {
-            if (itemPrefab == null || getColorFunc == null || itemType == SortableItemType.None || !CanAddItem())
+            if (itemPrefab == null || getSpriteFunc == null || itemType == SortableItemType.None || !CanAddItem())
             {
                 return false;
             }
@@ -103,8 +103,8 @@ namespace GameModes.DrinkSort.Core
 
             Transform slotTransform = slots[freeSlotIndex] != null ? slots[freeSlotIndex] : transform;
             SortableItem newItem = Instantiate(itemPrefab, slotTransform);
-            Color itemColor = getColorFunc(itemType);
-            newItem.Initialize(itemType, itemColor);
+            Sprite itemSprite = getSpriteFunc(itemType);
+            newItem.Initialize(itemType, itemSprite);
 
             return AddItemToSlot(newItem, freeSlotIndex, notifyMatchCheck: false);
         }
@@ -144,9 +144,11 @@ namespace GameModes.DrinkSort.Core
             return -1;
         }
         
+        /// <summary>
+        /// Finds the closest slot to the position.
+        /// </summary>
         public int GetSlotIndexForPosition(Vector3 worldPosition)
         {
-            // Find the closest slot to the position
             float minDistance = float.MaxValue;
             int closestSlot = -1;
             
@@ -189,6 +191,7 @@ namespace GameModes.DrinkSort.Core
                     Destroy(item.gameObject);
                 }
             }
+            
             items.Clear();
             
             // Clear slots

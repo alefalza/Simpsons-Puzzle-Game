@@ -847,7 +847,8 @@ MonoBehaviour:
   levelData: {fileID: 0}
   hudController: {fileID: 1499468659}
   trayGrid: {fileID: 258313207}
-  itemReserve: {fileID: 11400000, guid: 0666e8727cd57a2409097426ddebca6c, type: 2}
+  itemPrefab: {fileID: 6364125198001791147, guid: 839b7d1439fa20f439116400bb17635d, type: 3}
+  itemData: {fileID: 11400000, guid: 0666e8727cd57a2409097426ddebca6c, type: 2}
   dragLayer: {fileID: 1222725953}
 --- !u!114 &1499468659
 MonoBehaviour:

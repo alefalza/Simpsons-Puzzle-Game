@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/Scenes/GameModes/GameMode_DonutStack.unity
     guid: 77b647948f04e4aadb69d46398aa131e
   - enabled: 1
-    path: Assets/Scenes/GameModes/GameMode_FlamingMoes.unity
+    path: Assets/Scenes/GameModes/GameMode_DrinkSort.unity
     guid: fbc3739dcdb2d485f8fe8f8f4991ff3b
   - enabled: 1
     path: Assets/Scenes/GameModes/GameMode_BubbleMerge.unity

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using GameModes.DonutStack.Gameplay;
@@ -11,19 +12,10 @@ namespace GameModes.DonutStack.Core
     public class DonutStack : DraggableItem
     {
         [SerializeField] private Donut donutPrefab;
-        [SerializeField] private float pieceSpacing = 0.15f;
-        [SerializeField] private TextMeshPro topCountText;
-
-        [SerializeField] private DonutColor[] availableColors = new DonutColor[] 
-        { 
-            DonutColor.Red, 
-            DonutColor.Blue, 
-            DonutColor.Green, 
-            DonutColor.Yellow 
-        };
-        
         [SerializeField] private int minStackHeight = 1;
         [SerializeField] private int maxStackHeight = 4;
+        [SerializeField] private float pieceSpacing = 0.15f;
+        [SerializeField] private TextMeshPro topCountText;
         
         private readonly List<Donut> pieces = new List<Donut>();
         
@@ -34,26 +26,34 @@ namespace GameModes.DonutStack.Core
         public int PieceCount => pieces.Count;
         public bool IsPlaced { get; private set; } = false;
 
-        public void Initialize(StackSlot slot)
+        private void Awake()
+        {
+            textRenderer = topCountText.GetComponent<Renderer>();
+            textRenderer.sortingLayerName = "HUD";
+            textRenderer.sortingOrder = 0;
+        }
+
+        public void Initialize(StackSlot slot, Func<DonutColor, Sprite> getSpriteFunc, Func<DonutColor> getRandomColorFunc)
         {
             canvas = DonutStackGameManager.Instance.DragLayer.GetComponentInParent<Canvas>();
             
             parentSlot = slot;
             parentSlot.SetOccupied(true);
 
-            InstantiatePieces();
+            InstantiatePieces(getSpriteFunc, getRandomColorFunc);
             ArrangePieces();
         }
 
-        private void InstantiatePieces()
+        private void InstantiatePieces(Func<DonutColor, Sprite> getSpriteFunc, Func<DonutColor> getRandomColorFunc)
         {
             int pieceCount = Random.Range(minStackHeight, maxStackHeight + 1);
         
             for (int i = 0; i < pieceCount; i++)
             {
-                DonutColor color = availableColors[Random.Range(0, availableColors.Length)];
+                DonutColor color = getRandomColorFunc.Invoke();
                 Donut donut = Instantiate(donutPrefab, transform);
-                donut.Initialize(color);
+                Sprite sprite = getSpriteFunc(color);
+                donut.Initialize(color, sprite);
                 AddPiece(donut);
             }
         }
@@ -83,15 +83,6 @@ namespace GameModes.DonutStack.Core
                 topCountText.text = topCount.ToString();
                 float posY = pieceSpacing * (pieces.Count - 1);
                 topCountText.transform.localPosition = new Vector3(0, posY, -0.1f);
-        
-                textRenderer ??= topCountText.GetComponent<Renderer>();
-                
-                if (textRenderer != null)
-                {
-                    textRenderer.sortingLayerName = "HUD";
-                    textRenderer.sortingOrder = 0;
-                }
-        
                 topCountText.gameObject.SetActive(true);
             }
             else

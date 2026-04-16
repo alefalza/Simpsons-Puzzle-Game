@@ -664,7 +664,7 @@ GameObject:
   - component: {fileID: 1601575532}
   - component: {fileID: 1601575534}
   m_Layer: 0
-  m_Name: HexGameManager
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -685,7 +685,8 @@ MonoBehaviour:
   levelData: {fileID: 0}
   hudController: {fileID: 1601575534}
   donutGrid: {fileID: 1590626947}
-  donutStackPrefab: {fileID: 5863030423550925337, guid: 7d4ccbbf6c87dd6409e953f1b29dabb6, type: 3}
+  stackPrefab: {fileID: 5863030423550925337, guid: 7d4ccbbf6c87dd6409e953f1b29dabb6, type: 3}
+  itemData: {fileID: 11400000, guid: 1d44966ff6d8e2e408609eb1db14a87d, type: 2}
   stackSlots:
   - {fileID: 650989775}
   - {fileID: 93531898}

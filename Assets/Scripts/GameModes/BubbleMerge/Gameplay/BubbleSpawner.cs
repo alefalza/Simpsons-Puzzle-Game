@@ -16,10 +16,15 @@ namespace GameModes.BubbleMerge.Gameplay
         [SerializeField] private LineRenderer aimLine;
         [SerializeField] private float maxRayDistance = 20f;
         [SerializeField] private LayerMask groundMask;
+
+        [Header("Spawn Settings")]
+        [Min(0f)]
+        [SerializeField] private float spawnCooldown = 0.15f;
         
         private Camera mainCamera;
         private bool isDragging = false;
         private int[] levelSpawnWeights;
+        private float nextAllowedSpawnTime;
         
         public int CurrentTier { get; private set; }
         public int NextTier { get; private set; }
@@ -39,6 +44,7 @@ namespace GameModes.BubbleMerge.Gameplay
 
             CurrentTier = GetRandomWeightedTier();
             NextTier = GetRandomWeightedTier();
+            nextAllowedSpawnTime = 0f;
         }
 
         private void Update()
@@ -104,6 +110,9 @@ namespace GameModes.BubbleMerge.Gameplay
         
         private void DropBubble()
         {
+            if (Time.time < nextAllowedSpawnTime) return;
+            nextAllowedSpawnTime = Time.time + spawnCooldown;
+
             SpawnBubble(CurrentTier, spawnPoint.position);
 
             CurrentTier = NextTier;

@@ -5,49 +5,41 @@ using Random = UnityEngine.Random;
 
 namespace GameModes.DrinkSort.Gameplay
 {
-    [CreateAssetMenu(menuName = "GameModes/DrinkSort/ItemReserve")]
-    public class ItemReserve : ScriptableObject
+    [CreateAssetMenu(menuName = "GameModes/DrinkSort/ItemData")]
+    public class DrinkSortItemData : ScriptableObject
     {
         [System.Serializable]
         public class ItemData
         {
             public SortableItemType itemType;
-            public Color itemColor = Color.white;
+            public Sprite sprite;
         }
         
         [SerializeField] private ItemData[] availableItems;
-        [SerializeField] private SortableItem itemPrefab;
         
-        private Dictionary<SortableItemType, Color> itemColors = new Dictionary<SortableItemType, Color>();
-        
-        public SortableItem ItemPrefab => itemPrefab;
-        
+        private readonly Dictionary<SortableItemType, Sprite> sprites = new Dictionary<SortableItemType, Sprite>();
+
         private void OnEnable()
         {
-            InitializeColors();
+            InitializeSprites();
         }
         
-        private void InitializeColors()
+        private void InitializeSprites()
         {
-            itemColors.Clear();
-            
+            sprites.Clear();
+
             if (availableItems != null)
             {
-                foreach (var itemData in availableItems)
+                foreach (var item in availableItems)
                 {
-                    itemColors[itemData.itemType] = itemData.itemColor;
+                    sprites[item.itemType] = item.sprite;
                 }
             }
         }
-        
-        public Color GetColorForType(SortableItemType itemType)
+
+        public Sprite GetSpriteForType(SortableItemType itemType)
         {
-            if (itemColors.TryGetValue(itemType, out Color color))
-            {
-                return color;
-            }
-            
-            return Color.white;
+            return sprites.GetValueOrDefault(itemType);
         }
         
         public SortableItemType GetRandomAvailableType()

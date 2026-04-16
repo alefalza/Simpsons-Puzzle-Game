@@ -7,41 +7,39 @@ namespace GameModes.DrinkSort.Core
 {
     public class SortableItem : DraggableItem
     {
-        [SerializeField] private SortableItemType itemType = SortableItemType.None;
         [SerializeField] private Image image;
-        
+
         private Camera mainCamera;
-        private Tray parentTray;
-        
-        public SortableItemType ItemType => itemType;
-        public Tray ParentTray => parentTray;
+
+        public SortableItemType ItemType { get; private set; }
+        public Tray ParentTray { get; private set; }
         
         private void Awake()
         {
             mainCamera = Camera.main;
         }
         
-        public void Initialize(SortableItemType type, Color color)
+        public void Initialize(SortableItemType type, Sprite sprite)
         {
-            itemType = type;
-            
-            if (image != null)
+            ItemType = type;
+
+            if (sprite != null)
             {
-                image.color = color;
+                image.sprite = sprite;
             }
         }
         
         public void SetTray(Tray tray)
         {
-            parentTray = tray;
+            ParentTray = tray;
         }
         
         public void RemoveFromTray()
         {
-            if (parentTray != null)
+            if (ParentTray != null)
             {
-                parentTray.RemoveItem(this);
-                parentTray = null;
+                ParentTray.RemoveItem(this);
+                ParentTray = null;
             }
         }
         
@@ -49,7 +47,7 @@ namespace GameModes.DrinkSort.Core
         
         public override void OnBeginDrag(PointerEventData eventData)
         {
-            if (parentTray == null) return;
+            if (ParentTray == null) return;
             
             base.OnBeginDrag(eventData);
             
@@ -88,7 +86,7 @@ namespace GameModes.DrinkSort.Core
                 }
                 
                 // If it's the same tray, verify that the target slot is free or different
-                if (targetTray == parentTray)
+                if (targetTray == ParentTray)
                 {
                     if (targetTray.IsSlotFree(slotIndex))
                     {
@@ -106,14 +104,14 @@ namespace GameModes.DrinkSort.Core
                 else
                 {
                     // Move to the new tray
-                    if (parentTray != null)
+                    if (ParentTray != null)
                     {
-                        parentTray.RemoveItem(this);
+                        ParentTray.RemoveItem(this);
                     }
                     
                     if (targetTray.AddItem(this, slotIndex))
                     {
-                        parentTray = targetTray;
+                        ParentTray = targetTray;
                     }
                     else
                     {

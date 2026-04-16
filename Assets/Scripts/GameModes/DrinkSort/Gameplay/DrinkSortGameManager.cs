@@ -12,9 +12,10 @@ namespace GameModes.DrinkSort.Gameplay
     {
         [Header("Grid Settings")]
         [SerializeField] private TrayGrid trayGrid;
-        
+
         [Header("Item Settings")]
-        [SerializeField] private ItemReserve itemReserve;
+        [SerializeField] private SortableItem itemPrefab;
+        [SerializeField] private DrinkSortItemData itemData;
 
         [Header("Game Settings")]
         [SerializeField] private Transform dragLayer;
@@ -63,8 +64,8 @@ namespace GameModes.DrinkSort.Gameplay
                 GridWidth, 
                 GridHeight,
                 TrayPopulationPercent,
-                itemReserve != null ? itemReserve.ItemPrefab : null,
-                GetColorForType,
+                itemPrefab,
+                GetSpriteForType,
                 GetRandomWeightedLevelType,
                 BuildInitialSpawnPoolByWeights
             );
@@ -72,26 +73,21 @@ namespace GameModes.DrinkSort.Gameplay
             UpdateHUD();
         }
         
-        private Color GetColorForType(SortableItemType itemType)
+        private Sprite GetSpriteForType(SortableItemType itemType)
         {
-            if (itemReserve != null)
-            {
-                return itemReserve.GetColorForType(itemType);
-            }
-            
-            return Color.white;
+            return itemData.GetSpriteForType(itemType);
         }
         
         private void ConfigureLevelTypeWeights()
         {
             weightedLevelTypes.Clear();
 
-            if (itemReserve == null)
+            if (itemData == null)
             {
                 return;
             }
 
-            List<SortableItemType> availableTypes = itemReserve.GetAvailableTypes();
+            List<SortableItemType> availableTypes = itemData.GetAvailableTypes();
             if (availableTypes.Count == 0)
             {
                 return;
@@ -295,17 +291,13 @@ namespace GameModes.DrinkSort.Gameplay
         {
             IsInputBlocked = true;
             
-            // Clear tray
             tray.ClearItems();
             
             yield return new WaitForSeconds(MatchProcessDelay);
             
             IsInputBlocked = false;
             
-            // Update HUD
             UpdateHUD();
-            
-            // Check win condition
             CheckWinCondition();
         }
         

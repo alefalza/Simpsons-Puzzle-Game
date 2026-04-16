@@ -17,7 +17,7 @@ namespace GameModes.DrinkSort.Gameplay
         private int gridHeight;
         private int trayPopulationPercent;
         private SortableItem itemPrefab;
-        private Func<SortableItemType, Color> getColorFunc;
+        private Func<SortableItemType, Sprite> getSpriteFunc;
         private Func<SortableItemType> getRandomTypeFunc;
         private Func<int, List<SortableItemType>> buildSpawnPoolFunc;
 
@@ -38,7 +38,7 @@ namespace GameModes.DrinkSort.Gameplay
             int height,
             int trayPopulationPercent,
             SortableItem prefab,
-            Func<SortableItemType, Color> getColorFunc,
+            Func<SortableItemType, Sprite> getSpriteFunc,
             Func<SortableItemType> getRandomTypeFunc,
             Func<int, List<SortableItemType>> buildSpawnPoolFunc = null
         )
@@ -47,7 +47,7 @@ namespace GameModes.DrinkSort.Gameplay
             gridHeight = height;
             this.trayPopulationPercent = Mathf.Clamp(trayPopulationPercent, 0, 100);
             itemPrefab = prefab;
-            this.getColorFunc = getColorFunc;
+            this.getSpriteFunc = getSpriteFunc;
             this.getRandomTypeFunc = getRandomTypeFunc;
             this.buildSpawnPoolFunc = buildSpawnPoolFunc;
             ClearGrid();
@@ -99,7 +99,7 @@ namespace GameModes.DrinkSort.Gameplay
 
         private void PopulateInitialItems()
         {
-            if (itemPrefab == null || getColorFunc == null || getRandomTypeFunc == null || Trays.Count == 0)
+            if (itemPrefab == null || getSpriteFunc == null || getRandomTypeFunc == null || Trays.Count == 0)
             {
                 return;
             }
@@ -128,7 +128,7 @@ namespace GameModes.DrinkSort.Gameplay
                 }
 
                 Tray randomTray = traysWithSpace[Random.Range(0, traysWithSpace.Count)];
-                randomTray.TrySpawnInitialItem(itemPrefab, itemType, getColorFunc);
+                randomTray.TrySpawnInitialItem(itemPrefab, itemType, getSpriteFunc);
             }
         }
 

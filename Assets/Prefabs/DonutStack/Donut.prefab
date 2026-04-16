@@ -88,7 +88,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b93baf5ef94cd07439176a2c9c42db6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colorSprites:
+  image: {fileID: 2514722808640459400}
+  icons:
   - {fileID: 0}
   - {fileID: 21300000, guid: 913c387d370849f4690e6133a9a87a0b, type: 3}
   - {fileID: 21300000, guid: bd3b578db36c7084d90802bead79f4a3, type: 3}

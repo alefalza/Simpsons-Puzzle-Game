@@ -16,23 +16,17 @@ namespace UI.MainMenu.Tabs.Settings
         [SerializeField] private Toggle autoPauseToggle;
         [SerializeField] private TMP_Dropdown languageDropdown;
 
-        private SettingsService settingsManager;
-
-        private void Awake()
-        {
-            settingsManager = ServiceLocator.Get<SettingsService>();
-        }
-
         private void Start()
         {
             LoadUIFromData();
-            Initialize();
             SubscribeToNotifications();
+            AudioService.SetMusicVolume(musicSlider.value); // TODO: set earlier
+            AudioService.SetSFXVolume(sfxSlider.value); // TODO: set earlier
         }
         
         private void LoadUIFromData()
         {
-            var data = settingsManager.Data;
+            var data = SettingsService.Data;
 
             musicSlider.SetValueWithoutNotify(data.musicVolume);
             sfxSlider.SetValueWithoutNotify(data.sfXVolume);
@@ -48,19 +42,13 @@ namespace UI.MainMenu.Tabs.Settings
                 languageDropdown.SetValueWithoutNotify(index);
         }
 
-        private void Initialize()
-        {
-            AudioService.SetSFXVolume(sfxSlider.value);
-            AudioService.SetMusicVolume(musicSlider.value);
-        }
-        
         private void SubscribeToNotifications()
         {
-            musicSlider.onValueChanged.AddListener(settingsManager.SetMusicVolume);
-            sfxSlider.onValueChanged.AddListener(settingsManager.SetSFXVolume);
-            hapticsToggle.onValueChanged.AddListener(settingsManager.SetHaptics);
-            notificationsToggle.onValueChanged.AddListener(settingsManager.SetNotifications);
-            autoPauseToggle.onValueChanged.AddListener(settingsManager.SetAutoPause);
+            musicSlider.onValueChanged.AddListener(SettingsService.SetMusicVolume);
+            sfxSlider.onValueChanged.AddListener(SettingsService.SetSFXVolume);
+            hapticsToggle.onValueChanged.AddListener(SettingsService.SetHaptics);
+            notificationsToggle.onValueChanged.AddListener(SettingsService.SetNotifications);
+            autoPauseToggle.onValueChanged.AddListener(SettingsService.SetAutoPause);
             languageDropdown.onValueChanged.AddListener(OnLanguageSelected);
         }
 
@@ -73,8 +61,11 @@ namespace UI.MainMenu.Tabs.Settings
                 _ => "en"
             };
 
-            settingsManager.SetLanguage(code);
+            SettingsService.SetLanguage(code);
         }
+
+        private ISettingsService settingsService;
+        private ISettingsService SettingsService => settingsService ??= ServiceLocator.Get<ISettingsService>();
         
         private IAudioService audioService;
         private IAudioService AudioService => audioService ??= ServiceLocator.Get<IAudioService>();

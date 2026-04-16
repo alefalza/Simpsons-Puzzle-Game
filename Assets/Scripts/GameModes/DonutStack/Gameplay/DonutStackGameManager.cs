@@ -13,14 +13,17 @@ namespace GameModes.DonutStack.Gameplay
         [SerializeField] private DonutGrid donutGrid;
     
         [Header("Piece Settings")]
-        [SerializeField] private Core.DonutStack donutStackPrefab;
+        [SerializeField] private Core.DonutStack stackPrefab;
+        [SerializeField] private DonutStackItemData itemData;
         
         [Header("Game Settings")]
-        [SerializeField] private StackSlot[] stackSlots;
         [SerializeField] private Transform dragLayer;
+        [SerializeField] private StackSlot[] stackSlots;
 
         protected override string GameModeName => "DonutStack";
 
+        private readonly List<WeightedType> weightedLevelTypes = new List<WeightedType>();
+        
         // Properties that get values from levelData or default values
         private int GridRadius => levelData != null ? ((DonutStackLevelDefinition)levelData).gridRadius : 1;
         private int StacksPerTurn => levelData != null ? ((DonutStackLevelDefinition)levelData).stacksPerTurn : 3;
@@ -29,7 +32,8 @@ namespace GameModes.DonutStack.Gameplay
         private float PieceRemoveDelay => levelData != null ? ((DonutStackLevelDefinition)levelData).pieceRemoveDelay : GameConstants.DonutStack.PieceRemoveDelay;
         private float PostDestroyDelay => levelData != null ? ((DonutStackLevelDefinition)levelData).postDestroyDelay : GameConstants.DonutStack.PostDestroyDelay;
         private float NewTurnDelay => levelData != null ? ((DonutStackLevelDefinition)levelData).newTurnDelay : GameConstants.DonutStack.NewTurnDelay;
-    
+        private DonutStackLevelDefinition DonutStackLevelDefinition => levelData as DonutStackLevelDefinition;
+        
         private readonly List<Core.DonutStack> currentTurnStacks = new List<Core.DonutStack>();
         
         private int score = 0;
@@ -42,8 +46,48 @@ namespace GameModes.DonutStack.Gameplay
             base.Start();
             donutGrid.Initialize(GridRadius);
             hudController.SetLevelText(currentLevelNumber);
+            ConfigureLevelTypeWeights();
             UpdateScoreUI();
             GenerateNewTurn();
+        }
+        
+        private void ConfigureLevelTypeWeights()
+        {
+            weightedLevelTypes.Clear();
+
+            if (itemData == null)
+            {
+                return;
+            }
+
+            List<DonutColor> availableTypes = itemData.GetAvailableColors();
+            if (availableTypes.Count == 0)
+            {
+                return;
+            }
+
+            int positiveWeightCount = 0;
+
+            foreach (DonutColor color in availableTypes)
+            {
+                int weight = DonutStackLevelDefinition != null ? DonutStackLevelDefinition.GetSpawnWeight(color) : 1;
+                if (weight > 0)
+                {
+                    positiveWeightCount++;
+                }
+
+                weightedLevelTypes.Add(new WeightedType(color, weight));
+            }
+
+            // Fallback: if all configured weights are 0, use uniform weight 1.
+            if (positiveWeightCount == 0)
+            {
+                weightedLevelTypes.Clear();
+                foreach (DonutColor type in availableTypes)
+                {
+                    weightedLevelTypes.Add(new WeightedType(type, 1));
+                }
+            }
         }
         
         private void UpdateScoreUI()
@@ -73,7 +117,7 @@ namespace GameModes.DonutStack.Gameplay
         private Core.DonutStack CreateRandomStack()
         {
             StackSlot parentSlot = stackSlots.First(x => !x.IsOccupied);
-            Core.DonutStack stack = Instantiate(donutStackPrefab, parentSlot.transform);
+            Core.DonutStack stack = Instantiate(stackPrefab, parentSlot.transform);
         
             if (stack == null)
             {
@@ -81,9 +125,19 @@ namespace GameModes.DonutStack.Gameplay
                 return null;
             }
             
-            stack.Initialize(parentSlot);
+            stack.Initialize(parentSlot, GetSpriteForColor, GetRandomAvailableColor);
         
             return stack;
+        }
+
+        private Sprite GetSpriteForColor(DonutColor color)
+        {
+            return itemData.GetSpriteForColor(color);
+        }
+
+        private DonutColor GetRandomAvailableColor()
+        {
+            return itemData.GetRandomAvailableColor();
         }
 
         public void TryPlaceStack(GridCell cell, Core.DonutStack stack)
@@ -199,6 +253,18 @@ namespace GameModes.DonutStack.Gameplay
             }
         }
 
+        private readonly struct WeightedType
+        {
+            public WeightedType(DonutColor color, int weight)
+            {
+                Color = color;
+                Weight = weight;
+            }
+
+            public DonutColor Color { get; }
+            public int Weight { get; }
+        }
+        
         private void CheckWinCondition()
         {
             if (hasLost) return;
