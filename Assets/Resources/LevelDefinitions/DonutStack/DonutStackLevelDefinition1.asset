@@ -13,14 +13,15 @@ MonoBehaviour:
   m_Name: DonutStackLevelDefinition1
   m_EditorClassIdentifier: 
   levelNumber: 1
+  targetScore: 100
   gridRadius: 1
   stacksPerTurn: 3
   piecesToDestroy: 6
   spawnWeights:
   - color: 2
-    weight: 0
+    weight: 50
   - color: 3
-    weight: 0
+    weight: 50
   matchProcessDelay: 0.2
   pieceRemoveDelay: 0.05
   postDestroyDelay: 0.2

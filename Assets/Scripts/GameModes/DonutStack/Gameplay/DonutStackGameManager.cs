@@ -4,6 +4,7 @@ using System.Linq;
 using GameModes.Core;
 using GameModes.DonutStack.Core;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace GameModes.DonutStack.Gameplay
 {
@@ -25,6 +26,7 @@ namespace GameModes.DonutStack.Gameplay
         private readonly List<WeightedType> weightedLevelTypes = new List<WeightedType>();
         
         // Properties that get values from levelData or default values
+        private int TargetScore => levelData != null ? ((DonutStackLevelDefinition)levelData).targetScore : 10;
         private int GridRadius => levelData != null ? ((DonutStackLevelDefinition)levelData).gridRadius : 1;
         private int StacksPerTurn => levelData != null ? ((DonutStackLevelDefinition)levelData).stacksPerTurn : 3;
         private int PiecesToDestroy => levelData != null ? ((DonutStackLevelDefinition)levelData).piecesToDestroy : 10;
@@ -125,7 +127,7 @@ namespace GameModes.DonutStack.Gameplay
                 return null;
             }
             
-            stack.Initialize(parentSlot, GetSpriteForColor, GetRandomAvailableColor);
+            stack.Initialize(parentSlot, GetSpriteForColor, GetRandomWeightedAvailableColor);
         
             return stack;
         }
@@ -135,9 +137,39 @@ namespace GameModes.DonutStack.Gameplay
             return itemData.GetSpriteForColor(color);
         }
 
-        private DonutColor GetRandomAvailableColor()
+        private DonutColor GetRandomWeightedAvailableColor()
         {
-            return itemData.GetRandomAvailableColor();
+            if (weightedLevelTypes.Count == 0)
+            {
+                return itemData != null ? itemData.GetRandomAvailableColor() : DonutColor.None;
+            }
+
+            int totalWeight = 0;
+            foreach (WeightedType weightedType in weightedLevelTypes)
+            {
+                totalWeight += Mathf.Max(0, weightedType.Weight);
+            }
+
+            if (totalWeight <= 0)
+            {
+                return itemData != null ? itemData.GetRandomAvailableColor() : DonutColor.None;
+            }
+
+            int randomValue = Random.Range(0, totalWeight);
+            foreach (WeightedType weightedType in weightedLevelTypes)
+            {
+                int weight = Mathf.Max(0, weightedType.Weight);
+                if (weight == 0 || weightedType.Color == DonutColor.None) continue;
+
+                if (randomValue < weight)
+                {
+                    return weightedType.Color;
+                }
+
+                randomValue -= weight;
+            }
+
+            return weightedLevelTypes[weightedLevelTypes.Count - 1].Color;
         }
 
         public void TryPlaceStack(GridCell cell, Core.DonutStack stack)
@@ -223,6 +255,7 @@ namespace GameModes.DonutStack.Gameplay
                             
                             score += topColorCount;
                             UpdateScoreUI();
+                            CheckWinCondition();
 
                             // If the stack ends up empty after destroying its top pieces, destroy it.
                             if (neighbour.Stack.PieceCount == 0)
@@ -269,7 +302,10 @@ namespace GameModes.DonutStack.Gameplay
         {
             if (hasLost) return;
             
-            OnGameWon();
+            if (score >= TargetScore)
+            {
+                OnGameWon(score);
+            }
         }
 
         protected override void OnGameWon(int finalScore = 0)
@@ -300,7 +336,7 @@ namespace GameModes.DonutStack.Gameplay
             
                 if (canPlaceAny)
                 {
-                    OnGameLost();
+                    OnGameLost(score);
                 }
             }
         }

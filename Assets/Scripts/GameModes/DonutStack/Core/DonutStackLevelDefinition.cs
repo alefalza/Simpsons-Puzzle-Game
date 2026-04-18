@@ -11,6 +11,9 @@ namespace GameModes.DonutStack.Core
             public DonutColor color;
             [Min(0)] public int weight;
         }
+
+        [Header("Score Settings")]
+        public int targetScore = 0;
         
         [Header("Grid Settings")]
         [Tooltip("Radius of the hexagonal grid")]

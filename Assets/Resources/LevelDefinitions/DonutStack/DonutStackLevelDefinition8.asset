@@ -12,19 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4cabbb4326b99f40ac44f973978dfad, type: 3}
   m_Name: DonutStackLevelDefinition8
   m_EditorClassIdentifier: 
-  levelNumber: 1
+  levelNumber: 8
+  targetScore: 2800
   gridRadius: 1
   stacksPerTurn: 3
   piecesToDestroy: 6
   spawnWeights:
   - color: 2
-    weight: 0
+    weight: 25
   - color: 3
-    weight: 0
+    weight: 25
   - color: 1
-    weight: 0
+    weight: 25
   - color: 4
-    weight: 0
+    weight: 25
   matchProcessDelay: 0.2
   pieceRemoveDelay: 0.05
   postDestroyDelay: 0.2

@@ -168,7 +168,7 @@ namespace GameModes.DonutStack.Core
         
         public override void OnBeginDrag(PointerEventData eventData)
         {
-            if (IsPlaced) return;
+            if (IsPlaced || DonutStackGameManager.Instance.IsProcessingMatches) return;
             
             base.OnBeginDrag(eventData);
             
