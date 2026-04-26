@@ -62,6 +62,48 @@ flowchart TD
   HUD -->|Show Win/Lose| S3
 ```
 
+### Level & Progression Flow
+
+This flow describes how a Game Mode initializes its data (either from the Inspector or the Progression Service) and how the win/loss state persists.
+
+```mermaid
+flowchart TD
+  %% --- ENTRY FLOW ---
+  A[Player enters GameMode] --> B[BaseGameManager Awake]
+  B --> C{levelData assigned<br/>in Inspector?}
+
+  C -- Yes --> D[Use manual levelData]
+  C -- No --> E[GetNextPlayableLevelDefinition]
+
+  E --> F[GetNextPlayableLevel<br/>from saved progression]
+  F --> G[GetLevelDefinition<br/>from cached Resources]
+
+  D --> H[Assign currentLevelNumber and levelData]
+  G --> H
+
+  H --> I[Start reads params from levelData]
+
+  %% --- GAME RESULT ---
+  I --> J{Game result}
+
+  %% --- WIN FLOW ---
+  J -- Win --> K[GameModeGameManager OnGameWon]
+  K --> L[BaseGameManager MarkLevelAsCompleted]
+  L --> M[ServiceLocator Get LevelProgressionService]
+  M --> N[LevelProgressionService CompleteLevel]
+  N --> O[LevelProgressionData CompleteLevel<br/>update lastCompletedLevel]
+  O --> P[LevelProgressionData Save<br/>persist progression]
+
+  %% --- LOSE FLOW ---
+  J -- Lose --> Q[GameModeGameManager OnGameLost]
+  Q --> R[Show Lose Popup]
+
+  %% --- LOOP ---
+  P --> S[Player starts next level]
+  R --> S
+  S --> B
+```
+
 ### Design principles
 
 - **“Core vs. game mode” separation**: each mode encapsulates its own gameplay/UI and consumes shared core services.
