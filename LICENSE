@@ -1,53 +1,19 @@
-Simpsons Puzzle Game — Custom License (Read-Only / Non-Commercial / No Redistribution)
-Version 1.0 — 2026-04-26
+Copyright (c) 2026 Alejandro
 
-IMPORTANT NOTICE
-This is NOT an Open Source license. The code and assets are provided for reading and evaluation only.
-
-Copyright (c) 2026 ale_f
 All rights reserved.
 
-1) DEFINITIONS
-"Licensed Material" means all content in this repository (including but not limited to: source code, scripts, scenes,
-prefabs, art, audio, text, configuration files, metadata, and any other assets/resources).
+Permission is granted to view and study the source code for personal and educational purposes only.
 
-"Commercial Use" means any use primarily intended for or directed toward commercial advantage or monetary compensation,
-directly or indirectly, including (but not limited to) selling, licensing, subscriptions, ad-based monetization, use in
-paid products/services, or use in work delivered to a client/employer where the Licensed Material is part of the
-deliverable.
+You may NOT:
+- Use this code in commercial projects
+- Redistribute this code
+- Modify and redistribute this code
+- Use substantial portions of this code in your own projects
 
-2) READ PERMISSION (GRANTED)
-Permission is granted to:
-- Read, browse, and review the Licensed Material.
-- Clone or download local copies strictly for reading, technical evaluation, and review purposes (e.g., interview or
-  internal evaluation processes), as long as the prohibitions in Sections 3 and 4 are not violated.
+This repository is intended solely for portfolio and evaluation purposes.
 
-3) NO COMMERCIAL USE
-Any Commercial Use of the Licensed Material, or derivative works based on it, is strictly prohibited.
+Third-Party Content Disclaimer:
 
-4) NO REDISTRIBUTION
-It is strictly prohibited to:
-- Redistribute, publish, or share the Licensed Material (in whole or in part) in any form.
-- Upload copies to other repositories, mirrors, torrents, or hosting services (including public or private forks).
-- Distribute builds, packages, exports, or executables that contain the Licensed Material.
-- Share substantial excerpts of the code or assets in documentation, posts, videos, courses, or reusable examples.
-
-5) DERIVATIVE WORKS AND REUSE
-No permission is granted to modify, adapt, translate, create derivative works, integrate, or reuse the Licensed
-Material in other projects, unless you have explicit written permission from the rights holder.
-
-6) TRADEMARKS AND NAMES
-No rights are granted to any names, trademarks, logos, or visual identity associated with the project.
-
-7) TERMINATION
-Any breach of this license automatically terminates the permissions granted in Section 2.
-
-8) DISCLAIMER OF WARRANTY AND LIMITATION OF LIABILITY
-THE LICENSED MATERIAL IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND. TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE
-RIGHTS HOLDER SHALL NOT BE LIABLE FOR ANY DIRECT OR INDIRECT DAMAGES ARISING FROM THE USE OR INABILITY TO USE THE
-LICENSED MATERIAL.
-
-9) CONTACT / ADDITIONAL PERMISSIONS
-To request different permissions (e.g., commercial use, redistribution, or licensing for a project), contact the rights
-holder via the channel listed on the profile or in the project description.
-
+This project may include references to third-party intellectual property, including The Simpsons.
+All such content is used for non-commercial, educational purposes only.
+All rights belong to their respective owners.

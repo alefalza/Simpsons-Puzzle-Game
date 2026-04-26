@@ -1,3 +1,10 @@
+## Disclaimer
+
+This project includes references and visual assets inspired by The Simpsons.
+
+All rights to The Simpsons and related content belong to their respective owners.
+This is a non-commercial project created for educational and portfolio purposes only.
+
 ## Simpsons Puzzle Game (Unity) — Technical Overview
 
 A puzzle game project built in **Unity 6.0 (6000.3.12f1)** with multiple game modes and a reusable “core services” layer (UI, scenes, audio, popups, progression).
