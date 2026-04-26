@@ -30,21 +30,34 @@ The project is organized as a collection of independent **Game Modes** (e.g. `Do
 
 ```mermaid
 flowchart TD
-  A[BootScene] -->|BootLoader| B[ServiceBootstrap (DontDestroyOnLoad)]
-  B --> C[ServiceConfiguration (ScriptableObject)]
-  C --> D[ServiceDefinitions...]
-  D --> E[ServiceLocator.Initialize()]
-  E --> S1[SceneService]
-  E --> S2[UIService]
-  E --> S3[PopupService]
-  E --> S4[AudioService]
-  E --> S5[SettingsService]
-  E --> S6[LevelProgressionService]
-  A -->|LoadSceneAsync Single| M[MainMenuScene]
+
+  %% --- BOOT ---
+  A[BootScene] -->|BootLoader| B[ServiceBootstrap<br/>DontDestroyOnLoad]
+  B --> C[ServiceConfiguration<br/>ScriptableObject]
+  C --> D[ServiceDefinitions]
+  D --> E[ServiceLocator.Initialize]
+
+  %% --- CORE SERVICES ---
+  subgraph Core Services
+    E --> S1[SceneService]
+    E --> S2[UIService]
+    E --> S3[PopupService]
+    E --> S4[AudioService]
+    E --> S5[SettingsService]
+    E --> S6[LevelProgressionService]
+  end
+
+  %% --- GAME FLOW ---
+  A -->|LoadSceneAsync| M[MainMenuScene]
   M --> GM[GameMode Scene]
-  GM --> G1[BaseGameManager<T>]
-  G1 -->|GetNextPlayableLevelDefinition| S6
-  G1 --> HUD[HUD Controller]
+
+  subgraph Game Mode
+    GM --> G1[BaseGameManager]
+    G1 --> HUD[HUD Controller]
+    G1 -->|GetNextLevel| S6
+  end
+
+  %% --- UI FLOW ---
   S1 -->|ShowLoadingOverlay| S2
   HUD -->|Show Win/Lose| S3
 ```
