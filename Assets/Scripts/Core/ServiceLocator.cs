@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Boot;
 using UnityEngine;
 
@@ -58,7 +59,25 @@ namespace Core
                 }
             }
 
+            // Mark as initialized before PostInitialize so services can resolve dependencies via ServiceLocator.Get<T>().
             isInitialized = true;
+
+            // Second phase: allow services to safely interact with other services
+            // after everything has been instantiated + initialized.
+            foreach (var service in services.Values.Distinct())
+            {
+                if (service is IPostInitializableService postInitializable)
+                {
+                    try
+                    {
+                        postInitializable.PostInitialize();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError($"[ServiceLocator] Error in PostInitialize for {service.GetType().Name}: {e}");
+                    }
+                }
+            }
             Debug.Log("[ServiceLocator] Initialization complete!");
         }
 

@@ -25,6 +25,7 @@ namespace GameModes.BubbleMerge.Gameplay
         private bool isDragging = false;
         private int[] levelSpawnWeights;
         private float nextAllowedSpawnTime;
+        private Vector3 aimLineEndPosition;
         
         public int CurrentTier { get; private set; }
         public int NextTier { get; private set; }
@@ -61,6 +62,7 @@ namespace GameModes.BubbleMerge.Gameplay
             if (Input.GetMouseButtonDown(0))
             {
                 isDragging = true;
+                spawnPoint.position = GetClampedMousePos();
             }
 
             if (Input.GetMouseButtonUp(0))
@@ -73,39 +75,37 @@ namespace GameModes.BubbleMerge.Gameplay
             }
         }
 
-        private void FollowMouseWhileDragging()
+        private Vector3 GetClampedMousePos()
         {
-            if (!isDragging || BubbleGameManager.Instance.IsInputBlocked) return;
-
             Vector3 mousePos = Input.mousePosition;
             Vector3 worldPos = mainCamera.ScreenToWorldPoint(mousePos);
 
             float clampedX = Mathf.Clamp(worldPos.x, -horizontalLimit, horizontalLimit);
 
-            Vector3 target = new Vector3(clampedX, spawnPoint.position.y, spawnPoint.position.z);
-
-            spawnPoint.position = Vector3.Lerp(
-                spawnPoint.position,
-                target,
-                followSpeed * Time.deltaTime
-            );
+            return new Vector3(clampedX, spawnPoint.position.y, spawnPoint.position.z);
+        }
+        
+        private void FollowMouseWhileDragging()
+        {
+            if (!isDragging || BubbleGameManager.Instance.IsInputBlocked) return;
+            spawnPoint.position = Vector3.Lerp(spawnPoint.position, GetClampedMousePos(), followSpeed * Time.deltaTime);
         }
         
         private void UpdateAimLine()
         {
             Vector3 start = spawnPoint.position;
-            Vector3 end = start + Vector3.down * maxRayDistance;
+            aimLineEndPosition = start + Vector3.down * maxRayDistance;
             
             RaycastHit2D hit = Physics2D.Raycast(start, Vector2.down, maxRayDistance, groundMask);
 
             if (hit.collider != null)
             {
-                end = hit.point;
+                aimLineEndPosition = hit.point;
             }
 
             aimLine.positionCount = 2;
             aimLine.SetPosition(0, start);
-            aimLine.SetPosition(1, end);
+            aimLine.SetPosition(1, aimLineEndPosition);
         }
         
         private void DropBubble()

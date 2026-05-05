@@ -1,9 +1,9 @@
-﻿using Core.Services.AudioService;
+using Core.Services.AudioService;
 using UnityEngine;
 
 namespace Core.Services.SettingsService
 {
-    public class SettingsService : ISettingsService
+    public class SettingsService : ISettingsService, IPostInitializableService
     {
         public SettingsData Data { get; private set; }
 
@@ -12,8 +12,19 @@ namespace Core.Services.SettingsService
         public void Initialize()
         {
             Debug.Log("[SettingsService] Initializing...");
-            
             Data = SettingsData.Load();
+        }
+
+        public void PostInitialize()
+        {
+            // Apply persisted settings once all services are ready.
+            if (Data == null)
+            {
+                Data = SettingsData.Load();
+            }
+
+            AudioService.SetMusicVolume(Data.musicVolume);
+            AudioService.SetSFXVolume(Data.sfXVolume);
         }
 
         public void SetMusicVolume(float value)

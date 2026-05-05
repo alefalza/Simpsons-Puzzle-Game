@@ -27,7 +27,7 @@ namespace Boot
         public AudioSource SfxSource => sfxSource;
         public Transform PopupRoot => popupRoot;
         public GameObject LoadingOverlay => loadingOverlay;
-
+        
         private void Awake()
         {
             if (serviceDefinitions == null)

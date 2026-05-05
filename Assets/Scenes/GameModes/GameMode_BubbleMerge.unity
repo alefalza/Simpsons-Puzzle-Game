@@ -1473,7 +1473,7 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 448
-  spawnCooldown: 1
+  spawnCooldown: 0.35
 --- !u!1 &1610501521
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,4 @@
 using Core;
-using Core.Services.AudioService;
 using Core.Services.SettingsService;
 using TMPro;
 using UnityEngine;
@@ -20,8 +19,6 @@ namespace UI.MainMenu.Tabs.Settings
         {
             LoadUIFromData();
             SubscribeToNotifications();
-            AudioService.SetMusicVolume(musicSlider.value); // TODO: set earlier
-            AudioService.SetSFXVolume(sfxSlider.value); // TODO: set earlier
         }
         
         private void LoadUIFromData()
@@ -66,8 +63,5 @@ namespace UI.MainMenu.Tabs.Settings
 
         private ISettingsService settingsService;
         private ISettingsService SettingsService => settingsService ??= ServiceLocator.Get<ISettingsService>();
-        
-        private IAudioService audioService;
-        private IAudioService AudioService => audioService ??= ServiceLocator.Get<IAudioService>();
     }
 }
