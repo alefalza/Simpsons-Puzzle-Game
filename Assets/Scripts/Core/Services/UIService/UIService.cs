@@ -1,17 +1,20 @@
 using UI.MainMenu;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Core.Services.UIService
 {
     public class UIService : IUIService
     {
         private readonly GameObject loadingOverlay;
+        private Slider loadingBar;
 
         public MainMenuTab LastTabSeen { get; private set; } = MainMenuTab.Home;
         
-        public UIService(GameObject overlay)
+        public UIService(GameObject overlay, Slider bar)
         {
             loadingOverlay = overlay;
+            loadingBar = bar;
         }
         
         public void Initialize()
@@ -31,6 +34,11 @@ namespace Core.Services.UIService
         {
             if (loadingOverlay != null)
                 loadingOverlay.SetActive(show);
+        }
+
+        public void UpdateLoadingBar(float progress)
+        {
+            loadingBar.value = progress;
         }
 
         public void SetLastTabSeen(MainMenuTab tab)

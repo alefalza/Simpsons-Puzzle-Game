@@ -1,6 +1,7 @@
 using Core;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.UI;
 
 namespace Boot
 {
@@ -21,12 +22,14 @@ namespace Boot
         [Header("UI Components")]
         [SerializeField] private Transform popupRoot;
         [SerializeField] private GameObject loadingOverlay;
+        [SerializeField] private Slider loadingBar;
 
         public AudioMixer MainMixer => mainMixer;
         public AudioSource MusicSource => musicSource;
         public AudioSource SfxSource => sfxSource;
         public Transform PopupRoot => popupRoot;
         public GameObject LoadingOverlay => loadingOverlay;
+        public Slider LoadingBar => loadingBar;
         
         private void Awake()
         {

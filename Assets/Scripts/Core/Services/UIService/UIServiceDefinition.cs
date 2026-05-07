@@ -8,7 +8,7 @@ namespace Core.Services.UIService
     {
         public override IService CreateInstance(ServiceBootstrap bootstrap)
         {
-            return new UIService(bootstrap.LoadingOverlay);
+            return new UIService(bootstrap.LoadingOverlay, bootstrap.LoadingBar);
         }
     }
 }

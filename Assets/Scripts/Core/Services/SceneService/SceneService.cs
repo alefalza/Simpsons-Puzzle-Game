@@ -51,6 +51,7 @@ namespace Core.Services.SceneService
         {
             // Show global overlay
             UIService.ShowLoadingOverlay(true);
+            UIService.UpdateLoadingBar(0);
 
             // Optional: tiny delay to show overlay clearly
             yield return new WaitForSecondsRealtime(0.25f);
@@ -59,7 +60,14 @@ namespace Core.Services.SceneService
 
             // Optionally show progress here
             while (!op.isDone)
-                yield return null;
+            {
+                // op.progress goes from 0 to 0.9.
+                // We clamp/normalize it to 0-1 for the slider.
+                float progress = Mathf.Clamp01(op.progress / 0.9f);
+                UIService.UpdateLoadingBar(progress);
+                
+                yield return null; // Wait for the next frame
+            }
 
             // Hide global overlay
             UIService.ShowLoadingOverlay(false);
