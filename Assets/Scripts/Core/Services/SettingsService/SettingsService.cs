@@ -5,6 +5,9 @@ namespace Core.Services.SettingsService
 {
     public class SettingsService : ISettingsService, IPostInitializableService
     {
+        private const float DEFAULT_MUSIC_VOLUME = 0.5f;
+        private const float DEFAULT_SFX_VOLUME = 1f;
+        
         public SettingsData Data { get; private set; }
 
         public SettingsService() { }
@@ -27,15 +30,17 @@ namespace Core.Services.SettingsService
             AudioService.SetSFXVolume(Data.sfXVolume);
         }
 
-        public void SetMusicVolume(float value)
+        public void SetMusicVolume(bool enabled)
         {
+            float value = enabled ? DEFAULT_MUSIC_VOLUME : 0;
             Data.musicVolume = value;
             AudioService.SetMusicVolume(value);
             Data.Save();
         }
 
-        public void SetSFXVolume(float value)
+        public void SetSFXVolume(bool enabled)
         {
+            float value = enabled ? DEFAULT_SFX_VOLUME : 0;
             Data.sfXVolume = value;
             AudioService.SetSFXVolume(value);
             Data.Save();

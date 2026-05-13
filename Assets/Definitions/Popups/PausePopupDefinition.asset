@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: PausePopupDefinition
   m_EditorClassIdentifier: 
   id: PausePopup
-  prefab: {fileID: 7302075663463691656, guid: c18e7d4558132534287622bd8c4c0906, type: 3}
-  defaultPriority: 1
+  prefab: {fileID: 8929351185915503597, guid: c18e7d4558132534287622bd8c4c0906, type: 3}
+  defaultPriority: 3
   destroyOnClose: 0
   fadeInDuration: 0.15
   fadeOutDuration: 0.15

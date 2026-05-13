@@ -31,7 +31,7 @@ namespace UI
 
         public virtual bool CanTogglePause()
         {
-            return OpenedPopup is null || OpenedPopup is PausePopup && !OpenedPopup.IsFading;
+            return OpenedPopup is null || OpenedPopup is SettingsPopup && !OpenedPopup.IsFading;
         }
 
         public virtual void ShowPausePopup()
@@ -43,7 +43,7 @@ namespace UI
 
         public virtual void HidePausePopup()
         {
-            if (OpenedPopup != null && OpenedPopup is PausePopup && !OpenedPopup.IsFading)
+            if (OpenedPopup != null && OpenedPopup is SettingsPopup && !OpenedPopup.IsFading)
             {
                 OpenedPopup.Close();
             }

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PopupDefinition
   id: WinPopup
   prefab: {fileID: 3756521581399484218, guid: 93ddcd66bc9f085488752ce9f2b7669b, type: 3}
-  defaultPriority: 1
+  defaultPriority: 4
   destroyOnClose: 1
   fadeInDuration: 0.15
   fadeOutDuration: 0.15

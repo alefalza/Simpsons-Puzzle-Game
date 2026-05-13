@@ -2,48 +2,93 @@ using System;
 using Core;
 using Core.Services.PopupService;
 using Core.Services.SceneService;
+using Core.Services.SettingsService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI.Popups
 {
     public class PausePopup : BasePopup
     {
+        [SerializeField] private Button closeButton;
+        [SerializeField] private Toggle sfxToggle;
+        [SerializeField] private Toggle musicToggle;
+        [SerializeField] private Toggle hapticsToggle;
+        [SerializeField] private Button homeButton;
+        [SerializeField] private Button retryButton;
         [SerializeField] private Button resumeButton;
-        [SerializeField] private Button menuButton;
 
         private SceneService sceneService;
+        private string currentScene;
+        private SettingsData settingsData;
     
         protected override void Awake()
         {
             base.Awake();
             
             sceneService = ServiceLocator.Get<SceneService>();
+            currentScene = SceneManager.GetActiveScene().name;
 
+            closeButton.onClick.AddListener(OnCloseClicked);
+            sfxToggle.onValueChanged.AddListener(SettingsService.SetSFXVolume);
+            musicToggle.onValueChanged.AddListener(SettingsService.SetMusicVolume);
+            hapticsToggle.onValueChanged.AddListener(SettingsService.SetHaptics);
+            homeButton.onClick.AddListener(OnBackToMenuClicked);
+            retryButton.onClick.AddListener(OnRetryClicked);
             resumeButton.onClick.AddListener(OnResumeClicked);
-            menuButton.onClick.AddListener(OnBackToMenuClicked);
+        }
+
+        private void OnEnable()
+        {
+            settingsData ??= SettingsService.Data;
+            
+            sfxToggle.SetIsOnWithoutNotify(settingsData.sfXVolume > 0);
+            musicToggle.SetIsOnWithoutNotify(settingsData.musicVolume > 0);
+            hapticsToggle.SetIsOnWithoutNotify(settingsData.hapticsEnabled);
+        }
+
+        private void OnCloseClicked()
+        {
+            Close(true);
+            (PopupData as PausePopupData)?.OnResume?.Invoke();
+        }
+
+        private void OnRetryClicked()
+        {
+            Close(true);
+            Time.timeScale = 1f;
+            sceneService.LoadScene(currentScene);
         }
 
         private void OnResumeClicked()
         {
+            Close(true);
             (PopupData as PausePopupData)?.OnResume?.Invoke();
-            Close();
         }
 
         private void OnBackToMenuClicked()
         {
+            Close(true);
             Time.timeScale = 1f;
             sceneService.LoadScene(GameConstants.MAIN_MENU_SCENE);
-            Close(true);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
             
+            closeButton.onClick.RemoveListener(OnCloseClicked);
+            sfxToggle.onValueChanged.RemoveListener(SettingsService.SetSFXVolume);
+            musicToggle.onValueChanged.RemoveListener(SettingsService.SetMusicVolume);
+            hapticsToggle.onValueChanged.RemoveListener(SettingsService.SetHaptics);
+            homeButton.onClick.RemoveListener(OnBackToMenuClicked);
+            retryButton.onClick.RemoveListener(OnRetryClicked);
             resumeButton.onClick.RemoveListener(OnResumeClicked);
-            menuButton.onClick.RemoveListener(OnBackToMenuClicked);
         }
+        
+        private ISettingsService settingsService;
+        private ISettingsService SettingsService => settingsService ??= ServiceLocator.Get<ISettingsService>();
     }
 
     public class PausePopupData : PopupData

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: GameOverPopup
   prefab: {fileID: 2431321827677067901, guid: 5ebe4abbf82fe3e41995040118621fa5, type: 3}
-  defaultPriority: 1
+  defaultPriority: 4
   destroyOnClose: 1
   fadeInDuration: 0.15
   fadeOutDuration: 0.15
