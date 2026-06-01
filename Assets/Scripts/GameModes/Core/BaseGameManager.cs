@@ -1,11 +1,13 @@
 using Core;
 using Core.Services.LevelProgressionService;
+using Core.Services.SceneService;
 using UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace GameModes.Core
 {
-    public abstract class BaseGameManager<T> : MonoBehaviour where T : BaseGameManager<T>
+    public abstract class BaseGameManager<T> : MonoBehaviour, IGameSession where T : BaseGameManager<T>
     {
         [Header("Level Configuration")]
         [Tooltip("If not assigned, will load automatically from LevelProgressionService")]
@@ -26,7 +28,10 @@ namespace GameModes.Core
         protected virtual void Awake()
         {
             if (Instance == null)
+            {
                 Instance = this as T;
+                GameSession.Current = this;
+            }
             else
                 Destroy(gameObject);
 
@@ -117,6 +122,12 @@ namespace GameModes.Core
         protected virtual void OnResumed() { }
         #endregion
 
+        public virtual void Retry()
+        {
+            Time.timeScale = 1f;
+            SceneService.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
         protected void MarkLevelAsCompleted()
         {
             LevelProgressionService.CompleteLevel(GameModeName, currentLevelNumber);
@@ -146,12 +157,16 @@ namespace GameModes.Core
         protected virtual void OnDestroy()
         {
             if (Instance == this as T)
-            {
                 Instance = null;
-            }
+
+            if (ReferenceEquals(GameSession.Current, this))
+                GameSession.Current = null;
         }
         
         private ILevelProgressionService levelProgressionService;
         private ILevelProgressionService LevelProgressionService => levelProgressionService ??= ServiceLocator.Get<ILevelProgressionService>();
+
+        private SceneService sceneService;
+        private SceneService SceneService => sceneService ??= ServiceLocator.Get<SceneService>();
     }
 }

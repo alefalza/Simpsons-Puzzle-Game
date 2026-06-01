@@ -1,9 +1,9 @@
 using Core;
 using Core.Services.PopupService;
 using Core.Services.SceneService;
+using GameModes.Core;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI.Popups
@@ -15,14 +15,12 @@ namespace UI.Popups
         [SerializeField] private Button menuButton;
 
         private SceneService sceneService;
-        private string currentScene;
 
         protected override void Awake()
         {
             base.Awake();
             
             sceneService = ServiceLocator.Get<SceneService>();
-            currentScene = SceneManager.GetActiveScene().name;
 
             retryButton.onClick.AddListener(OnRetryClicked);
             menuButton.onClick.AddListener(OnBackToMenuClicked);
@@ -37,14 +35,14 @@ namespace UI.Popups
 
         private void OnRetryClicked()
         {
-            sceneService.LoadScene(currentScene);
             Close();
+            GameSession.Current?.Retry();
         }
 
         private void OnBackToMenuClicked()
         {
-            sceneService.LoadScene(GameConstants.MAIN_MENU_SCENE);
             Close(true);
+            sceneService.LoadScene(GameConstants.MAIN_MENU_SCENE);
         }
 
         protected override void OnDestroy()

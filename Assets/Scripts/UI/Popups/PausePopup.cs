@@ -3,8 +3,8 @@ using Core;
 using Core.Services.PopupService;
 using Core.Services.SceneService;
 using Core.Services.SettingsService;
+using GameModes.Core;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI.Popups
@@ -20,7 +20,6 @@ namespace UI.Popups
         [SerializeField] private Button resumeButton;
 
         private SceneService sceneService;
-        private string currentScene;
         private SettingsData settingsData;
     
         protected override void Awake()
@@ -28,7 +27,6 @@ namespace UI.Popups
             base.Awake();
             
             sceneService = ServiceLocator.Get<SceneService>();
-            currentScene = SceneManager.GetActiveScene().name;
 
             closeButton.onClick.AddListener(OnCloseClicked);
             sfxToggle.onValueChanged.AddListener(SettingsService.SetSFXVolume);
@@ -57,8 +55,7 @@ namespace UI.Popups
         private void OnRetryClicked()
         {
             Close(true);
-            Time.timeScale = 1f;
-            sceneService.LoadScene(currentScene);
+            GameSession.Current?.Retry();
         }
 
         private void OnResumeClicked()
